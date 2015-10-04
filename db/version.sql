@@ -1,0 +1,5 @@
+CREATE USER 'django'@'localhost' IDENTIFIED BY '31415926';
+GRANT ALL PRIVILEGES ON * . * TO 'django'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE DATABASE electrolab;

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Аутентификация{% endblock %}
+{% block main %}
+<div class="center">
+    <form name="login_form" action="/login/" method="post">
+    {% csrf_token %}
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}
+    {% for field in form %}
+       <div class="control-group">
+       	<label class="control-label" for={{ field.id_for_label }}><div class="label-div">{{ field.label }}</div></label>
+       	<input class="controls" type="text" id={{ field.id_for_label }} name={{ field.html_name }}>
+       	{{ field.errors }}
+       </div>
+    {% endfor %}
+    <div class="control-group">
+        <div class="div-submit" onClick="javascript:document.forms[0].submit();">Войти</div>
+    </div>
+    </form>
+    <div class="control-group">
+        <a class="link-block" href="/register">Зарегестрироваться</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+body {
+  background-color: #cdddec;
+  margin: 10;
+}
+
+.center {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.control-group {
+	white-space: nowrap;
+	margin-bottom: 20px;
+}
+
+.controls {
+	padding: 10px 10px;
+	line-height: 15px;
+}
+
+.div-submit {
+	background-color: #5b9bd5;
+	color: white;
+	text-align: center;
+	padding: 10px 10px;
+	border: 1px solid gray;
+	cursor: pointer;
+}
+
+.control-label {
+	display:inline-block;
+    width:100px;
+	margin-right: 10px;
+}
+
+.link-block {
+	background-color: #5b9bd5;
+	text-align: center;
+	color: white;
+	padding: 10px 10px;
+	border: 1px solid gray;
+	text-decoration: none;
+	display: block;
+}
+
+.label-div {
+	background-color: #5b9bd5;
+	border: 1px solid gray;
+	text-align: center;
+	color: white;
+	padding: 10px 10px;
+}
+
+.errorlist {
+	margin: 5px;
+}
+

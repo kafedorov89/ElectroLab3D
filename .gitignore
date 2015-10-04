@@ -1,0 +1,6 @@
+*.py[cod]
+
+.project
+.pydevproject
+.settings
+src/diogenes/__keyring__/random_seed
