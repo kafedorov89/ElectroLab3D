@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Аутентификация{% endblock %}
 {% block main %}
+{% load staticfiles %}
 <div class="center">
     <form name="login_form" action="/login/" method="post">
     {% csrf_token %}
@@ -21,5 +22,6 @@
     <div class="control-group">
         <a class="link-block" href="/register">Зарегестрироваться</a>
     </div>
+    <img class="login-logo" src="{% static 'img/logo.png' %}" alt="logo"/>
 </div>
 {% endblock %}

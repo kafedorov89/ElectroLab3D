@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Рассписание лабораторных{% endblock %}
+{% load staticfiles %}
+{% block main %}
+<div class="main-menu-head">
+	<div class="control-group">
+        <a class="back-link-block" href="/main_menu">Возврат в главное меню</a>
+    </div>
+	<div class="date">{{ date }}<br>{{ time }}</div>
+</div>
+
+<div class="main-table">
+{{datagrid.render_listview}}
+</div>
+
+{% endblock %}

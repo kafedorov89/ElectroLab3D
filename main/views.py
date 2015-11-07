@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.http import *
 from django.contrib.auth import login, logout
 from django.views.generic.edit import FormView
@@ -8,19 +7,29 @@ from django.views.generic.base import View
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.models import User
+from datetime import datetime
+from courses import CoursesDataGrid
+
+
+class EUserCreationForm(UserCreationForm):
+    def __init__ (self, *args, **kwargs):
+        super (EUserCreationForm, self).__init__ (*args, **kwargs)
+        self.fields ['username'].label = u'Логин'
+
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")
 
 
 class RegisterFormView (FormView):
-    form_class = UserCreationForm
+    form_class = EUserCreationForm
 
     template_name = "register.html"
     success_url = "/login"
 
     def form_valid (self, form):
-        # Создаём пользователя, если данные в форму были введены корректно.
         form.save ()
-
-        # Вызываем метод базового класса
         return super (RegisterFormView, self).form_valid (form)
 
 
@@ -38,23 +47,37 @@ class LoginFormView (FormView):
     success_url = "/main_menu"
 
     def form_valid (self, form):
-        # Получаем объект пользователя на основе введённых в форму данных.
         self.user = form.get_user ()
-
-        # Выполняем аутентификацию пользователя.
         login (self.request, self.user)
         return super (LoginFormView, self).form_valid (form)
 
 
-class LogoutView(View):
+class LogoutView (View):
     def get (self, request):
-        # Выполняем выход для пользователя, запросившего данное представление.
         logout (request)
-
-        # После чего, перенаправляем пользователя на главную страницу.
         return HttpResponseRedirect ("/")
 
 
-def main_menu(request):
-    return render_to_response('main_menu.html', context_instance = RequestContext(request))
+def main_menu (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('main_menu.html', templ_data)
+
+def timetable (request):
+    templ_data = {
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return CoursesDataGrid (request).render_to_response ('timetable.html', templ_data)
+
+def media_course (request):
+    current_user = request.user
+    templ_data = {
+    }
+    return render_to_response ('media_course.html', templ_data)
 

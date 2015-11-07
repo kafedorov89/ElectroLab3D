@@ -1,6 +1,7 @@
 body {
-  background-color: #cdddec;
+  background-color: #ffffff;
   margin: 10;
+  font-family: Geneva, Arial, Helvetica, sans-serif;
 }
 
 .center {
@@ -22,11 +23,12 @@ body {
 }
 
 .div-submit {
-	background-color: #5b9bd5;
-	color: white;
+	background-color: #ee9015;
+	color: black;
 	text-align: center;
 	padding: 10px 10px;
-	border: 1px solid gray;
+	border: 1px solid black;
+	border-radius: 10px;
 	cursor: pointer;
 }
 
@@ -37,24 +39,100 @@ body {
 }
 
 .link-block {
-	background-color: #5b9bd5;
+	background-color: #ee9015;
 	text-align: center;
-	color: white;
+	color: black;
 	padding: 10px 10px;
-	border: 1px solid gray;
+	border: 1px solid black;
 	text-decoration: none;
+	border-radius: 10px;
+	display: block;
+}
+
+.menu-link-block {
+	background-color: #ee9015;
+	text-align: center;
+	color: black;
+	padding: 40px 10px 40px 10px;
+	border: 1px solid black;
+	text-decoration: none;
+	border-radius: 10px;
+	display: block;
+	width:500px;
+    height: 20px;
+    font-size: 20px;
+}
+
+.back-link-block {
+	background-color: gray;
+	text-align: center;
+	color: black;
+	padding: 10px 10px;
+	border: 1px solid black;
+	text-decoration: none;
+	border-radius: 10px;
+	width:200px;
 	display: block;
 }
 
 .label-div {
-	background-color: #5b9bd5;
-	border: 1px solid gray;
+	background-color: #ee9015;
+	border: 1px solid black;
+	border-radius: 10px;
 	text-align: center;
-	color: white;
+	color: black;
 	padding: 10px 10px;
 }
 
+.login-logo {
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.menu-logo {
+    margin-top: 10px;
+    align: center;
+    display: block;
+}
+
+.main-menu-head {
+    margin: 50px;
+}
+
+.main-table {
+    text-align: center;
+    margin: 50px;
+}
+
+.date {
+    border: 1px solid #ee9015;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+    width: 150px;
+    height: 40px;
+    position: relative;
+    top: -70px;
+    right: -90%;
+    padding: 10px;
+}
+
+.fio {
+    border: 1px solid #ee9015;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+    width:300px;
+    height: 150px;
+    margin-top: 10px;
+    padding: 10px;
+    position: relative;
+    top: -50px;
+}
+
 .errorlist {
-	margin: 5px;
+	margin-top: 5px;
 }
 

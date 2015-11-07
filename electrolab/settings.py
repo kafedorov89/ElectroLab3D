@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for electrolab project.
 
@@ -37,6 +38,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djblets.datagrid',
+    'djblets.feedview',
+#    'djblets.siteconfig',
+    'djblets.util',
+    'djblets.webapi',
     'main',
 )
 
@@ -76,7 +82,6 @@ WSGI_APPLICATION = 'electrolab.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.mysql',

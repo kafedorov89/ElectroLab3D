@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Главное меню{% endblock %}
 {% block main %}
+{% load staticfiles %}
+<div class="main-menu-head">
+<img class="menu-logo" src="{% static 'img/logo.png' %}" alt="logo"/>
+<div class="date">{{ date }}<br>{{ time }}</div>
+<div class="fio">{{ first_name }}<br>{{ last_name }}</div>
+</div>
 <div class="center">
+	<div class="control-group">
+        <a class="menu-link-block" href="/timetable">Расписание лабораторных работ</a>
+    </div>
+    <div class="control-group">
+        <a class="menu-link-block" href="/media_course">Полный мультимедийный курс по лаборатории</a>
+    </div>
 </div>
 {% endblock %}

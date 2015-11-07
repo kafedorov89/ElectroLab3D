@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """electrolab URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -27,6 +28,6 @@ urlpatterns = patterns('',
     url(r'^login/$', views.LoginFormView.as_view()),
     url(r'^logout/$', views.LogoutView.as_view()),
     url(r'^main_menu/$', 'main.views.main_menu'),
-    url(r'^test/$', 'django.views.static.serve', kwargs = {
-            'path': 'pipetest/index.html', 'document_root': settings.STATIC_ROOT}),
+    url(r'^timetable/$', 'main.views.timetable'),
+    url(r'^media_course/$', 'main.views.media_course'),
 )
