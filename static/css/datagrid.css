@@ -86,13 +86,6 @@
 /****************************************************************************
  * Titles
  ****************************************************************************/
-.datagrid-title,
-.datagrid-titlebox {
-  background-color: #a2bedc;
-  border-bottom: 1px #728eac solid;
-  margin: 0;
-  padding: 5px 10px 5px 5px;
-}
 .datagrid-titlebox h1 {
   display: inline;
   font-size: 120%;

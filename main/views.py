@@ -81,3 +81,53 @@ def media_course (request):
     }
     return render_to_response ('media_course.html', templ_data)
 
+def input_control (request, id):
+    current_user = request.user
+    templ_data = {
+        'input_control' : True,
+        'id': id,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('input_control.html', templ_data)
+
+def workplace_construct (request, id):
+    current_user = request.user
+    templ_data = {
+        'workplace_construct' : True,
+        'id': id,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('workpalce_construct.html', templ_data)
+
+def course (request, id):
+    current_user = request.user
+    templ_data = {
+        'course' : True,
+        'id': id,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('course.html', templ_data)
+
+def report (request, id):
+    current_user = request.user
+    templ_data = {
+        'report' : True,
+        'id': id,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('report.html', templ_data)
+
+
+def method (request, id):
+    current_user = request.user
+    templ_data = {
+        'id': id,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('method.html', templ_data)
+
