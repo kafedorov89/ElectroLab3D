@@ -13,8 +13,8 @@ class CourseColumn(Column):
         return u"Приступить"
 
     def link_to_object(self, state, course, value):
-#        return reverse('course', args = [course.id])
-        return '/input_control/%s/' % (course.id,)
+#        return reverse('input_control', args = [course.id, '1'])
+        return '/input_control/%s/1/' % (course.id,)
 
 class MethodColumn(Column):
     def __init__(self, *args, **kwargs):

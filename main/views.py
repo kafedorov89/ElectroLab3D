@@ -81,13 +81,15 @@ def media_course (request):
     }
     return render_to_response ('media_course.html', templ_data)
 
-def input_control (request, id):
+def input_control (request, id, q_id):
     current_user = request.user
     templ_data = {
         'input_control' : True,
         'id': id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'pq_id' : int (q_id) - 1 if q_id > 1 else None,
+        'nq_id' : int (q_id) + 1,
     }
     return render_to_response ('input_control.html', templ_data)
 

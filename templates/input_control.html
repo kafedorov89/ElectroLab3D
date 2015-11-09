@@ -1,4 +1,48 @@
 {% extends "base_course.html" %}
+{% load staticfiles %}
 {% block title %}Входной контроль{% endblock %}
 {% block main %}
+<table class="table-question">
+	<tr>
+		<td class="td-prew">
+			<a href="/input_control/{{ id }}/{{ pq_id }}/">
+	        	<img class="login-logo" src="{% static 'img/left.png' %}" alt="logo"/>
+	        </a>
+		</td>
+		<td class="td-question">
+			<div class="question">{{ question }}</div>
+		</td>
+    	<td class="td-next">
+    		<a href="/input_control/{{ id }}/{{ nq_id }}/">
+    			<img class="login-logo" src="{% static 'img/right.png' %}" alt="logo"/>
+    		</a>
+    	</td>
+    </tr>
+</table>
+
+<table class="table-answer">
+	<tr>
+		<td class="td-answer">
+			<div class="answer"><input type="checkbox">{{ answer.one }}</div>
+		</td>
+		<td class="td-answer">
+			<div class="answer"><input type="checkbox">{{ answer.two }}</div>
+		</td>
+	</tr>
+    <tr>
+		<td class="td-answer">
+			<div class="answer"><input type="checkbox">{{ answer.three }}</div>
+		</td>
+		<td class="td-answer">
+			<div class="answer"><input type="checkbox">{{ answer.four }}</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-answer">
+		</td>
+		<td class="td-answer">
+			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Завершить тестирование</div>
+		</td>
+	</tr>
+</table>
 {% endblock %}

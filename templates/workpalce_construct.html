@@ -1,4 +1,22 @@
 {% extends "base_course.html" %}
 {% block title %}Сборка стенда{% endblock %}
 {% block main %}
+<table class="construct">
+    <tr>
+		<td class="td-answer">
+			<a class="back-link-block" href="/method/{{ id }}/">Методические материалы</a>
+		</td>
+		<td class="td-answer">
+			<a class="back-link-block" href="/method/{{ id }}/">Помощь преподователя</a>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-answer">
+			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Начать сборку стенда</div>
+		</td>
+		<td class="td-answer">
+			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Проверить правильность сборки стенда</div>
+		</td>
+	</tr>
+</table>
 {% endblock %}
