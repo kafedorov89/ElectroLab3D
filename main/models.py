@@ -1,47 +1,83 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class wp_type (models.Model):
+class WpType (models.Model):
     name = models.CharField (max_length = 200)
 
 
-class workplace (models.Model):
+class Workplace (models.Model):
     name = models.CharField (max_length = 200)
-    wp_type = models.ForeignKey (wp_type)
+    wp_type = models.ForeignKey (WpType)
 
 
-class wp_param_type (models.Model):
+class WpParamType (models.Model):
     name = models.CharField (max_length = 200)
 
 
-class wp_param (models.Model):
+class WpParam (models.Model):
     name = models.CharField (max_length = 200)
-    wp_param_type = models.ForeignKey (wp_param_type)
-    workplace = models.ForeignKey (workplace)
+    wp_param_type = models.ForeignKey (WpParamType)
+    workplace = models.ForeignKey (Workplace)
 
 
-class wp_preset (models.Model):
+class WpPreset (models.Model):
     name = models.CharField (max_length = 200)
     value = models.IntegerField (default = 0)
-    workplace = models.ForeignKey (workplace)
-    wp_param = models.ForeignKey (wp_param)
+    workplace = models.ForeignKey (Workplace)
+    wp_param = models.ForeignKey (WpParam)
 
 
-class wp_user (models.Model):
+class WpUser (models.Model):
     value = models.IntegerField (default = 0)
-#    user = models.ForeignKey (user)
-    workplace = models.ForeignKey (workplace)
-    wp_param = models.ForeignKey (wp_param)
+    user = models.ForeignKey (User)
+    workplace = models.ForeignKey (Workplace)
+    wp_param = models.ForeignKey (WpParam)
 
 
-class wp_action (models.Model):
+class WpAction (models.Model):
     priority = models.IntegerField (default = 0)
-    workplace = models.ForeignKey (workplace)
-    wp_param = models.ForeignKey (wp_param)
+    workplace = models.ForeignKey (Workplace)
+    wp_param = models.ForeignKey (WpParam)
 
 
-class course (models.Model):
+class Course (models.Model):
     name = models.CharField (max_length = 200)
     last_date = models.DateTimeField ()
+    user = models.ForeignKey (User)
+    duration = models.DurationField ()
+
+    def theacher (self):
+        User.username
+
+
+class CourseState (models.Model):
+    name = models.CharField (max_length = 200)
+
+
+class UserCourseState (models.Model):
+    course = models.ForeignKey (Course)
+    user = models.ForeignKey (User)
+    course_state = models.ForeignKey (CourseState)
+    def state (self):
+        User.get_username
+
+
+class Question (models.Model):
+    course = models.ForeignKey (Course)
+    text_question = models.TextField ()
+    number = models.IntegerField (default = 1)
+
+
+class Answer (models.Model):
+    question = models.ForeignKey (Question)
+    text_answer = models.TextField ()
+    right = models.BooleanField (default = False)
+
+
+class UserAnswer (models.Model):
+    user = models.ForeignKey (User)
+    question = models.ForeignKey (Question)
+    answer = models.ForeignKey (Answer)
 

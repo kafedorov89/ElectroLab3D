@@ -119,6 +119,56 @@ body {
     margin-right: auto
 }
 
+.table-question{
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.td-question{
+	border: 1px solid black;
+	width: 1000px;
+	height: 500px;
+	border-radius: 10px;
+}
+
+.td-answer{
+	margin: 20px;
+}
+.div-answer-submit{
+	background-color: #ee9015;
+	color: black;
+	width: 200px;
+	text-align: center;
+	padding: 10px 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	cursor: pointer;
+	display: inline;
+}
+
+.td-prew{
+	width: 50px;
+}
+
+.td-next{
+	width: 50px;
+}
+
+.question{
+	margin: 30px;
+	font-size: 25px;
+}
+
+.table-answer{
+    margin-top: 10px;
+    display: block;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto
+}
+
 .menu-logo {
     margin-top: 10px;
     align: center;

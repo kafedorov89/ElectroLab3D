@@ -5,44 +5,41 @@
 <table class="table-question">
 	<tr>
 		<td class="td-prew">
+			{% if pq_id %}
 			<a href="/input_control/{{ id }}/{{ pq_id }}/">
 	        	<img class="login-logo" src="{% static 'img/left.png' %}" alt="logo"/>
 	        </a>
+	        {%  endif %}
 		</td>
 		<td class="td-question">
-			<div class="question">{{ question }}</div>
+			<div class="question">{{ question.text_question|safe }}</div>
 		</td>
     	<td class="td-next">
+    		{% if nq_id %}
     		<a href="/input_control/{{ id }}/{{ nq_id }}/">
     			<img class="login-logo" src="{% static 'img/right.png' %}" alt="logo"/>
     		</a>
+    		{%  endif %}
     	</td>
     </tr>
 </table>
 
 <table class="table-answer">
+	<form name="answer">
+	{% for answer in answers %}
 	<tr>
 		<td class="td-answer">
-			<div class="answer"><input type="checkbox">{{ answer.one }}</div>
-		</td>
-		<td class="td-answer">
-			<div class="answer"><input type="checkbox">{{ answer.two }}</div>
+			<div class="answer"><input type="radio" name="answer" value="{{ answer.id }}">{{ answer.text_answer }}</div>
 		</td>
 	</tr>
-    <tr>
-		<td class="td-answer">
-			<div class="answer"><input type="checkbox">{{ answer.three }}</div>
-		</td>
-		<td class="td-answer">
-			<div class="answer"><input type="checkbox">{{ answer.four }}</div>
-		</td>
-	</tr>
+	{% endfor %}
+	</form>
 	<tr>
-		<td class="td-answer">
-		</td>
-		<td class="td-answer">
-			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Завершить тестирование</div>
-		</td>
+		<form name="send">
+			<td class="td-answer" style="text-align: right; margin-top: 30px;" colspan = 2>
+				<div class="div-answer-submit" onClick="javascript:document.forms[1].submit();">Завершить тестирование</div>
+			</td>
+		</form>
 	</tr>
 </table>
 {% endblock %}

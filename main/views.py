@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from datetime import datetime
 from courses import CoursesDataGrid
+from .models import Question, Answer
 
 
 class EUserCreationForm(UserCreationForm):
@@ -81,15 +82,24 @@ def media_course (request):
     }
     return render_to_response ('media_course.html', templ_data)
 
-def input_control (request, id, q_id):
+def input_control (request, course_id, number):
+    number = int (number)
+    course_id = int (course_id)
     current_user = request.user
+    count = len (list (Question.objects.filter (course = course_id)))
+
+    question = list (Question.objects.filter (course = course_id, number = number)) [0]
+    answers = Answer.objects.filter (question = question.id)
+
     templ_data = {
         'input_control' : True,
-        'id': id,
+        'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
-        'pq_id' : int (q_id) - 1 if q_id > 1 else None,
-        'nq_id' : int (q_id) + 1,
+        'pq_id' : number - 1 if number > 1 else None,
+        'nq_id' : number + 1 if number < count else None,
+        'question' : question,
+        'answers' : answers,
     }
     return render_to_response ('input_control.html', templ_data)
 
