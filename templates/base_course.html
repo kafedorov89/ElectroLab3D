@@ -28,17 +28,29 @@
 				</td>
 				<td class="td-center">
 					<div class="control-group" style="width: 25%;">
+						{% if uallowance.construct %}
 				        <a class="course-link-block{% if workplace_construct %}-active{% endif %}" href="/workplace_construct/{{ id }}/">Сборка стенда</a>
+				        {% else %}
+				        <div class="course-link-block-unactive">Сборка стенда</div>
+				        {% endif %}
 				    </div>
 				</td>
 				<td class="td-center">
 					<div class="control-group" style="width: 25%;">
+						{% if uallowance.course_start %}
 				        <a class="course-link-block{% if course %}-active{% endif %}" href="/course/{{ id }}/">Выполнение работы</a>
+				        {% else %}
+				        <div class="course-link-block-unactive">Выполнение работы</div>
+				        {% endif %}
 				    </div>
 				</td>
 				<td class="td-center">
 					<div class="control-group" style="width: 25%;">
+						{% if uallowance.report %}
 				        <a class="course-link-block{% if report %}-active{% endif %}" href="/report/{{ id }}/">Отчет</a>
+				        {% else %}
+				        <div class="course-link-block-unactive">Отчет</div>
+				        {% endif %}
 				    </div>
 				</td>
 		    </tr>

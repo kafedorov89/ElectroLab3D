@@ -1,21 +1,36 @@
 {% extends "base_course.html" %}
 {% block title %}Сборка стенда{% endblock %}
 {% block main %}
-<table class="construct">
+<script type="text/javascript">
+function startWorkplace(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/", false);
+	xhr.send();
+	window.location.reload();
+}
+
+function checkWorkplace(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/", false);
+	xhr.send();
+	window.location.reload();
+}
+</script>
+<table class="table-construct">
     <tr>
-		<td class="td-answer">
-			<a class="back-link-block" href="/method/{{ id }}/">Методические материалы</a>
+		<td class="td-construct">
+			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
 		</td>
-		<td class="td-answer">
-			<a class="back-link-block" href="/method/{{ id }}/">Помощь преподователя</a>
+		<td class="td-construct">
+			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Помощь преподователя</a></div>
 		</td>
 	</tr>
 	<tr>
-		<td class="td-answer">
-			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Начать сборку стенда</div>
+		<td class="td-construct">
+			<div class="div-construct-submit" onClick="startWorkplace ();">Начать сборку стенда</div>
 		</td>
-		<td class="td-answer">
-			<div class="div-submit" onClick="javascript:document.forms[0].submit();">Проверить правильность сборки стенда</div>
+		<td class="td-construct">
+			<div class="div-construct-submit" onClick="checkWorkplace ();">Проверить правильность сборки стенда</div>
 		</td>
 	</tr>
 </table>

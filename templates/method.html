@@ -3,4 +3,11 @@
 {% block cource_menu %}
 {% endblock %}
 {% block main %}
+<table class="table-question">
+	<tr>
+		<td class="td-question">
+			<div class="question">{{ db.text_question|safe }}</div>
+		</td>
+    </tr>
+</table>
 {% endblock %}

@@ -54,6 +54,11 @@ class CourseGroupField (models.Model):
     name = models.CharField (max_length = 200)
 
 
+class Method (models.Model):
+    course = models.ForeignKey (Course)
+    text_question = models.TextField ()
+
+
 class FieldType (models.Model):
     name = models.CharField (max_length = 200)
 
@@ -96,3 +101,9 @@ class UserAnswer (models.Model):
     question = models.ForeignKey (Question)
     answer = models.ForeignKey (Answer)
 
+class UserAllowance (models.Model):
+    user = models.ForeignKey (User)
+    course = models.ForeignKey (Course)
+    construct = models.BooleanField (default = False)
+    course_start = models.BooleanField (default = False)
+    report = models.BooleanField (default = False)

@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Question, Answer, UserCourseState
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance
 
 
 class EUserCreationForm(UserCreationForm):
@@ -79,6 +79,9 @@ def timetable (request):
 def media_course (request):
     current_user = request.user
     templ_data = {
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+        'db' : Method.objects.all (),
     }
     return render_to_response ('media_course.html', templ_data)
 
@@ -87,12 +90,17 @@ def input_control (request, course_id, number):
     course_id = int (course_id)
     current_user = request.user
     count = len (list (Question.objects.filter (course = course_id)))
-
     question = list (Question.objects.filter (course = course_id, number = number)) [0]
     answers = Answer.objects.filter (question = question.id)
+    uanswer = UserAnswer.objects.filter (user = request.user, question = question)
+    course = Course.objects.get (pk = int (course_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
 
+    if uanswer:
+        uanswer = list (uanswer) [0]
     templ_data = {
         'input_control' : True,
+        'host' : request.get_host(),
         'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
@@ -100,45 +108,112 @@ def input_control (request, course_id, number):
         'nq_id' : number + 1 if number < count else None,
         'question' : question,
         'answers' : answers,
+        'user' : request.user,
+        'uanswer' : uanswer,
+        'uallowance' : uallowance,
     }
     return render_to_response ('input_control.html', templ_data)
 
-def workplace_construct (request, id):
-    current_user = request.user
+def workplace_construct (request, course_id):
+    course = Course.objects.get (pk = int (course_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'workplace_construct' : True,
-        'id': id,
+        'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'user' : request.user,
+        'host' : request.get_host(),
+        'uallowance' : uallowance,
     }
     return render_to_response ('workpalce_construct.html', templ_data)
 
-def course (request, id):
-    current_user = request.user
+def course (request, course_id):
+    course = Course.objects.get (pk = int (course_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'course' : True,
-        'id': id,
+        'db' : CourseField.objects.select_related ().filter (group__course__id = course_id),
+        'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'uallowance' : uallowance,
     }
     return render_to_response ('course.html', templ_data)
 
-def report (request, id):
-    current_user = request.user
+def report (request, course_id):
+    course = Course.objects.get (pk = int (course_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'report' : True,
-        'id': id,
+        'db' : CourseField.objects.select_related ().filter (group__course__id = course_id),
+        'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'uallowance' : uallowance,
     }
     return render_to_response ('report.html', templ_data)
 
-def method (request, id):
+def method (request, course_id):
     current_user = request.user
     templ_data = {
-        'id': id,
+        'id': course_id,
+        'db' : list (Method.objects.filter (course__id = course_id)) [0],
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
     }
     return render_to_response ('method.html', templ_data)
 
+def load_answer (request, user_id, question_id, answer_id):
+    user = User.objects.get (pk = int (user_id))
+    question = Question.objects.get (pk = int (question_id))
+    answer = Answer.objects.get (pk = int (answer_id))
+
+    column = {
+        'user' : user,
+        'question' : question,
+        'answer' : answer,
+    }
+
+    uanswer, created = UserAnswer.objects.update_or_create (user = user, question = question, defaults = column)
+
+    return render_to_response ('empty.html')
+
+def check_answer (request, course_id, user_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+
+    cnt_question = Question.objects.filter (course = course).count ()
+    cnt_user_answer = UserAnswer.objects.filter (user = request.user, question__course = course).count ()
+    cnt_bad_user_answer = UserAnswer.objects.filter (user = request.user, question__course = course, answer__right = 0).count ()
+
+    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+
+    if cnt_question == cnt_user_answer and cnt_bad_user_answer == 0:
+        uallowance.construct = 1
+    else:
+        uallowance.construct = 0
+        uallowance.course_start = 0
+        uallowance.report = 0
+
+    uallowance.save()
+
+    return render_to_response ('empty.html')
+
+def check_workplace (request, course_id, user_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance.course_start = 1
+    uallowance.save()
+
+    return render_to_response ('empty.html')
+
+def start_workplace (request, course_id, user_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance.course_start = 0
+    uallowance.save()
+
+    return render_to_response ('empty.html')

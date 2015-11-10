@@ -1,4 +1,21 @@
 {% extends "base_course.html" %}
 {% block title %}Выполнение лабораторной работы{% endblock %}
 {% block main %}
+<table class="table-construct">
+    <tr>
+		<td class="td-construct">
+			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
+		</td>
+		<td class="td-construct">
+			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Помощь преподователя</a></div>
+		</td>
+	</tr>
+</table>
+
+<table class="table-question">
+	<tr>
+		<td class="td-question">
+		</td>
+    </tr>
+</table>
 {% endblock %}

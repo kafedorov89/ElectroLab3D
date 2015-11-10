@@ -1,15 +1,11 @@
 body {
   background-color: #ffffff;
   margin: 10;
-  font-family: Geneva, Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
 }
 
 .center {
-	position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%)
+    margin: 0px auto;
 }
 
 .control-group {
@@ -30,6 +26,40 @@ body {
 	border: 1px solid black;
 	border-radius: 10px;
 	cursor: pointer;
+}
+
+.div-construct-submit{
+	background-color: gray;
+	color: black;
+	text-align: center;
+	padding: 10px 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	cursor: pointer;
+	width: 300px;
+}
+
+.link-construct {
+	background-color: #ee9015;
+	color: black;
+	text-align: center;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	height: 40px;
+	text-decoration: none;
+}
+.link-construct:active{
+	color: black;
+}
+.link-construct:hover{
+	color: black;
+}
+.link-construct:visited {
+	color: black;
+}
+.div-link-construct{
+	height: 40px;
 }
 
 .control-label {
@@ -61,6 +91,7 @@ body {
 	width:500px;
     height: 20px;
     font-size: 20px;
+    margin: 0px auto;
 }
 
 .course-link-block {
@@ -72,7 +103,7 @@ body {
 	text-decoration: none;
 	border-radius: 10px;
 	display: block;
-	width:300px;
+	width: 200px;
     height: 20px;
     font-size: 20px;
 }
@@ -86,7 +117,21 @@ body {
 	text-decoration: none;
 	border-radius: 10px;
 	display: block;
-	width:300px;
+	width: 200px;
+    height: 20px;
+    font-size: 20px;
+}
+
+.course-link-block-unactive {
+	background-color: #d7d7d7;
+	text-align: center;
+	color: black;
+	padding: 40px 10px 40px 10px;
+	border: 1px solid #ee9015;
+	text-decoration: none;
+	border-radius: 10px;
+	display: block;
+	width: 200px;
     height: 20px;
     font-size: 20px;
 }
@@ -129,7 +174,7 @@ body {
 .td-question{
 	border: 1px solid black;
 	width: 1000px;
-	height: 500px;
+	height: 400px;
 	border-radius: 10px;
 }
 
@@ -145,7 +190,8 @@ body {
 	border: 1px solid black;
 	border-radius: 10px;
 	cursor: pointer;
-	display: inline;
+	display: inline-block;
+	margin-top: 30px;
 }
 
 .td-prew{
@@ -157,16 +203,84 @@ body {
 }
 
 .question{
-	margin: 30px;
+	margin: 10px;
+	margin-left: 40px;
 	font-size: 25px;
 }
 
 .table-answer{
-    margin-top: 10px;
+    margin-top: 30px;
     display: block;
-    width: 1000px;
+    width: 60%;
     margin-left: auto;
     margin-right: auto
+}
+
+.time-table{
+	width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #ee9015;
+    border-collapse: collapse;
+}
+
+.table-construct{
+	width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.td-construct{
+	width: 450px;
+}
+
+.time-tr-head{
+	height: 50px;
+    border: 1px solid #ee9015;
+}
+
+.time-td-head{
+	text-align: center;
+    border: 2px solid #ee9015;
+}
+
+.time-tr-body1{
+	background-color: #d7d7d7;
+	height: 50px;
+    border: 1px solid #ee9015;
+}
+
+.time-tr-body2{
+	background-color: #e6c191;
+	height: 50px;
+    border: 1px solid #ee9015;
+}
+
+.time-tr-body3{
+	height: 50px;
+    border: 1px solid #ee9015;
+}
+
+.time-td-body{
+	text-align: center;
+    border: 2px solid #ee9015;
+}
+
+.timetable-link{
+	text-decoration: none;
+	color: black;
+}
+
+.timetable-link:active{
+	color: black;
+}
+
+.timetable-link:hover{
+	color: black;
+}
+
+.timetable-link:visited {
+	color: black;
 }
 
 .menu-logo {
@@ -176,7 +290,8 @@ body {
 }
 
 .main-menu-head {
-    margin: 50px;
+    margin: 30px;
+    width: 100%;
 }
 
 .main-table {
@@ -191,10 +306,9 @@ body {
     color: black;
     width: 150px;
     height: 40px;
-    position: relative;
-    top: -70px;
-    right: -90%;
     padding: 10px;
+    display: inline-block;
+    margin: 70px;
 }
 
 .number {
@@ -210,21 +324,21 @@ body {
 .fio {
     border: 1px solid #ee9015;
     border-radius: 10px;
-    text-align: center;
+    text-align: left;
     color: black;
-    width:300px;
-    height: 150px;
+    width: 90%;
+    height: 100px;
     margin-top: 10px;
-    padding: 10px;
-    position: relative;
-    top: -50px;
+    padding: 20px;
+    font-size: 20px;
+    line-height: 1.5;
 }
 
 .table-head {
-    width: 90%;
+    width: 70%;
     padding: 10px;
     margin-left: auto;
-	margin-right: auto;
+    margin-right: auto;
 }
 
 .td-left {
@@ -250,13 +364,14 @@ body {
     width: 150px;
     height: 40px;
     padding: 10px;
+    display:inline-block;
 }
 
 .table-course-menu {
-    width: 90%;
+    width: 70%;
     padding: 10px;
     margin-left: auto;
-	margin-right: auto;
+    margin-right: auto;
 }
 
 .errorlist {

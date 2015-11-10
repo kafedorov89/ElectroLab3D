@@ -2,16 +2,23 @@
 {% block title %}Рассписание лабораторных{% endblock %}
 {% load staticfiles %}
 {% block main %}
-<div class="main-menu-head">
-	<div class="control-group">
-        <a class="back-link-block" href="/main_menu">Возврат в главное меню</a>
-    </div>
-	<div class="date">{{ date }}<br>{{ time }}</div>
-</div>
+<table class="main-menu-head">
+	<tr>
+		<td>
+			<div class="control-group">
+		        <a class="back-link-block" href="/main_menu">Возврат в главное меню</a>
+		    </div>
+	    </td>
+	    <td valign = top style="text-align: right;">
+			<div class="date">{{ date }}<br>{{ time }}</div>
+		</td>
+	</tr>
+</table>
 
 <table class="time-table">
 	<tr class="time-tr-head">
 		<td class="time-td-head">Наименование лабораторной работы</td>
+		<td class="time-td-head">Преподаватель</td>
 		<td class="time-td-head">Дата/Время</td>
 		<td class="time-td-head">Длительность</td>
 		<td class="time-td-head">Статус</td>
@@ -19,14 +26,14 @@
 		<td class="time-td-head">Приступить к выполнению</td>
 	</tr>
 	{% for row in data %}
-	<tr class="time-tr-body">
+	<tr class="time-tr-body{{ row.course_state.id }}">
 		<td class="time-td-body">{{ row.course.name }}</td>
 		<td class="time-td-body">{{ row.course.user.last_name }} {{ row.course.user.first_name }}</td>
 		<td class="time-td-body">{{ row.course.last_date }}</td>
 		<td class="time-td-body">{{ row.course.duration }}</td>
 		<td class="time-td-body">{{ row.course_state.name }}</td>
-		<td class="time-td-body"><a href="/method/{{ row.course.id }}/">Открыть</a></td>
-		<td class="time-td-body"><a href="/input_control/{{ row.course.id }}/1/">Приступить</a></td>
+		<td class="time-td-body">{% if row.course_state.id == 2 %}<a class="timetable-link" href="/method/{{ row.course.id }}/">Открыть</a>{% endif %}</td>
+		<td class="time-td-body">{% if row.course_state.id == 2 %}<a class="timetable-link" href="/input_control/{{ row.course.id }}/1/">Приступить</a>{% endif %}</td>
 	</tr>
 	{% endfor %}
 </table>

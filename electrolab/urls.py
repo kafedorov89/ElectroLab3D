@@ -35,4 +35,8 @@ urlpatterns = patterns('',
     url(r'^course/([0-9]*)/$', 'main.views.course'),
     url(r'^report/([0-9]*)/$', 'main.views.report'),
     url(r'^media_course/$', 'main.views.media_course'),
+    url(r'^load_answer/([0-9]*)/([0-9]*)/([0-9]*)/$', 'main.views.load_answer'),
+    url(r'^check_answer/([0-9]*)/([0-9]*)/$', 'main.views.check_answer'),
+    url(r'^check_workplace/([0-9]*)/([0-9]*)/$', 'main.views.check_workplace'),
+    url(r'^start_workplace/([0-9]*)/([0-9]*)/$', 'main.views.start_workplace'),
 )
