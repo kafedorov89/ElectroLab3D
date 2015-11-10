@@ -9,8 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from datetime import datetime
-from courses import CoursesDataGrid
-from .models import Question, Answer
+from .models import Question, Answer, UserCourseState
 
 
 class EUserCreationForm(UserCreationForm):
@@ -73,8 +72,9 @@ def timetable (request):
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'data' : UserCourseState.objects.select_related ().filter (user = request.user.id),
     }
-    return CoursesDataGrid (request).render_to_response ('timetable.html', templ_data)
+    return render_to_response ('timetable.html', templ_data)
 
 def media_course (request):
     current_user = request.user
@@ -132,7 +132,6 @@ def report (request, id):
         'time' : "{:%H:%M}".format (datetime.now()),
     }
     return render_to_response ('report.html', templ_data)
-
 
 def method (request, id):
     current_user = request.user

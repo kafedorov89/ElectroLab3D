@@ -9,8 +9,26 @@
 	<div class="date">{{ date }}<br>{{ time }}</div>
 </div>
 
-<div class="main-table">
-{{datagrid.render_listview}}
-</div>
+<table class="time-table">
+	<tr class="time-tr-head">
+		<td class="time-td-head">Наименование лабораторной работы</td>
+		<td class="time-td-head">Дата/Время</td>
+		<td class="time-td-head">Длительность</td>
+		<td class="time-td-head">Статус</td>
+		<td class="time-td-head">Методические материалы</td>
+		<td class="time-td-head">Приступить к выполнению</td>
+	</tr>
+	{% for row in data %}
+	<tr class="time-tr-body">
+		<td class="time-td-body">{{ row.course.name }}</td>
+		<td class="time-td-body">{{ row.course.user.last_name }} {{ row.course.user.first_name }}</td>
+		<td class="time-td-body">{{ row.course.last_date }}</td>
+		<td class="time-td-body">{{ row.course.duration }}</td>
+		<td class="time-td-body">{{ row.course_state.name }}</td>
+		<td class="time-td-body"><a href="/method/{{ row.course.id }}/">Открыть</a></td>
+		<td class="time-td-body"><a href="/input_control/{{ row.course.id }}/1/">Приступить</a></td>
+	</tr>
+	{% endfor %}
+</table>
 
 {% endblock %}

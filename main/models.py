@@ -48,8 +48,25 @@ class Course (models.Model):
     user = models.ForeignKey (User)
     duration = models.DurationField ()
 
-    def theacher (self):
-        User.username
+
+class CourseGroupField (models.Model):
+    course = models.ForeignKey (Course)
+    name = models.CharField (max_length = 200)
+
+
+class FieldType (models.Model):
+    name = models.CharField (max_length = 200)
+
+
+class CourseField (models.Model):
+    group = models.ForeignKey (CourseGroupField)
+    type = models.ForeignKey (FieldType)
+    name = models.CharField (max_length = 200)
+
+
+class UserFieldParam (models.Model):
+    field = models.ForeignKey (CourseField)
+    value = models.CharField (max_length = 200)
 
 
 class CourseState (models.Model):
@@ -60,8 +77,6 @@ class UserCourseState (models.Model):
     course = models.ForeignKey (Course)
     user = models.ForeignKey (User)
     course_state = models.ForeignKey (CourseState)
-    def state (self):
-        User.get_username
 
 
 class Question (models.Model):
