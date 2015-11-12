@@ -38,11 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djblets.datagrid',
-    'djblets.feedview',
-#    'djblets.siteconfig',
-    'djblets.util',
-    'djblets.webapi',
     'main',
 )
 
