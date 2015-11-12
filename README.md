@@ -1,1 +1,0 @@
-# Laboratory3Denergy
