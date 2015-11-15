@@ -138,6 +138,9 @@ def course (request, course_id):
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'uallowance' : uallowance,
+        'rows' : range(10),
+        'rows_select' : range(0, 16),
+        'row_cnt' : 10,
     }
     return render_to_response ('course.html', templ_data)
 

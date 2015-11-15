@@ -1,0 +1,42 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+function sendRequestonline(url) {
+$(function(){
+	$.ajax({
+		url: url,
+		success: function(data){
+			document.getElementById("online_1").value = data.Data
+		},
+		error: function(data){
+			
+		},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+
+function flTrue(){
+	document.getElementById("flag").value = 'True';
+}
+
+function startRead(){
+	flag = document.getElementById("flag").value;
+	sendRequestonline ('{{ url }}');
+	if (flag == 'True')
+	{
+		setTimeout("startRead()",200);
+	}
+}
+
+function stopRead(){
+	document.getElementById("flag").value = 'False';
+}
+</script>
+<h3>Одиночный параметр</h3>
+<input type='hidden' id="flag" name="flag" value="True">
+<input type='text' style="margin-bottom: 20px;" id="online_1" name="online_1" value="" readonly>
+<br>
+<div class="div-construct-submit" onClick="flTrue(); startRead();">Начать считывание</div>
+<br>
+<div class="div-construct-submit" onClick="stopRead();">Закончить считывание</div>

@@ -1,0 +1,46 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+$(function() {
+	setSelected ();
+});
+
+function setSelected (){
+	$.ajax({
+		url: "{{ url }}",
+		success: function(data){
+			if (data.Success){
+				document.getElementById("select_1").selectedIndex = data.Data;
+			}
+		},
+		error: function(data){
+			alert('Нет ответа от стенда.');
+		},
+		type: "GET",
+		dataType: "json"
+	});
+}
+
+function sendRequestSelect(url) {
+	$(function(){
+		$.ajax({
+			url: "{{ url }}" + "&write=" + document.getElementById("select_1").value,
+			success: function(data){
+				setSelected ();
+			},
+			error: function(data){
+				alert('Нет ответа от стенда.');
+			},
+			type: "GET",
+			dataType: "json"
+		});
+	});
+}
+</script>
+
+<h3>Многопозиционный дискретный параметр</h3>
+<label for="select_1">Переключатель: </label>
+<select id="select_1" onChange="sendRequestSelect('{{ url }}');">
+	{% for i in rows_select %}
+	<option value="{{ i }}">{{ i }}</option>
+	{% endfor %}
+</select>

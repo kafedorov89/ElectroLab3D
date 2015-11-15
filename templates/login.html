@@ -2,7 +2,7 @@
 {% block title %}Аутентификация{% endblock %}
 {% block main %}
 {% load staticfiles %}
-<div class="center">
+<div class="login-blok">
     <form name="login_form" action="/login/" method="post">
     {% csrf_token %}
     {% if next %}

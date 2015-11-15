@@ -12,9 +12,40 @@
 	</tr>
 </table>
 
-<table class="table-question">
+<table class="table-course">
 	<tr>
-		<td class="td-question">
+		<td class="td-course">
+		{% include "controls/text.html" %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/img.html" %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/analog_table.html" with url="http://46.48.44.5/do?format=json&uid=5&n=" rows=rows row_cnt=row_cnt %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/onlineparam.html" with url="http://46.48.44.5/do?format=json&uid=1" %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/bool.html" with url="http://46.48.44.5/do?format=json&uid=7" %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/diagram.html" with url="http://46.48.44.5/do?format=json&uid=1&n=50" %}
+		</td>
+    </tr>
+    <tr>
+		<td class="td-course">
+		{% include "controls/select.html" with url="http://46.48.44.5/do?format=json&uid=17" %}
 		</td>
     </tr>
 </table>

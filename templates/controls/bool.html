@@ -1,0 +1,36 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+function sendRequestbool(url) {
+$(function(){
+	$.ajax({
+		url: url,
+		success: function(data){
+			
+		},
+		error: function(data){
+			alert('Нет ответа от стенда.');
+		},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+
+function click_button(url) {
+	if (document.getElementById("button_1").value == 'on')
+	{
+		sendRequestbool(url + "write=false");
+		document.getElementById("button_1").style.backgroundColor = "gray";
+		document.getElementById("button_1").value = "off";
+	}
+	else{
+		sendRequestbool(url + "write=true");
+		document.getElementById("button_1").style.backgroundColor = "#ee9015";
+		document.getElementById("button_1").value = "on";
+	}
+}
+</script>
+
+<h3>Логический управляющий/считываемый параметр</h3>
+<span></span>
+<div class="div-construct-submit" id="button_1" value="off" onClick="click_button('{{ url }}');">Кнопка</div>

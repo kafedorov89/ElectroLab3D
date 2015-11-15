@@ -1,0 +1,30 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+function sendRequesttable(url) {
+$(function(){
+	$.ajax({
+		url: url,
+		success: function(data){
+			for (var i = 0; i <= data.Data.length; i++) {
+				document.getElementById("table_" + i).value = data.Data[i]
+			}
+		},
+		error: function(data){
+			alert('Нет ответа от стенда.');
+		},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+</script>
+<h3>Таблица аналоговых параметров</h3>
+<table>
+{% for i in rows %}
+<tr>
+ <td><input type='text' id="table_{{ i }}" name="table_{{ i }}" value="" readonly></td>
+</tr>
+{% endfor %}
+</table>
+
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable('{{ url }}{{ row_cnt }}');">Считать значения</div>
