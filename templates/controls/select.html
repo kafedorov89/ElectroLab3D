@@ -1,15 +1,14 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script>
 $(function() {
-	setSelected ();
+	setSelected{{ ctl.id }}();
 });
 
-function setSelected (){
+function setSelected{{ ctl.id }}(){
 	$.ajax({
 		url: "{{ url }}",
 		success: function(data){
 			if (data.Success){
-				document.getElementById("select_1").selectedIndex = data.Data;
+				document.getElementById("select_{{ ctl.id }}").selectedIndex = data.Data;
 			}
 		},
 		error: function(data){
@@ -20,12 +19,12 @@ function setSelected (){
 	});
 }
 
-function sendRequestSelect(url) {
+function sendRequestSelect{{ ctl.id }}(url) {
 	$(function(){
 		$.ajax({
-			url: "{{ url }}" + "&write=" + document.getElementById("select_1").value,
+			url: "{{ url }}" + "&write=" + document.getElementById("select_{{ ctl.id }}").value,
 			success: function(data){
-				setSelected ();
+				setSelected{{ ctl.id }}();
 			},
 			error: function(data){
 				alert('Нет ответа от стенда.');
@@ -37,10 +36,10 @@ function sendRequestSelect(url) {
 }
 </script>
 
-<h3>Многопозиционный дискретный параметр</h3>
-<label for="select_1">Переключатель: </label>
-<select id="select_1" onChange="sendRequestSelect('{{ url }}');">
+<h3>{{ ctl.name }}</h3>
+<label for="select_{{ ctl.id }}">Переключатель: </label>
+<select id="select_{{ ctl.id }}" onChange="sendRequestSelect{{ ctl.id }}('{{ url }}');">
 	{% for i in rows_select %}
-	<option value="{{ i }}">{{ i }}</option>
+	<option value="{{ i }}">Режим_{{ i }}</option>
 	{% endfor %}
 </select>

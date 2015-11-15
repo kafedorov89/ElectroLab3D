@@ -10,6 +10,7 @@ class WpType (models.Model):
 class Workplace (models.Model):
     name = models.CharField (max_length = 200)
     wp_type = models.ForeignKey (WpType)
+    url = models.CharField (max_length = 200, default = '')
 
 
 class WpParamType (models.Model):
@@ -20,26 +21,7 @@ class WpParam (models.Model):
     name = models.CharField (max_length = 200)
     wp_param_type = models.ForeignKey (WpParamType)
     workplace = models.ForeignKey (Workplace)
-
-
-class WpPreset (models.Model):
-    name = models.CharField (max_length = 200)
-    value = models.IntegerField (default = 0)
-    workplace = models.ForeignKey (Workplace)
-    wp_param = models.ForeignKey (WpParam)
-
-
-class WpUser (models.Model):
-    value = models.IntegerField (default = 0)
-    user = models.ForeignKey (User)
-    workplace = models.ForeignKey (Workplace)
-    wp_param = models.ForeignKey (WpParam)
-
-
-class WpAction (models.Model):
-    priority = models.IntegerField (default = 0)
-    workplace = models.ForeignKey (Workplace)
-    wp_param = models.ForeignKey (WpParam)
+    code = models.CharField (max_length = 200, default = '')
 
 
 class Course (models.Model):
@@ -49,11 +31,6 @@ class Course (models.Model):
     duration = models.DurationField ()
 
 
-class CourseGroupField (models.Model):
-    course = models.ForeignKey (Course)
-    name = models.CharField (max_length = 200)
-
-
 class Method (models.Model):
     course = models.ForeignKey (Course)
     text_question = models.TextField ()
@@ -61,12 +38,17 @@ class Method (models.Model):
 
 class FieldType (models.Model):
     name = models.CharField (max_length = 200)
+    code = models.CharField (max_length = 200, default = '')
 
 
 class CourseField (models.Model):
-    group = models.ForeignKey (CourseGroupField)
+    course = models.ForeignKey (Course, default = 1)
+    wp_param = models.ForeignKey (WpParam, null = True)
     type = models.ForeignKey (FieldType)
     name = models.CharField (max_length = 200)
+    param1 = models.TextField (null = True)
+    param2 = models.TextField (null = True)
+    param3 = models.TextField (null = True)
 
 
 class UserFieldParam (models.Model):
@@ -100,6 +82,7 @@ class UserAnswer (models.Model):
     user = models.ForeignKey (User)
     question = models.ForeignKey (Question)
     answer = models.ForeignKey (Answer)
+
 
 class UserAllowance (models.Model):
     user = models.ForeignKey (User)

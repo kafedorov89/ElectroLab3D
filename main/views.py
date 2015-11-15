@@ -6,7 +6,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.base import View
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.contrib.auth.models import User
 from datetime import datetime
 from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance
@@ -77,7 +76,6 @@ def timetable (request):
     return render_to_response ('timetable.html', templ_data)
 
 def media_course (request):
-    current_user = request.user
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
@@ -92,9 +90,9 @@ def input_control (request, course_id, number):
     count = len (list (Question.objects.filter (course = course_id)))
     question = list (Question.objects.filter (course = course_id, number = number)) [0]
     answers = Answer.objects.filter (question = question.id)
-    uanswer = UserAnswer.objects.filter (user = request.user, question = question)
+    uanswer = UserAnswer.objects.filter (user = current_user, question = question)
     course = Course.objects.get (pk = int (course_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = current_user, course = course)
 
     if uanswer:
         uanswer = list (uanswer) [0]
@@ -108,7 +106,7 @@ def input_control (request, course_id, number):
         'nq_id' : number + 1 if number < count else None,
         'question' : question,
         'answers' : answers,
-        'user' : request.user,
+        'user' : current_user,
         'uanswer' : uanswer,
         'uallowance' : uallowance,
     }
@@ -116,7 +114,7 @@ def input_control (request, course_id, number):
 
 def workplace_construct (request, course_id):
     course = Course.objects.get (pk = int (course_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'workplace_construct' : True,
         'id': course_id,
@@ -130,10 +128,10 @@ def workplace_construct (request, course_id):
 
 def course (request, course_id):
     course = Course.objects.get (pk = int (course_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'course' : True,
-        'db' : CourseField.objects.select_related ().filter (group__course__id = course_id),
+        'controls' : CourseField.objects.select_related ().filter (course__id = course_id),
         'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
@@ -146,10 +144,10 @@ def course (request, course_id):
 
 def report (request, course_id):
     course = Course.objects.get (pk = int (course_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'report' : True,
-        'db' : CourseField.objects.select_related ().filter (group__course__id = course_id),
+        'db' : CourseField.objects.select_related ().filter (course__id = course_id),
         'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
@@ -158,7 +156,6 @@ def report (request, course_id):
     return render_to_response ('report.html', templ_data)
 
 def method (request, course_id):
-    current_user = request.user
     templ_data = {
         'id': course_id,
         'db' : list (Method.objects.filter (course__id = course_id)) [0],
@@ -177,9 +174,7 @@ def load_answer (request, user_id, question_id, answer_id):
         'question' : question,
         'answer' : answer,
     }
-
-    uanswer, created = UserAnswer.objects.update_or_create (user = user, question = question, defaults = column)
-
+    UserAnswer.objects.update_or_create (user = user, question = question, defaults = column)
     return render_to_response ('empty.html')
 
 def check_answer (request, course_id, user_id):
@@ -190,7 +185,7 @@ def check_answer (request, course_id, user_id):
     cnt_user_answer = UserAnswer.objects.filter (user = request.user, question__course = course).count ()
     cnt_bad_user_answer = UserAnswer.objects.filter (user = request.user, question__course = course, answer__right = 0).count ()
 
-    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
 
     if cnt_question == cnt_user_answer and cnt_bad_user_answer == 0:
         uallowance.construct = 1
@@ -200,23 +195,20 @@ def check_answer (request, course_id, user_id):
         uallowance.report = 0
 
     uallowance.save()
-
     return render_to_response ('empty.html')
 
 def check_workplace (request, course_id, user_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
     uallowance.course_start = 1
     uallowance.save()
-
     return render_to_response ('empty.html')
 
 def start_workplace (request, course_id, user_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
-    uallowance, created = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
     uallowance.course_start = 0
     uallowance.save()
-
     return render_to_response ('empty.html')

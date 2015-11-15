@@ -1,4 +1,3 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script>
 function sendRequestbool(url) {
 $(function(){
@@ -17,20 +16,20 @@ $(function(){
 }
 
 function click_button(url) {
-	if (document.getElementById("button_1").value == 'on')
+	if (document.getElementById("button_{{ ctl.id }}").value == 'on')
 	{
 		sendRequestbool(url + "write=false");
-		document.getElementById("button_1").style.backgroundColor = "gray";
-		document.getElementById("button_1").value = "off";
+		document.getElementById("button_{{ ctl.id }}").style.backgroundColor = "gray";
+		document.getElementById("button_{{ ctl.id }}").value = "off";
 	}
 	else{
 		sendRequestbool(url + "write=true");
-		document.getElementById("button_1").style.backgroundColor = "#ee9015";
-		document.getElementById("button_1").value = "on";
+		document.getElementById("button_{{ ctl.id }}").style.backgroundColor = "#ee9015";
+		document.getElementById("button_{{ ctl.id }}").value = "on";
 	}
 }
 </script>
 
-<h3>Логический управляющий/считываемый параметр</h3>
+<h3>{{ ctl.name }}</h3>
 <span></span>
-<div class="div-construct-submit" id="button_1" value="off" onClick="click_button('{{ url }}');">Кнопка</div>
+<div class="div-construct-submit" id="button_{{ ctl.id }}" value="off" onClick="click_button('{{ url }}');">Кнопка</div>
