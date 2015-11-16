@@ -71,7 +71,7 @@ def timetable (request):
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
-        'data' : UserCourseState.objects.select_related ().filter (user = request.user.id),
+        'data' : UserCourseState.objects.select_related ().filter (user = request.user.id).order_by('course_state__name', 'course__name'),
     }
     return render_to_response ('timetable.html', templ_data)
 
@@ -131,7 +131,7 @@ def course (request, course_id):
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'course' : True,
-        'controls' : CourseField.objects.select_related ().filter (course__id = course_id),
+        'controls' : CourseField.objects.select_related ().filter (course__id = course_id).order_by('id'),
         'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),

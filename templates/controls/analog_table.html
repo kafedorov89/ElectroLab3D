@@ -1,3 +1,4 @@
+{% load main_tags %}
 <script>
 function sendRequesttable{{ ctl.id }}(url) {
 $.ajax({
@@ -17,11 +18,12 @@ $.ajax({
 </script>
 
 <h3>{{ ctl.name }}</h3>
+
 <table>
-{% for i in ctl.param1 %}
+{% for i in ctl.param1|column_range %}
 <tr>
  <td><input type='text' id="table_{{ ctl.id }}_{{ i }}" name="table_{{ ctl.id }}_{{ i }}" value="" readonly></td>
 </tr>
 {% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}&n={{ ctl.param1|length }}');">Считать значения</div>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}&n={{ ctl.param1|length }}');">{{ ctl.param3 }}</div>

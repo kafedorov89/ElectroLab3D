@@ -1,0 +1,10 @@
+{% load main_tags %}
+<h3>{{ ctl.name }}</h3>
+
+<table>
+{% for i in ctl.param1|column_range %}
+<tr>
+ <td><input type='text' id="table_{{ ctl.id }}_{{ i }}" name="table_{{ ctl.id }}_{{ i }}" value=""></td>
+</tr>
+{% endfor %}
+</table>
