@@ -4,7 +4,7 @@ $(function () {
 	$.ajax({
 		url: url,
 		success: function (data) {
-			document.getElementById ("online_{{ ctl.id }}").value = data.Data
+			document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data
 		},
 		error: function (data) {},
 		type: "GET",
@@ -43,5 +43,5 @@ function read{{ ctl.id }} () {
 <div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
 	<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
 	<div class="iterate_switcher_play" id="iterate_switcher{{ ctl.id }}" onClick="read{{ ctl.id }}();"></div>
-	<input type='text' id="online_{{ ctl.id }}" name="online_{{ ctl.id }}" value="" readonly>
+	<div class="online_value" id="online_{{ ctl.id }}"></div>
 </div>
