@@ -26,4 +26,4 @@ $.ajax({
 </tr>
 {% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}&n={{ ctl.param1|length }}');">{{ ctl.param3 }}</div>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2 }}{% endif %}');">{{ ctl.param3 }}</div>

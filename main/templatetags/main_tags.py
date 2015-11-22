@@ -7,3 +7,7 @@ register = Library()
 @register.filter(name = 'column_range')
 def column_range (number):
     return range (int (number))
+
+@register.filter(name = 'swicher_range')
+def swicher_range (number):
+    return range (1, int (number) - 1)

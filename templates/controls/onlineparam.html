@@ -1,22 +1,16 @@
 <script>
-function sendRequestonline{{ ctl.id }}(url) {
-$(function(){
+function sendRequestonline{{ ctl.id }} (url) {
+$(function () {
 	$.ajax({
 		url: url,
-		success: function(data){
-			document.getElementById("online_{{ ctl.id }}").value = data.Data
+		success: function (data) {
+			document.getElementById ("online_{{ ctl.id }}").value = data.Data
 		},
-		error: function(data){
-			
-		},
+		error: function (data) {},
 		type: "GET",
 		dataType: "json"
 		});
 	});
-}
-
-function flTrue{{ ctl.id }}(){
-	document.getElementById("flag{{ ctl.id }}").value = 'True';
 }
 
 function startRead{{ ctl.id }}(){
@@ -28,15 +22,26 @@ function startRead{{ ctl.id }}(){
 	}
 }
 
-function stopRead{{ ctl.id }}(){
-	document.getElementById("flag{{ ctl.id }}").value = 'False';
+function read{{ ctl.id }} () {
+	switcher = document.getElementById ("iterate_switcher{{ ctl.id }}");
+	flag = document.getElementById ("flag{{ ctl.id }}");
+	if (flag.value == 'True')
+	{
+		flag.value = 'False'
+		switcher.className = "iterate_switcher_play";
+	}
+	else
+	{
+		flag.value = 'True'
+		switcher.className = "iterate_switcher_stop";
+		startRead{{ ctl.id }} ();
+	}
 }
 </script>
 
 <h3>{{ ctl.name }}</h3>
-<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="True">
-<input type='text' style="margin-bottom: 20px;" id="online_{{ ctl.id }}" name="online_{{ ctl.id }}" value="" readonly>
-<br>
-<div class="div-construct-submit" onClick="flTrue{{ ctl.id }}(); startRead{{ ctl.id }}();">Начать считывание</div>
-<br>
-<div class="div-construct-submit" onClick="stopRead{{ ctl.id }}();">Закончить считывание</div>
+<div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
+	<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
+	<div class="iterate_switcher_play" id="iterate_switcher{{ ctl.id }}" onClick="read{{ ctl.id }}();"></div>
+	<input type='text' id="online_{{ ctl.id }}" name="online_{{ ctl.id }}" value="" readonly>
+</div>

@@ -1,45 +1,119 @@
 <script>
 $(function() {
-	setSelected{{ ctl.id }}();
-});
-
-function setSelected{{ ctl.id }}(){
 	$.ajax({
 		url: "{{ url }}",
-		success: function(data){
+		success: function (data) {
 			if (data.Success){
-				document.getElementById("select_{{ ctl.id }}").selectedIndex = data.Data;
+				setSelected{{ ctl.id }} (data.Data);
+			}
+			else {
+				setSelected{{ ctl.id }} (0);
 			}
 		},
-		error: function(data){
-			alert('Нет ответа от стенда.');
+		error: function (data) {
+			setSelected{{ ctl.id }} (0);
 		},
 		type: "GET",
 		dataType: "json"
 	});
+});
+
+function setSelected{{ ctl.id }} (id) {
+	document.getElementById("select_id_{{ ctl.id }}").value = id;
+	document.getElementById("switcher_value_{{ ctl.id }}").innerHTML = "значение " + id
+	for (var i = 0; i < {{ ctl.param1 }}; i++) {
+		if (i == 0) {
+			document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_left";
+			
+		}
+		else if (i == {{ ctl.param1|add:"-1" }}) {
+			document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_right";
+		}
+		else {
+			document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_center";
+		}
+	}
+	if (id == 0) {
+		document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_left_on";
+		document.getElementById("switcher_minus_{{ ctl.id }}").className = "switcher_minus";
+		document.getElementById("switcher_plus_{{ ctl.id }}").className = "switcher_plus_on";
+	}
+	else if (id == {{ ctl.param1|add:"-1" }}) {
+		document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_right_on";
+		document.getElementById("switcher_minus_{{ ctl.id }}").className = "switcher_minus_on";
+		document.getElementById("switcher_plus_{{ ctl.id }}").className = "switcher_plus";
+	}
+	else {
+		document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_center_on";
+		document.getElementById("switcher_minus_{{ ctl.id }}").className = "switcher_minus_on";
+		document.getElementById("switcher_plus_{{ ctl.id }}").className = "switcher_plus_on";
+	}
 }
 
-function sendRequestSelect{{ ctl.id }}(url) {
+function sendRequestSelect{{ ctl.id }} (id) {
+	setSelected{{ ctl.id }} (id);
 	$(function(){
 		$.ajax({
-			url: "{{ url }}" + "&write=" + document.getElementById("select_{{ ctl.id }}").value,
+			url: "{{ url }}" + "&write=" + id,
 			success: function(data){
-				setSelected{{ ctl.id }}();
+				setSelected{{ ctl.id }} (data.Data);
 			},
-			error: function(data){
-				alert('Нет ответа от стенда.');
-			},
+			error: function (data) {},
 			type: "GET",
 			dataType: "json"
 		});
 	});
 }
+
+function minusSelect{{ ctl.id }} () {
+	cur_id = document.getElementById("select_id_{{ ctl.id }}").value;
+	if (Number(cur_id) > 0) {
+		setSelected{{ ctl.id }} (Number(cur_id) - 1);
+	}
+}
+
+function plusSelect{{ ctl.id }} () {
+	cur_id = document.getElementById("select_id_{{ ctl.id }}").value;
+	if (Number(cur_id) < {{ ctl.param1|add:"-1" }}) {
+		setSelected{{ ctl.id }} (Number(cur_id) + 1);
+	}
+}
+
 </script>
 
+{% load main_tags %}
 <h3>{{ ctl.name }}</h3>
-<label for="select_{{ ctl.id }}">Переключатель: </label>
-<select id="select_{{ ctl.id }}" onChange="sendRequestSelect{{ ctl.id }}('{{ url }}');">
-	{% for i in rows_select %}
-	<option value="{{ i }}">Режим_{{ i }}</option>
-	{% endfor %}
-</select>
+<input type='hidden' id="select_id_{{ ctl.id }}" name="select_id_{{ ctl.id }}" value="">
+<div onselectstart="return false" onmousedown="return false">
+	<ul class="ul_switcher">
+		<li class="li_switcher">
+			<div class="switcher_minus" id="switcher_minus_{{ ctl.id }}" onClick="minusSelect{{ ctl.id }}();"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_left" id="switcher_{{ ctl.id }}_0" onClick="sendRequestSelect{{ ctl.id }}('0');"></div>
+		</li>   
+		{% for i in ctl.param1|swicher_range %}
+		<li class="li_switcher">
+			<div class="switcher_center" id="switcher_{{ ctl.id }}_{{ i }}" onClick="sendRequestSelect{{ ctl.id }}('{{ i }}');"></div>
+		</li>
+		{% endfor %}
+		<li class="li_switcher">
+			<div class="switcher_right" id='switcher_{{ ctl.id }}_{{ ctl.param1|add:"-1" }}' onClick='sendRequestSelect{{ ctl.id }}("{{ ctl.param1|add:"-1" }}");'></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_plus" id="switcher_plus_{{ ctl.id }}"  onClick="plusSelect{{ ctl.id }}();"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_value" id="switcher_value_{{ ctl.id }}"></div>
+		</li>
+	</ul>
+</div>

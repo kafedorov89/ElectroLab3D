@@ -23,7 +23,7 @@ function checkAnswers(){
 		<td class="td-prew">
 			{% if pq_id %}
 			<a href="/input_control/{{ id }}/{{ pq_id }}/">
-	        	<img class="login-logo" src="{% static 'img/left.png' %}" alt="logo"/>
+	        	<img class="q-logo" src="{% static 'img/left.png' %}" alt="logo"/>
 	        </a>
 	        {%  endif %}
 		</td>
@@ -33,7 +33,7 @@ function checkAnswers(){
     	<td class="td-next">
     		{% if nq_id %}
     		<a href="/input_control/{{ id }}/{{ nq_id }}/">
-    			<img class="login-logo" src="{% static 'img/right.png' %}" alt="logo"/>
+    			<img class="q-logo" src="{% static 'img/right.png' %}" alt="logo"/>
     		</a>
     		{%  endif %}
     	</td>

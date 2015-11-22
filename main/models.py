@@ -90,3 +90,36 @@ class UserAllowance (models.Model):
     construct = models.BooleanField (default = False)
     course_start = models.BooleanField (default = False)
     report = models.BooleanField (default = False)
+
+
+''' Таблицы для 3Д тренингов '''
+class Training (models.Model):
+    name = models.CharField (max_length = 200)
+
+
+class TrainingList (models.Model):
+    traning = models.ForeignKey (Training)
+    start_time = models.DateTimeField ()
+    end_time = models.DateTimeField ()
+    traning_status = models.BooleanField ()
+
+
+class StandTask (models.Model):
+    name = models.CharField (max_length = 200)
+
+
+class StandTaskState (models.Model):
+    stand_task = models.ForeignKey (StandTask)
+    user = models.ForeignKey (User)
+    name = models.CharField (max_length = 200)
+    activate = models.BooleanField ()
+    complete = models.BooleanField ()
+    error = models.BooleanField ()
+
+
+class TrainingEventLog (models.Model):
+    traning = models.ForeignKey (Training)
+    user = models.ForeignKey (User)
+    name = models.CharField (max_length = 200)
+    status = models.BooleanField ()
+    time = models.DateTimeField ()
