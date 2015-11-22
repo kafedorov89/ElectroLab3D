@@ -2,40 +2,28 @@
 {% block title %}Главное меню{% endblock %}
 {% block main %}
 {% load staticfiles %}
-<table style="width: 100%">
-	<tr>
-		<td style="width: 25%">
-			<table class="main-menu-head">
-				<tr>
-					<td>
-						<img class="menu-logo" src="{% static 'img/logo.jpg' %}" alt="logo"/>
-					</td>
-				<tr>
-					<td>
-						<div class="fio">{{ first_name }}<br>{{ last_name }}<br>Тип пользователя: Студент</div>
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td colspan = 2 valign = top style="text-align: right; ">
-			<div class="date">{{ date }}<br>{{ time }}</div>
-		</td>
-	</tr>
+
+<table class="menu-head">
 	<tr>
 		<td>
+			<img class="menu-logo" src="{% static 'img/logo.jpg' %}" alt="logo"/>
 		</td>
-		<td style="width: 50%">
-			<div class="center">
-				<div class="control-group">
-			        <a class="menu-link-block" href="/timetable">Расписание лабораторных работ</a>
-			    </div>
-			    <div class="control-group">
-			        <a class="menu-link-block" href="/media_course">Полный мультимедийный курс по лаборатории</a>
-			    </div>
-			</div>
+		<td valign = top style="text-align: right; ">
+			<div class="date">{{ date }}<br>{{ time }}</div>
 		</td>
-		<td style="width: 25%">
+	<tr>
+		<td colspan=2>
+			<div class="fio">{{ first_name }}<br>{{ last_name }}<br>Тип пользователя: Студент</div>
 		</td>
 	</tr>
 </table>
+
+<div class="center">
+	<div class="control-group">
+        <a class="menu-link-block" href="/timetable">Расписание лабораторных работ</a>
+    </div>
+    <div class="control-group">
+        <a class="menu-link-block" href="/media_course">Полный мультимедийный курс по лаборатории</a>
+    </div>
+</div>
 {% endblock %}

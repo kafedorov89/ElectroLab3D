@@ -4,6 +4,16 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
+.main {
+    display: block;
+    width: 1100px;
+    max-width: 1100px;
+    min-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
 .center {
     margin: 0px auto;
 }
@@ -106,12 +116,11 @@ body {
 	background-color: #ffffff;
 	text-align: center;
 	color: black;
-	padding: 40px 10px 40px 10px;
+	padding: 20px 10px 20px 10px;
 	border: 1px solid #ee9015;
 	text-decoration: none;
 	border-radius: 10px;
 	display: block;
-	width: 200px;
     height: 20px;
     font-size: 20px;
 }
@@ -120,12 +129,11 @@ body {
 	background-color: #ee9015;
 	text-align: center;
 	color: black;
-	padding: 40px 10px 40px 10px;
+	padding: 20px 10px 20px 10px;
 	border: 1px solid black;
 	text-decoration: none;
 	border-radius: 10px;
 	display: block;
-	width: 200px;
     height: 20px;
     font-size: 20px;
 }
@@ -134,12 +142,11 @@ body {
 	background-color: #d7d7d7;
 	text-align: center;
 	color: black;
-	padding: 40px 10px 40px 10px;
+	padding: 20px 10px 20px 10px;
 	border: 1px solid #ee9015;
 	text-decoration: none;
 	border-radius: 10px;
 	display: block;
-	width: 200px;
     height: 20px;
     font-size: 20px;
 }
@@ -352,7 +359,7 @@ body {
 	text-align: center;
 	width: 200px;
 	height: 75px;
-	border: 1px solid black;
+	border: 1px solid gray;
 	border-radius: 15px;
 	font-size: 32px;
 	font-variant: normal;
@@ -364,29 +371,34 @@ body {
 .table-question{
     margin-top: 10px;
     display: block;
-    margin-left: auto;
-    margin-right: auto
+    width: 100%;
+}
+
+.td-link{
+	min-width: 10%;
+	width: 10%;
+	max-width: 10%;
 }
 
 .td-question{
 	border: 1px solid black;
-	width: 1000px;
+	min-width: 80%;
+	width: 80%;
+	max-width: 80%;
 	height: 400px;
 	border-radius: 10px;
 }
 
-.table-course{
+.main_course{
     margin-top: 10px;
     display: block;
+    width: 1000px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px;
 }
 
-.td-course{
-	border: 1px solid black;
-	width: 1000px;
-	border-radius: 10px;
+.main_control{
 	margin: 10px;
 	padding: 10px;
 }
@@ -408,30 +420,21 @@ body {
 	margin-top: 30px;
 }
 
-.td-prew{
-	width: 50px;
-}
-
-.td-next{
-	width: 50px;
-}
-
 .question{
-	margin: 10px;
-	margin-left: 40px;
+	text-align: center;
 	font-size: 25px;
 }
 
 .table-answer{
     margin-top: 30px;
     display: block;
-    width: 60%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto
 }
 
 .time-table{
-	width: 70%;
+	width: 100%;
     margin-left: auto;
     margin-right: auto;
     border: 2px solid #ee9015;
@@ -439,7 +442,7 @@ body {
 }
 
 .table-construct{
-	width: 70%;
+	width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -504,8 +507,9 @@ body {
     width: 300px;
 }
 
-.main-menu-head {
-    margin: 30px;
+.menu-head {
+	margin-top: 30px;
+    margin-bottom: 30px;
     width: 100%;
 }
 
@@ -518,22 +522,22 @@ body {
     border: 1px solid #ee9015;
     border-radius: 10px;
     text-align: center;
+    vertical-align: middle;
     color: black;
     width: 150px;
     height: 40px;
     padding: 10px;
     display: inline-block;
-    margin: 70px;
 }
 
 .number {
     border: 1px solid #ee9015;
     border-radius: 10px;
     text-align: center;
+    vertical-align: middle;
     color: black;
-    width: 150px;
-    height: 40px;
-    display: inline;
+    padding: 10px;
+    display: table-cell;
 }
 
 .fio {
@@ -541,8 +545,8 @@ body {
     border-radius: 10px;
     text-align: left;
     color: black;
-    width: 90%;
-    height: 100px;
+    width: 40%;
+    height: 90px;
     margin-top: 10px;
     padding: 20px;
     font-size: 20px;
@@ -558,17 +562,15 @@ body {
 
 .td-left {
     text-align: left;
-    padding: 5px;
 }
 
 .td-right {
     text-align: right;
-    padding: 5px;
 }
 
 .td-center {
     text-align: center;
-    padding: 5px;
+    width: 25%;
 }
 
 .head-date {
@@ -583,10 +585,16 @@ body {
 }
 
 .table-course-menu {
-    width: 70%;
-    padding: 10px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.chart_container{
+	width:100%;
+	height:400px;
+	border: 1px solid gray;
+    border-radius: 10px;
 }
 
 .errorlist {

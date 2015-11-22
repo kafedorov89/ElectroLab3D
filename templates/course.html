@@ -24,25 +24,24 @@ function checkCourse(){
 	</tr>
 </table>
 
+<div class="main_course">
 {% for control in controls %}
-<table class="table-course">
-	<tr>
-		<td class="td-course">
-		{% if control.type.code %}
-		    {% with template_name=control.type.code|stringformat:"s"|add:".html" %}
-		    	{% if control.wp_param.code %}
-		    		{% with surl=control.wp_param.workplace.url|safe|add:control.wp_param.code|safe %}
-		    		{% include "controls/"|add:template_name with ctl=control url=surl %}
-		    		{% endwith %}
-		    	{% else %}
-		    		{% include "controls/"|add:template_name with ctl=control %}
-		    	{% endif %}
-		    {% endwith %}
-		{% endif %}
-		</td>
-    </tr>
-</table>
+	<div class="main_control">
+	{% if control.type.code %}
+	    {% with template_name=control.type.code|stringformat:"s"|add:".html" %}
+	    	{% if control.wp_param.code %}
+	    		{% with surl=control.wp_param.workplace.url|safe|add:control.wp_param.code|safe %}
+	    		{% include "controls/"|add:template_name with ctl=control url=surl %}
+	    		{% endwith %}
+	    	{% else %}
+	    		{% include "controls/"|add:template_name with ctl=control %}
+	    	{% endif %}
+	    {% endwith %}
+	{% endif %}
+	</div>
 {% endfor %}
+</div>
+
 <table class="table-answer">
 	<tr>
 		<td style="text-align: right; margin-bottom: 30px;" colspan = 2>
