@@ -11,7 +11,7 @@
     {% for field in form %}
        <div class="control-group">
        	<label class="control-label" for={{ field.id_for_label }}><div class="label-div">{{ field.label }}</div></label>
-       	<input class="controls" type="text" id={{ field.id_for_label }} name={{ field.html_name }}>
+       	<input class="controls" {% if field.html_name = "password" %}type="password"{% else %}type="text"{% endif %} id={{ field.id_for_label }} name={{ field.html_name }}>
        	{{ field.errors }}
        </div>
     {% endfor %}

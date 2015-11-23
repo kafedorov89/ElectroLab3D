@@ -160,8 +160,21 @@ body {
 	text-decoration: none;
 	border-radius: 10px;
 	width:200px;
-	display: block;
+	display: inline-block;
 }
+
+.logout-link-block {
+	background-color: gray;
+	text-align: center;
+	color: black;
+	padding: 10px 10px;
+	border: 1px solid black;
+	text-decoration: none;
+	border-radius: 10px;
+	width: 150px;
+	display: inline-block;
+}
+
 
 .label-div {
 	background-color: #ee9015;
@@ -545,7 +558,7 @@ body {
     border-radius: 10px;
     text-align: left;
     color: black;
-    width: 40%;
+    width: 70%;
     height: 90px;
     margin-top: 10px;
     padding: 20px;

@@ -10,4 +10,6 @@ def column_range (number):
 
 @register.filter(name = 'swicher_range')
 def swicher_range (number):
+    if number is None:
+        number = 16
     return range (1, int (number) - 1)

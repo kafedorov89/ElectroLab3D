@@ -9,6 +9,31 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
 from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance
+import functools
+from django.shortcuts import redirect
+
+
+def private (request_number = 0):
+    '''
+    Декоратор, делат метод доступным только после авторизации.
+    В противном случае отсылает на форму авторизации
+    :param request_number - номер параметра запроса
+    '''
+    def _wrap (method):
+        @functools.wraps (method)
+        def _wrapped (*args, **kwargs):
+            try:
+                request = args [request_number]
+                if request.user.is_authenticated ():
+                    result = method (*args, **kwargs)
+                    return result
+                else:
+                    return redirect('/')
+            except:
+
+                raise
+        return _wrapped
+    return _wrap
 
 
 class EUserCreationForm(UserCreationForm):
@@ -57,6 +82,7 @@ class LogoutView (View):
         return HttpResponseRedirect ("/")
 
 
+@private()
 def main_menu (request):
     current_user = request.user
     templ_data = {
@@ -67,6 +93,8 @@ def main_menu (request):
     }
     return render_to_response ('main_menu.html', templ_data)
 
+
+@private()
 def timetable (request):
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
@@ -75,6 +103,8 @@ def timetable (request):
     }
     return render_to_response ('timetable.html', templ_data)
 
+
+@private()
 def media_course (request):
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
@@ -83,6 +113,8 @@ def media_course (request):
     }
     return render_to_response ('media_course.html', templ_data)
 
+
+@private()
 def input_control (request, course_id, number):
     number = int (number)
     course_id = int (course_id)
@@ -112,6 +144,8 @@ def input_control (request, course_id, number):
     }
     return render_to_response ('input_control.html', templ_data)
 
+
+@private()
 def workplace_construct (request, course_id):
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
@@ -126,6 +160,8 @@ def workplace_construct (request, course_id):
     }
     return render_to_response ('workpalce_construct.html', templ_data)
 
+
+@private()
 def course (request, course_id):
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
@@ -142,6 +178,8 @@ def course (request, course_id):
     }
     return render_to_response ('course.html', templ_data)
 
+
+@private()
 def report (request, course_id):
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
@@ -155,6 +193,8 @@ def report (request, course_id):
     }
     return render_to_response ('report.html', templ_data)
 
+
+@private()
 def method (request, course_id):
     templ_data = {
         'id': course_id,
@@ -163,6 +203,7 @@ def method (request, course_id):
         'time' : "{:%H:%M}".format (datetime.now()),
     }
     return render_to_response ('method.html', templ_data)
+
 
 def load_answer (request, user_id, question_id, answer_id):
     user = User.objects.get (pk = int (user_id))
@@ -176,6 +217,7 @@ def load_answer (request, user_id, question_id, answer_id):
     }
     UserAnswer.objects.update_or_create (user = user, question = question, defaults = column)
     return render_to_response ('empty.html')
+
 
 def check_answer (request, course_id, user_id):
     course = Course.objects.get (pk = int (course_id))
@@ -197,6 +239,7 @@ def check_answer (request, course_id, user_id):
     uallowance.save()
     return render_to_response ('empty.html')
 
+
 def check_workplace (request, course_id, user_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
@@ -204,6 +247,7 @@ def check_workplace (request, course_id, user_id):
     uallowance.course_start = 1
     uallowance.save()
     return render_to_response ('empty.html')
+
 
 def start_workplace (request, course_id, user_id):
     course = Course.objects.get (pk = int (course_id))

@@ -8,12 +8,17 @@
 		<td>
 			<img class="menu-logo" src="{% static 'img/logo.jpg' %}" alt="logo"/>
 		</td>
-		<td valign = top style="text-align: right; ">
+		<td valign = top style="text-align: right;">
 			<div class="date">{{ date }}<br>{{ time }}</div>
 		</td>
 	<tr>
-		<td colspan=2>
+		<td>
 			<div class="fio">{{ first_name }}<br>{{ last_name }}<br>Тип пользователя: Студент</div>
+		</td>
+		<td valign = top style="text-align: right;">
+			<div class="control-group">
+				<a class="logout-link-block" href="/logout/">Выйти</a>
+			</div>
 		</td>
 	</tr>
 </table>
