@@ -531,6 +531,11 @@ body {
     margin: 50px;
 }
 
+.course-td{
+	text-align: center;
+    border: 2px solid black;
+}
+
 .date {
     border: 1px solid #ee9015;
     border-radius: 10px;

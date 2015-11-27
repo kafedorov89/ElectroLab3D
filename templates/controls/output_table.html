@@ -1,10 +1,24 @@
 {% load main_tags %}
 <h3>{{ ctl.name }}</h3>
 
-<table>
-{% for i in ctl.param1|column_range %}
-<tr>
- <td><input type='text' id="table_{{ ctl.id }}_{{ i }}" name="table_{{ ctl.id }}_{{ i }}" value=""></td>
-</tr>
-{% endfor %}
+<table style="border-collapse: collapse;">
+	<tr>
+		{% if ctl.param1|exist_left_head %}
+		<td class="course-td"></td>
+		{% endif %}
+		{% for i in ctl.param2|table_width %}
+		<td class="course-td"><span>{{ ctl.param1|table_head:i }}</span></td>
+		{% endfor %}
+	</tr>
+	{% for i in ctl.param2|table_heigth %}
+	<tr>
+		{% if ctl.param1|exist_left_head %}
+		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
+		{% endif %}
+		{% for j in ctl.param2|table_width %}
+		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ ij }}" name="table_{{ ctl.id }}_{{ ij }}" value=""></td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
 </table>
+<div class="div-construct-submit" style="margin-top: 20px;">{{ ctl.param3 }}</div>

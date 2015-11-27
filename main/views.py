@@ -165,7 +165,7 @@ def course (request, course_id):
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'course' : True,
-        'controls' : CourseField.objects.select_related ().filter (course__id = course_id).order_by('id'),
+        'controls' : CourseField.objects.select_related ().filter (course__id = course_id).order_by('number', 'id'),
         'id': course_id,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
