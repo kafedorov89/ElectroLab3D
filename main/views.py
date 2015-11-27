@@ -25,12 +25,10 @@ def private (request_number = 0):
             try:
                 request = args [request_number]
                 if request.user.is_authenticated ():
-                    result = method (*args, **kwargs)
-                    return result
+                    return method (*args, **kwargs)
                 else:
                     return redirect('/')
             except:
-
                 raise
         return _wrapped
     return _wrap

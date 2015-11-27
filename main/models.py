@@ -49,6 +49,11 @@ class CourseField (models.Model):
     param1 = models.TextField (null = True)
     param2 = models.TextField (null = True)
     param3 = models.TextField (null = True)
+    number = models.IntegerField (default = 1)
+    in_course = models.BooleanField (default = False)
+    in_report = models.BooleanField (default = False)
+    min_right = models.DecimalField (max_digits = 14, decimal_places = 4, default = 0)
+    max_right = models.DecimalField (max_digits = 14, decimal_places = 4, default = 0)
 
 
 class UserFieldParam (models.Model):
