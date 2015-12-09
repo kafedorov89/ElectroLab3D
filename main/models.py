@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 class WpType (models.Model):
     name = models.CharField (max_length = 200)
@@ -46,7 +46,6 @@ class WpParam (models.Model):
 
 class Course (models.Model):
     name = models.CharField (max_length = 200, verbose_name = u"Название")
-    last_date = models.DateTimeField (verbose_name = u"Дата")
     user = models.ForeignKey (User, verbose_name = u"Преподаватель")
     duration = models.DurationField (verbose_name = u"Время на выполнение")
 
@@ -78,17 +77,17 @@ class FieldType (models.Model):
 
 class CourseField (models.Model):
     course = models.ForeignKey (Course, default = 1, verbose_name = u"Лабораторная работа")
-    wp_param = models.ForeignKey (WpParam, null = True, verbose_name = u"UID")
+    wp_param = models.ForeignKey (WpParam, null = True, verbose_name = u"UID", blank = True)
     type = models.ForeignKey (FieldType, verbose_name = u"Тип поля")
-    name = models.CharField (max_length = 200, verbose_name = u"Заголовок")
-    param1 = models.TextField (null = True, verbose_name = u"Параметр 1")
-    param2 = models.TextField (null = True, verbose_name = u"Параметр 2")
-    param3 = models.TextField (null = True, verbose_name = u"Параметр 3")
-    number = models.IntegerField (default = 1, verbose_name = u"Сортировка")
-    in_course = models.BooleanField (default = False, verbose_name = u"Отображение в лабораторной")
-    in_report = models.BooleanField (default = False, verbose_name = u"Отображение в отчете")
-    min_right = models.DecimalField (max_digits = 14, decimal_places = 4, default = 0, verbose_name = u"Минимальное правильное значение")
-    max_right = models.DecimalField (max_digits = 14, decimal_places = 4, default = 0, verbose_name = u"Максимальное правильное значение")
+    name = models.CharField (max_length = 200, verbose_name = u"Заголовок", blank = True)
+    param1 = models.TextField (null = True, verbose_name = u"Параметр 1", blank = True)
+    param2 = models.TextField (null = True, verbose_name = u"Параметр 2", blank = True)
+    param3 = models.TextField (null = True, verbose_name = u"Параметр 3", blank = True)
+    number = models.IntegerField (default = 1, null = True, verbose_name = u"Сортировка")
+    in_course = models.NullBooleanField (default = True, null = True, verbose_name = u"Отображение в лабораторной")
+    in_report = models.NullBooleanField (default = True, null = True, verbose_name = u"Отображение в отчете")
+    min_right = models.DecimalField (max_digits = 14, null = True, decimal_places = 4, default = 0, verbose_name = u"Минимальное правильное значение")
+    max_right = models.DecimalField (max_digits = 14, null = True, decimal_places = 4, default = 0, verbose_name = u"Максимальное правильное значение")
 
     class Meta:
         verbose_name = u"Поле лабораторной"
@@ -111,6 +110,7 @@ class CourseState (models.Model):
 class UserCourseState (models.Model):
     course = models.ForeignKey (Course)
     user = models.ForeignKey (User)
+    last_date = models.DateTimeField (default = datetime.now)
     course_state = models.ForeignKey (CourseState)
 
 
@@ -152,33 +152,42 @@ class UserAllowance (models.Model):
 
 
 ''' Таблицы для 3Д тренингов '''
-class Training (models.Model):
-    name = models.CharField (max_length = 200)
+class Standtask (models.Model):
+    standtask_name = models.CharField (max_length = 200)
+    conn_json = models.TextField ()
+    rope_json = models.TextField ()
 
-
-class TrainingList (models.Model):
-    traning = models.ForeignKey (Training)
-    start_time = models.DateTimeField ()
-    end_time = models.DateTimeField ()
-    traning_status = models.BooleanField ()
-
-
-class StandTask (models.Model):
-    name = models.CharField (max_length = 200)
-
-
-class StandTaskState (models.Model):
-    stand_task = models.ForeignKey (StandTask)
-    user = models.ForeignKey (User)
-    name = models.CharField (max_length = 200)
+class Standtask_state (models.Model):
+    standtask_id = models.ForeignKey (Standtask)
+    user_id = models.ForeignKey (User)
+    user_rope_json = models.TextField ()
     activate = models.BooleanField ()
     complete = models.BooleanField ()
     error = models.BooleanField ()
 
+class Training_log (models.Model):
+    user_id = models.ForeignKey (User)
+    training_id = models.IntegerField ()
+    training_name = models.CharField (max_length = 200)
+    start_time = models.DateTimeField ()
+    end_time = models.DateTimeField ()
+    complete = models.BooleanField ()
+    event_list = models.TextField ()
 
-class TrainingEventLog (models.Model):
-    traning = models.ForeignKey (Training)
-    user = models.ForeignKey (User)
-    name = models.CharField (max_length = 200)
-    status = models.BooleanField ()
-    time = models.DateTimeField ()
+class Training_param_state (models.Model):
+    bool_value = models.BooleanField ()
+    int_value = models.IntegerField ()
+    training_id = models.IntegerField ()
+    session_id = models.IntegerField ()
+    float_value = models.DecimalField (max_digits = 14, decimal_places = 4, default = 0)
+    string_value = models.TextField ()
+    vector3_value = models.TextField ()
+    vector2_value = models.TextField ()
+
+class Training_state (models.Model):
+    training_id = models.IntegerField ()
+    user_id = models.ForeignKey (User)
+    online = models.BooleanField ()
+    activate = models.BooleanField ()
+
+

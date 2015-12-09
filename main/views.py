@@ -71,6 +71,8 @@ class LoginFormView (FormView):
     def form_valid (self, form):
         self.user = form.get_user ()
         login (self.request, self.user)
+        if self.request.user.is_staff:
+            LoginFormView.success_url = "/teacher_main_menu"
         return super (LoginFormView, self).form_valid (form)
 
 
@@ -100,6 +102,16 @@ def timetable (request):
         'data' : UserCourseState.objects.select_related ().filter (user = request.user.id).order_by('course_state__name', 'course__name'),
     }
     return render_to_response ('timetable.html', templ_data)
+
+
+@private()
+def timetable_editor (request):
+    templ_data = {
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+        'data' : UserCourseState.objects.select_related ().filter ().order_by('user__id', 'course__name', 'course_state__name'),
+    }
+    return render_to_response ('timetable_editor.html', templ_data)
 
 
 @private()
@@ -201,6 +213,19 @@ def method (request, course_id):
         'time' : "{:%H:%M}".format (datetime.now()),
     }
     return render_to_response ('method.html', templ_data)
+
+
+@private()
+def teacher_main_menu (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('teacher_main_menu.html', templ_data)
+
 
 
 def load_answer (request, user_id, question_id, answer_id):

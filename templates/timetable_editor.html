@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Редактор рассписания лабораторных{% endblock %}
+{% load staticfiles %}
+{% block main %}
+<table class="menu-head">
+	<tr>
+		<td>
+			<div class="control-group">
+		        <a class="back-link-block" href="/main_menu">Возврат в главное меню</a>
+		    </div>
+	    </td>
+	    <td valign = top style="text-align: right;">
+			<div class="date">{{ date }}<br>{{ time }}</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="control-group">
+		        <a class="back-link-block" href="/course_state_add">Добавить</a>
+		    </div>
+	    </td>
+	</tr>
+</table>
+
+<table class="time-table">
+	<tr class="time-tr-head">
+		<td class="time-td-head">Студент</td>
+		<td class="time-td-head">Наименование лабораторной работы</td>
+		<td class="time-td-head">Дата/Время</td>
+		<td class="time-td-head">Длительность</td>
+		<td class="time-td-head">Статус</td>
+		<td class="time-td-head">Редактировать</td>
+		<td class="time-td-head">Удалить</td>
+	</tr>
+	{% for row in data %}
+	<tr class="time-tr-body{{ row.course_state.id }}">
+		<td class="time-td-body">{{ row.user.last_name }} {{ row.course.user.first_name }}</td>
+		<td class="time-td-body">{{ row.course.name }}</td>
+		<td class="time-td-body">{{ row.last_date }}</td>
+		<td class="time-td-body">{{ row.course.duration }}</td>
+		<td class="time-td-body">{{ row.course_state.name }}</td>
+		<td class="time-td-body"><a class="timetable-link" href="/course_state_edit/{{ row.id }}/">Редактировать</a></td>
+		<td class="time-td-body"><a class="timetable-link" href="/course_state_delete/{{ row.id }}/">Удалить</a></td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

@@ -25,10 +25,10 @@ class CourseFieldAdmin (admin.StackedInline):
 class CourseAdmin (admin.ModelAdmin):
     fieldsets = [
         (u'Заголовок', {'fields': ['name']}),
-        (u'Параметры', {'fields': ['last_date', 'user', 'duration']}),
+        (u'Параметры', {'fields': ['user', 'duration']}),
     ]
 
-    list_display = ('name', 'last_date', 'user', 'duration')
+    list_display = ('name', 'user', 'duration')
 
     inlines = [CourseFieldAdmin]
 
