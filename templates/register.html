@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Регистрация{% endblock %}
 {% block main %}
-<div class="center">
+<div class=login-blok>
     <form action="" name="register-form" method="post">
         {% csrf_token %}
         {% for field in form %}
