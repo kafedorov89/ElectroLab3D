@@ -34,7 +34,7 @@
 	</tr>
 	{% for row in data %}
 	<tr class="time-tr-body{{ row.course_state.id }}">
-		<td class="time-td-body">{{ row.user.last_name }} {{ row.course.user.first_name }}</td>
+		<td class="time-td-body">{{ row.user.last_name }} {{ row.user.first_name }}</td>
 		<td class="time-td-body">{{ row.course.name }}</td>
 		<td class="time-td-body">{{ row.last_date }}</td>
 		<td class="time-td-body">{{ row.course.duration }}</td>
