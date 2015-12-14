@@ -16,7 +16,7 @@
 	<tr>
 		<td>
 			<div class="control-group">
-		        <a class="back-link-block" href="/course_state_add">Добавить</a>
+		        <a class="back-link-block" href="/course_state_form/add/">Добавить</a>
 		    </div>
 	    </td>
 	</tr>
@@ -39,8 +39,8 @@
 		<td class="time-td-body">{{ row.last_date }}</td>
 		<td class="time-td-body">{{ row.course.duration }}</td>
 		<td class="time-td-body">{{ row.course_state.name }}</td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_edit/{{ row.id }}/">Редактировать</a></td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_delete/{{ row.id }}/">Удалить</a></td>
+		<td class="time-td-body"><a class="timetable-link" href="/course_state_form/cng/{{ row.id }}/">Редактировать</a></td>
+		<td class="time-td-body"><a class="timetable-link" href="/course_state_del/{{ row.id }}/">Удалить</a></td>
 	</tr>
 	{% endfor %}
 </table>

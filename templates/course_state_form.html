@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Редактор рассписания лабораторных{% endblock %}
+{% load staticfiles %}
+{% block main %}
+{% load staticfiles %}
+<link type="text/css" href="{% static 'js/formstyler/' %}jquery.formstyler.css" rel="stylesheet" />
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/i18n/jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="{% static 'js/formstyler/' %}/jquery.formstyler.js"></script>
+
+<script>
+$(function(){
+	$.datepicker.setDefaults(
+		$.extend($.datepicker.regional["ru"])
+	);
+	$("#datepicker").datepicker();
+});
+
+(function($) {
+	$(function() {
+		$('input, select').styler({
+			selectSearch: true
+		});
+	});
+})(jQuery);
+</script>
+
+<script type="text/javascript">
+function saveChange (action){
+	student = document.getElementById("student").value;
+	course = document.getElementById("course").value;
+	state = document.getElementById("state").value;
+	date = document.getElementById("datepicker").value;
+	id = document.getElementById("id").value;
+	
+	if (action == 'cng')
+	{
+		window.location.href = "/course_state_cng/" + id + "/" + student + "/" + course + "/" + date + "/" + state;
+	}
+	else
+	{
+		window.location.href = "/course_state_add/" + student + "/" + course + "/" + date + "/" + state;
+	}
+}
+</script>
+
+<table class="menu-head">
+	<tr>
+		<td>
+			<div class="control-group">
+		        <a class="back-link-block" href="/timetable_editor">Возврат к рассписанию</a>
+		    </div>
+	    </td>
+	    <td valign = top style="text-align: right;">
+			<div class="date">{{ date }}<br>{{ time }}</div>
+		</td>
+	</tr>
+</table>
+
+<input type="hidden" name="id" id="id" value="{{ id }}" />
+<table>
+	<tr>
+		<td>
+			<label for="student">Студент</label>
+		</td>
+		<td>
+			<select id="student" name="student" class="sec">
+				{% for student in students %}
+				<option value={{ student.id }} {% if cur_course.user.id == student.id %}selected{% endif %}>{{ student.last_name }} {{ student.first_name }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="course">Лабораторная работа</label>
+		</td>
+		<td>
+			<select id="course" name="course" class="sec">
+				{% for course in courses %}
+				<option value={{ course.id }} {% if cur_course.course.id == course.id %}selected{% endif %}>Лабораторная работа {{ course.name }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="state">Состояние</label>
+		</td>
+		<td>
+			<select id="state" name="state" class="sec">
+				{% for state in states %}
+				<option value={{ state.id }} {% if cur_course.state.id == state.id %}selected{% endif %}>{{ state.name }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="datepicker">Дата выполнения</label>
+		</td>
+		<td>
+			<input class="styler" id="datepicker" type="text" />
+		</td>
+	</tr>
+</table>
+
+<table class="table-answer">
+	<tr>
+		<td style="text-align: right; margin-bottom: 30px;" colspan = 2>
+			<div class="div-answer-submit" onClick="saveChange ('{{ action }}');">Сохранить изменения</div>
+		</td>
+	</tr>
+</table>
+{% endblock %}

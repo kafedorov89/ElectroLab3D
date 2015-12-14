@@ -113,6 +113,9 @@ class UserCourseState (models.Model):
     last_date = models.DateTimeField (default = datetime.now)
     course_state = models.ForeignKey (CourseState)
 
+    class Meta:
+        unique_together = ('course', 'user',)
+
 
 class Question (models.Model):
     course = models.ForeignKey (Course, verbose_name = u"Лабораторная работа")

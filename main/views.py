@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState
 import functools
 from django.shortcuts import redirect
 
@@ -126,13 +126,19 @@ def media_course (request):
 
 @private()
 def input_control (request, course_id, number):
+    course = Course.objects.get (pk = int (course_id))
     number = int (number)
     course_id = int (course_id)
     current_user = request.user
     count = len (list (Question.objects.filter (course = course_id)))
-    question = list (Question.objects.filter (course = course_id, number = number)) [0]
-    answers = Answer.objects.filter (question = question.id)
-    uanswer = UserAnswer.objects.filter (user = current_user, question = question)
+    question = list (Question.objects.filter (course = course_id, number = number))
+    if len (question) == 0:
+        answers = []
+        uanswer = []
+    else:
+        question = question [0]
+        answers = Answer.objects.filter (question = question.id)
+        uanswer = UserAnswer.objects.filter (user = current_user, question = question)
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = current_user, course = course)
 
@@ -142,6 +148,7 @@ def input_control (request, course_id, number):
         'input_control' : True,
         'host' : request.get_host(),
         'id': course_id,
+        'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'pq_id' : number - 1 if number > 1 else None,
@@ -162,6 +169,7 @@ def workplace_construct (request, course_id):
     templ_data = {
         'workplace_construct' : True,
         'id': course_id,
+        'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'user' : request.user,
@@ -179,6 +187,7 @@ def course (request, course_id):
         'course' : True,
         'controls' : CourseField.objects.select_related ().filter (course__id = course_id).order_by('number', 'id'),
         'id': course_id,
+        'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'uallowance' : uallowance,
@@ -197,6 +206,7 @@ def report (request, course_id):
         'report' : True,
         'db' : CourseField.objects.select_related ().filter (course__id = course_id),
         'id': course_id,
+        'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'uallowance' : uallowance,
@@ -226,6 +236,50 @@ def teacher_main_menu (request):
     }
     return render_to_response ('teacher_main_menu.html', templ_data)
 
+
+@private()
+def course_state_add (request, student, course, date, state):
+
+    UserCourseState.objects.update_or_create (user = student, course = course, course_state = state)
+    return HttpResponseRedirect ("/timetable_editor/")
+
+
+@private()
+def course_state_cng (request, id, student, course, date, state):
+    UserCourseState.objects.filter (pk = id).update (user = student, course = course, course_state = state)
+    return HttpResponseRedirect ("/timetable_editor/")
+
+
+@private()
+def course_state_del (request, id):
+    UserCourseState.objects.get (pk = id).delete ()
+    return HttpResponseRedirect ("/timetable_editor/")
+
+
+@private()
+def course_state_form (request, action, id = None):
+    current_user = request.user
+    students = User.objects.select_related ().filter ().order_by('last_name', 'first_name')
+    courses = Course.objects.select_related ().filter ().order_by('id')
+    states = CourseState.objects.select_related ().filter ()
+
+    cur_course = None
+    if id is not None:
+        cur_course = UserCourseState.objects.get (pk = int (id))
+
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+        'students' : students,
+        'courses' : courses,
+        'states' : states,
+        'action' : action,
+        'id' : id,
+        'cur_course' : cur_course,
+    }
+    return render_to_response ('course_state_form.html', templ_data)
 
 
 def load_answer (request, user_id, question_id, answer_id):
