@@ -4,7 +4,9 @@ $(function () {
 	$.ajax({
 		url: url,
 		success: function (data) {
-			document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data
+			if (data.Success == true) {
+				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data
+			}
 		},
 		error: function (data) {},
 		type: "GET",
