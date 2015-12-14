@@ -43,6 +43,6 @@ urlpatterns = [
     url (r'^course_state_form/([a-z]*)/$', views.course_state_form),
     url (r'^course_state_form/([a-z]*)/([0-9]*)/$', views.course_state_form),
     url (r'^course_state_cng/([0-9]*)/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_cng),
-    url (r'^course_state_add/([0-9]*)/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/$', views.course_state_add),
+    url (r'^course_state_add/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_add),
     url (r'^course_state_del/([0-9]*)/$', views.course_state_del),
 ]

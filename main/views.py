@@ -239,14 +239,19 @@ def teacher_main_menu (request):
 
 @private()
 def course_state_add (request, student, course, date, state):
-
-    UserCourseState.objects.update_or_create (user = student, course = course, course_state = state)
+    obj_course = Course.objects.get (pk = course)
+    obj_course_state = CourseState.objects.get (pk = state)
+    obj_user = User.objects.get (pk = student)
+    UserCourseState.objects.update_or_create (user = obj_user, course = obj_course, course_state = obj_course_state)
     return HttpResponseRedirect ("/timetable_editor/")
 
 
 @private()
 def course_state_cng (request, id, student, course, date, state):
-    UserCourseState.objects.filter (pk = id).update (user = student, course = course, course_state = state)
+    obj_course = Course.objects.get (pk = course)
+    obj_course_state = CourseState.objects.get (pk = state)
+    obj_user = User.objects.get (pk = student)
+    UserCourseState.objects.filter (pk = id).update (user = obj_user, course = obj_course, course_state = obj_course_state)
     return HttpResponseRedirect ("/timetable_editor/")
 
 
