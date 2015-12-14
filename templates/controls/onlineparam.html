@@ -18,7 +18,7 @@ function startRead{{ ctl.id }}(){
 	sendRequestonline{{ ctl.id }} ('{{ url }}');
 	if (flag == 'True')
 	{
-		setTimeout("startRead{{ ctl.id }}()",200);
+		setTimeout("startRead{{ ctl.id }}()",{% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
 	}
 }
 

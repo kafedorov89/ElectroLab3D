@@ -17,6 +17,10 @@ def table_width (param):
     else:
         return 0
 
+@register.filter(name = 'param_url')
+def param_url (param):
+    return param.split(";") [0]
+
 @register.filter(name = 'table_width2')
 def table_width2 (param):
     params = param.split(";")

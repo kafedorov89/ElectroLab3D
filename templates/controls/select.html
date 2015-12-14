@@ -68,14 +68,14 @@ function sendRequestSelect{{ ctl.id }} (id) {
 function minusSelect{{ ctl.id }} () {
 	cur_id = document.getElementById("select_id_{{ ctl.id }}").value;
 	if (Number(cur_id) > 0) {
-		setSelected{{ ctl.id }} (Number(cur_id) - 1);
+		sendRequestSelect{{ ctl.id }} (Number(cur_id) - 1);
 	}
 }
 
 function plusSelect{{ ctl.id }} () {
 	cur_id = document.getElementById("select_id_{{ ctl.id }}").value;
 	if (Number(cur_id) < {{ ctl.param1|add:"-1" }}) {
-		setSelected{{ ctl.id }} (Number(cur_id) + 1);
+		sendRequestSelect{{ ctl.id }} (Number(cur_id) + 1);
 	}
 }
 

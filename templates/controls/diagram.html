@@ -6,10 +6,10 @@ $(function(){
 		success: function(data){
 				$('#chart_container{{ ctl.id }}').highcharts({
 				chart: {
-					type: 'line'
+					type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}
 				},
 				title: {
-					text: 'График напряжения'
+					text: ''
 				},
 				xAxis: {
 					title: {

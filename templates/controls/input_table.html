@@ -4,8 +4,10 @@ function sendRequesttable{{ ctl.id }}(url) {
 $.ajax({
 	url: url,
 	success: function(data){
-		for (var i = 0; i < data.Data.length; i++) {
-			document.getElementById("table_{{ ctl.id }}_" + i).innerHTML = data.Data[i]
+		if (data.Success == true) {
+			for (var i = 0; i < data.Data.length; i++) {
+				document.getElementById("table_{{ ctl.id }}_" + i + "0").innerHTML = data.Data[i]
+			}
 		}
 	},
 	error: function (data) {},
@@ -32,9 +34,9 @@ $.ajax({
 		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
-		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ ij }}" name="table_{{ ctl.id }}_{{ ij }}"></div></td>
+		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>
 		{% endfor %}
 	</tr>
 	{% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2 }}{% endif %}');">{{ ctl.param3 }}</div>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2|param_url }}{% endif %}');">{{ ctl.param3 }}</div>

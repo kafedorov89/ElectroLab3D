@@ -6,9 +6,9 @@ body {
 
 .main {
     display: block;
-    width: 1100px;
-    max-width: 1100px;
-    min-width: 1100px;
+    width: 1000px;
+    max-width: 1000px;
+    min-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px;
@@ -369,9 +369,11 @@ body {
 .online_value{
 	display: inline-block;
 	vertical-align: middle;
+	padding-top: 20px;
+	padding-left: 10px;
 	text-align: center;
-	width: 200px;
-	height: 75px;
+	width: 300px;
+	height: 55px;
 	border: 1px solid gray;
 	border-radius: 15px;
 	font-size: 32px;
@@ -533,6 +535,7 @@ body {
 
 .course-td{
 	text-align: center;
+	height: 20px;
     border: 2px solid black;
 }
 
