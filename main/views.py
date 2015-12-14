@@ -239,19 +239,21 @@ def teacher_main_menu (request):
 
 @private()
 def course_state_add (request, student, course, date, state):
+    obj_date = datetime.strptime(date, '%d.%m.%Y').date ()
     obj_course = Course.objects.get (pk = course)
     obj_course_state = CourseState.objects.get (pk = state)
     obj_user = User.objects.get (pk = student)
-    UserCourseState.objects.update_or_create (user = obj_user, course = obj_course, course_state = obj_course_state)
+    UserCourseState.objects.update_or_create (user = obj_user, course = obj_course, last_date = obj_date, course_state = obj_course_state)
     return HttpResponseRedirect ("/timetable_editor/")
 
 
 @private()
 def course_state_cng (request, id, student, course, date, state):
+    obj_date = datetime.strptime(date, '%d.%m.%Y').date ()
     obj_course = Course.objects.get (pk = course)
     obj_course_state = CourseState.objects.get (pk = state)
     obj_user = User.objects.get (pk = student)
-    UserCourseState.objects.filter (pk = id).update (user = obj_user, course = obj_course, course_state = obj_course_state)
+    UserCourseState.objects.filter (pk = id).update (user = obj_user, course = obj_course, last_date = obj_date, course_state = obj_course_state)
     return HttpResponseRedirect ("/timetable_editor/")
 
 
@@ -283,6 +285,7 @@ def course_state_form (request, action, id = None):
         'action' : action,
         'id' : id,
         'cur_course' : cur_course,
+        'last_date' : cur_course.last_date.strftime("%d.%m.%Y")
     }
     return render_to_response ('course_state_form.html', templ_data)
 
