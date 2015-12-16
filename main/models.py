@@ -100,7 +100,11 @@ class CourseField (models.Model):
 
 class UserFieldParam (models.Model):
     field = models.ForeignKey (CourseField)
-    value = models.CharField (max_length = 200)
+    user = models.ForeignKey (User)
+    value = models.TextField (null = True, blank = True)
+
+    class Meta:
+        unique_together = ('field', 'user',)
 
 
 class CourseState (models.Model):

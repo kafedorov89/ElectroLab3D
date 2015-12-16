@@ -1,0 +1,36 @@
+{% load main_tags %}
+<h3>{{ ctl.name }}</h3>
+<input type='hidden' id="select_id_{{ ctl.id }}" name="select_id_{{ ctl.id }}" value="">
+<div onselectstart="return false" onmousedown="return false">
+	<ul class="ul_switcher">
+		<li class="li_switcher">
+			<div class="switcher_minus" id="switcher_minus_{{ ctl.id }}" onClick="minusSelect{{ ctl.id }}();"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_left" id="switcher_{{ ctl.id }}_0" onClick="sendRequestSelect{{ ctl.id }}('0');"></div>
+		</li>   
+		{% for i in ctl.param1|swicher_range %}
+		<li class="li_switcher">
+			<div class="switcher_center" id="switcher_{{ ctl.id }}_{{ i }}" onClick="sendRequestSelect{{ ctl.id }}('{{ i }}');"></div>
+		</li>
+		{% endfor %}
+		<li class="li_switcher">
+			<div class="switcher_right" id='switcher_{{ ctl.id }}_{{ ctl.param1|add:"-1" }}' onClick='sendRequestSelect{{ ctl.id }}("{{ ctl.param1|add:"-1" }}");'></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_plus" id="switcher_plus_{{ ctl.id }}" onClick="plusSelect{{ ctl.id }}();"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_space"></div>
+		</li>
+		<li class="li_switcher">
+			<div class="switcher_value" id="switcher_value_{{ ctl.id }}"></div>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,36 @@
+<script>
+function sendRequestbool(url) {
+$(function(){
+	$.ajax({
+		url: url,
+		success: function(data){
+			
+		},
+		error: function(data){
+			
+		},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+
+function click_button(url) {
+	if (document.getElementById("button_{{ ctl.id }}").value == 'on')
+	{
+		sendRequestbool(url + "write=false");
+		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_off";
+		document.getElementById("button_{{ ctl.id }}").value = "off";
+	}
+	else{
+		sendRequestbool(url + "write=true");
+		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_on";
+		document.getElementById("button_{{ ctl.id }}").value = "on";
+	}
+}
+</script>
+
+<h3>{{ ctl.name }}</h3>
+<div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">
+	<div class="bool_switcher_off" id="button_{{ ctl.id }}" value="off" onClick="click_button('{{ url }}');"></div>
+</div>

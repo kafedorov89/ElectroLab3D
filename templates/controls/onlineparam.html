@@ -1,11 +1,25 @@
 <script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
 function sendRequestonline{{ ctl.id }} (url) {
 $(function () {
 	$.ajax({
 		url: url,
 		success: function (data) {
 			if (data.Success == true) {
-				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data
+				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data;
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data);
 			}
 		},
 		error: function (data) {},

@@ -1,4 +1,28 @@
 {% load main_tags %}
+<script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function save_results{{ ctl.id }}(){
+	clear_value{{ ctl.id }}();
+	for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
+		for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
+			value = document.getElementById("table_{{ ctl.id }}_" + i + j).value;
+			set_value{{ ctl.id }}(value);
+		}
+	}
+}
+</script>
+
 <h3>{{ ctl.name }}</h3>
 
 <table style="border-collapse: collapse;">
@@ -16,9 +40,9 @@
 		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
-		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ ij }}" name="table_{{ ctl.id }}_{{ ij }}" value=""></td>
+		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}" value=""></td>
 		{% endfor %}
 	</tr>
 	{% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px;">{{ ctl.param3 }}</div>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="save_results{{ ctl.id }}()">{{ ctl.param3 }}</div>

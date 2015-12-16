@@ -7,7 +7,7 @@
 <script type="text/javascript">
 function checkCourse(){
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/check_answer/{{ id }}/{{ user.id }}/", false);
+	xhr.open('GET', "http://{{ host }}/get_report/{{ id }}/{{ user.id }}/", false);
 	xhr.send();
 	window.location.reload();
 }
@@ -31,10 +31,10 @@ function checkCourse(){
 	    {% with template_name=control.type.code|stringformat:"s"|add:".html" %}
 	    	{% if control.wp_param.code %}
 	    		{% with surl=control.wp_param.workplace.url|safe|add:control.wp_param.code|safe %}
-	    		{% include "controls/"|add:template_name with ctl=control url=surl %}
+	    		{% include "controls/"|add:template_name with ctl=control url=surl host=host user=user%}
 	    		{% endwith %}
 	    	{% else %}
-	    		{% include "controls/"|add:template_name with ctl=control %}
+	    		{% include "controls/"|add:template_name with ctl=control host=host user=user%}
 	    	{% endif %}
 	    {% endwith %}
 	{% endif %}

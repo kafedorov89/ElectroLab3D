@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam
 import functools
 from django.shortcuts import redirect
 
@@ -126,7 +126,6 @@ def media_course (request):
 
 @private()
 def input_control (request, course_id, number):
-    course = Course.objects.get (pk = int (course_id))
     number = int (number)
     course_id = int (course_id)
     current_user = request.user
@@ -185,15 +184,14 @@ def course (request, course_id):
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'course' : True,
-        'controls' : CourseField.objects.select_related ().filter (course__id = course_id).order_by('number', 'id'),
+        'controls' : CourseField.objects.select_related ().filter (course__id = course_id, in_course = True).order_by ('number', 'id'),
         'id': course_id,
         'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
         'uallowance' : uallowance,
-        'rows' : range(10),
-        'rows_select' : range(0, 16),
-        'row_cnt' : 10,
+        'host' : request.get_host(),
+        'user' : request.user,
     }
     return render_to_response ('course.html', templ_data)
 
@@ -204,7 +202,7 @@ def report (request, course_id):
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'report' : True,
-        'db' : CourseField.objects.select_related ().filter (course__id = course_id),
+        'controls' : UserFieldParam.objects.select_related ().filter (user = request.user, field__course__id = course_id, field__in_report = True),
         'id': course_id,
         'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
@@ -271,8 +269,10 @@ def course_state_form (request, action, id = None):
     states = CourseState.objects.select_related ().filter ()
 
     cur_course = None
+    last_date = None
     if id is not None:
         cur_course = UserCourseState.objects.get (pk = int (id))
+        last_date = cur_course.last_date.strftime("%d.%m.%Y")
 
     templ_data = {
         'first_name' : current_user.first_name,
@@ -285,9 +285,34 @@ def course_state_form (request, action, id = None):
         'action' : action,
         'id' : id,
         'cur_course' : cur_course,
-        'last_date' : cur_course.last_date.strftime("%d.%m.%Y")
+        'last_date' : last_date
     }
     return render_to_response ('course_state_form.html', templ_data)
+
+
+def set_userfieldparam (request, user_id, field_id, value):
+    user = User.objects.get (pk = int (user_id))
+    field = CourseField.objects.get (pk = int (field_id))
+    userfieldparam = UserFieldParam.objects.filter (user = user, field = field)
+
+    if len (userfieldparam) == 0:
+        UserFieldParam.objects.update_or_create (user = user, field = field, value = value)
+    else:
+        cur_value = u';'.join ([userfieldparam [0].value, value]) if userfieldparam [0].value is not None else value
+        userfieldparam.update (value = cur_value)
+    return render_to_response ('empty.html')
+
+
+def clear_userfieldparam (request, user_id, field_id):
+    user = User.objects.get (pk = int (user_id))
+    field = CourseField.objects.get (pk = int (field_id))
+    userfieldparam = UserFieldParam.objects.filter (user = user, field = field)
+
+    if len (userfieldparam) == 0:
+        UserFieldParam.objects.update_or_create (user = user, field = field)
+    else:
+        userfieldparam.update (value = None)
+    return render_to_response ('empty.html')
 
 
 def load_answer (request, user_id, question_id, answer_id):
@@ -320,6 +345,22 @@ def check_answer (request, course_id, user_id):
         uallowance.construct = 0
         uallowance.course_start = 0
         uallowance.report = 0
+
+    uallowance.save()
+    return render_to_response ('empty.html')
+
+
+def get_report (request, course_id, user_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+
+    empty_field = CourseField.objects.filter (userfieldparam__isnull = True, in_report = True)
+    for field in empty_field:
+        UserFieldParam.objects.update_or_create (user = user, field = field)
+
+    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
+
+    uallowance.report = 1
 
     uallowance.save()
     return render_to_response ('empty.html')

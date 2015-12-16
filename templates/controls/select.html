@@ -1,17 +1,35 @@
 <script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
 $(function() {
 	$.ajax({
 		url: "{{ url }}",
 		success: function (data) {
 			if (data.Success){
 				setSelected{{ ctl.id }} (data.Data);
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data);
 			}
 			else {
 				setSelected{{ ctl.id }} (0);
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(0);
 			}
 		},
 		error: function (data) {
 			setSelected{{ ctl.id }} (0);
+			clear_value{{ ctl.id }}();
+			set_value{{ ctl.id }}(0);
 		},
 		type: "GET",
 		dataType: "json"
@@ -57,6 +75,8 @@ function sendRequestSelect{{ ctl.id }} (id) {
 			url: "{{ url }}" + "&write=" + id,
 			success: function(data){
 				setSelected{{ ctl.id }} (data.Data);
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data);
 			},
 			error: function (data) {},
 			type: "GET",

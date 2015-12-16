@@ -1,0 +1,30 @@
+<script>
+$(function(){
+	var data = "{{ value }}".split(';');
+	$('#chart_container{{ ctl.id }}').highcharts({
+		chart: {
+			type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}
+		},
+		title: {
+			text: ''
+		},
+		xAxis: {
+			title: {
+				text: 'Время'
+			}
+		},
+		yAxis: {
+			title: {
+				text: 'Влт'
+			}
+		},
+		series: [{
+			name: 'Напряжение',
+			data: data
+			},]
+		});
+}
+</script>
+
+<h3>{{ ctl.name }}</h3>
+<div id="chart_container{{ ctl.id }}" class="chart_container"></div>

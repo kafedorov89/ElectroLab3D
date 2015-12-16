@@ -1,0 +1,47 @@
+{% load main_tags %}
+<script>
+function sendRequesttable{{ ctl.id }}(url) {
+$.ajax({
+	url: url,
+	success: function(data){
+		for (var i = 0; i < data.Data.length; i++) {
+			document.getElementById("table_{{ ctl.id }}_" + i).innerHTML = data.Data[i]
+		}
+	},
+	error: function (data) {},
+	type: "GET",
+	dataType: "json"
+	});
+}
+</script>
+
+<h3>{{ ctl.name }}</h3>
+
+<table style="border-collapse: collapse;">
+	<tr>
+		{% if ctl.param1|exist_left_head %}
+		<td class="course-td"></td>
+		{% endif %}
+		{% for i in ctl.param2|table_width %}
+		<td class="course-td"><span>{{ ctl.param1|table_head:i }}</span></td>
+		{% endfor %}
+		{% for j in ctl.param2|table_width2 %}
+		<td class="course-td"><span>{{ ctl.param1|table_head:j }}</span></td>
+		{% endfor %}
+	</tr>
+	{% for i in ctl.param2|table_heigth %}
+	<tr>
+		{% if ctl.param1|exist_left_head %}
+		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
+		{% endif %}
+		{% for j in ctl.param2|table_width %}
+		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>
+		{% endfor %}
+		{% for j in ctl.param2|table_width2 %}
+		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}" value=""></td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+</table>
+<div class="div-construct-submit" style="margin-top: 20px; display: inline-block;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2 }}{% endif %}');">{{ ctl.param3|multitable_name1 }}</div>
+<div class="div-construct-submit" style="margin-top: 20px; display: inline-block;">{{ ctl.param3|multitable_name2 }}</div>

@@ -1,2 +1,24 @@
+{% load main_tags %}
+<script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function save_result{{ ctl.id }}(){
+	clear_value{{ ctl.id }}();
+	value = document.getElementById("textarea_{{ ctl.id }}").value;
+	set_value{{ ctl.id }}(value)
+}
+</script>
+
 <h3>{{ ctl.name }}</h3>
 <textarea rows="{{ ctl.param1 }}" cols="{{ ctl.param2 }}" id="textarea_{{ ctl.id }}"></textarea>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="save_result{{ ctl.id }}()">Сохранить</div>

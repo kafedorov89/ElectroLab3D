@@ -1,19 +1,42 @@
 {% load main_tags %}
 <script>
 function sendRequesttable{{ ctl.id }}(url) {
-$.ajax({
-	url: url,
-	success: function(data){
-		if (data.Success == true) {
-			for (var i = 0; i < data.Data.length; i++) {
-				document.getElementById("table_{{ ctl.id }}_" + i + "0").innerHTML = data.Data[i]
+	$.ajax({
+		url: url,
+		success: function(data){
+			if (data.Success == true) {
+				for (var i = 0; i < data.Data.length; i++) {
+					document.getElementById("table_{{ ctl.id }}_" + i + "0").innerHTML = data.Data[i]
+				}
 			}
+		},
+		error: function (data) {},
+		type: "GET",
+		dataType: "json"
+		});
+	save_results{{ ctl.id }}();
+}
+
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function save_results{{ ctl.id }}(){
+	clear_value{{ ctl.id }}();
+	for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
+		for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
+			value = document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML;
+			set_value{{ ctl.id }}(value);
 		}
-	},
-	error: function (data) {},
-	type: "GET",
-	dataType: "json"
-	});
+	}
 }
 </script>
 

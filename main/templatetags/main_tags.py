@@ -9,6 +9,11 @@ def table_heigth (param):
     width = param.split(";") [0]
     return range (int (width))
 
+@register.filter(name = 'table_len_heigth')
+def table_len_heigth (param):
+    width = param.split(";") [0]
+    return int (width)
+
 @register.filter(name = 'table_width')
 def table_width (param):
     params = param.split(";")
@@ -16,6 +21,15 @@ def table_width (param):
         return range (int (params [1]))
     else:
         return 0
+
+@register.simple_tag
+def get_table_value (param, width, i, j):
+    params = param.split(";")
+    cur = j + i * width
+    if len (params) >= i:
+        return params [cur]
+    else:
+        return ''
 
 @register.filter(name = 'param_url')
 def param_url (param):

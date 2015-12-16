@@ -1,4 +1,16 @@
 <script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
 function sendRequestDiargam{{ ctl.id }}(url) {
 $(function(){
 	$.ajax({
@@ -26,6 +38,8 @@ $(function(){
 					data: data.Data
 					},]
 				});
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data.join(';'));
 		},
 		error: function(data){
 			alert('Нет ответа от стенда.');
@@ -34,6 +48,7 @@ $(function(){
 		dataType: "json"
 		});
 	});
+	
 }
 </script>
 
