@@ -8,9 +8,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam, Standtask_state, Standtask
 import functools
 from django.shortcuts import redirect
+from django.http import JsonResponse
 
 
 def private (request_number = 0):
@@ -366,18 +367,31 @@ def get_report (request, course_id, user_id):
     return render_to_response ('empty.html')
 
 
-def check_workplace (request, course_id, user_id):
+def check_workplace (request, course_id, user_id, standtask_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
-    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
-    uallowance.course_start = 1
-    uallowance.save()
-    return render_to_response ('empty.html')
+    standtask = Standtask.objects.get (pk = int (standtask_id))
+
+    standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+    for standtask_state in standtask_states:
+        if standtask_state.complete:
+            uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
+            uallowance.course_start = 1
+            uallowance.save ()
+        return JsonResponse ({'Complete' : standtask_state.complete, 'Error' : standtask_state.error})
 
 
-def start_workplace (request, course_id, user_id):
+def start_workplace (request, course_id, user_id, standtask_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
+    standtask = Standtask.objects.get (pk = int (standtask_id))
+
+    standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+    for standtask_state in standtask_states:
+        standtask_state.delete ()
+
+    Standtask_state.objects.update_or_create (user_id = user, standtask_id = standtask, activate = True, complete = False, error = False)
+
     uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
     uallowance.course_start = 0
     uallowance.save()

@@ -1,12 +1,44 @@
 {% block main %}
 
 <script type="text/javascript">
-function loadAnswer(id){
+function startWorkplace{{ ctl.id }}(){
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/load_answer/{{ user.id }}/{{ question.id }}/" + id + "/", false);
+	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}", false);
 	xhr.send();
+	
+}
+
+function checkWorkplace{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}", false);
+	xhr.send();
+	if (xhr.status != 200) {
+		  // обработать ошибку
+		  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+		} else {
+		  // вывести результат
+		  alert( xhr.responseText ); // responseText -- текст ответа.
+		}
+}
+
+function startRead{{ ctl.id }}(){
+	checkWorkplace{{ ctl.id }}();
+	if ('False' == 'True')
+	{
+		setTimeout("startRead{{ ctl.id }}()",500);
+	}
 }
 </script>
 
+<table class="table-construct">
+	<tr>
+		<td class="td-construct">
+			<div class="div-construct-submit" onClick="startWorkplace{{ ctl.id }}();">Начать сборку стенда</div>
+		</td>
+		<td class="td-construct">
+			<div class="div-construct-submit" onClick="checkWorkplace{{ ctl.id }}();">Проверить правильность сборки стенда</div>
+		</td>
+	</tr>
+</table>
 
 {% endblock %}
