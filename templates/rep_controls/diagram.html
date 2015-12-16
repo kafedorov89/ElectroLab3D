@@ -1,6 +1,6 @@
+{% load main_tags %}
 <script>
 $(function(){
-	var data = "{{ value }}".split(';');
 	$('#chart_container{{ ctl.id }}').highcharts({
 		chart: {
 			type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}
@@ -20,10 +20,10 @@ $(function(){
 		},
 		series: [{
 			name: 'Напряжение',
-			data: data
+			data: [{{ value|data_to_chart }}]
 			},]
 		});
-}
+});
 </script>
 
 <h3>{{ ctl.name }}</h3>

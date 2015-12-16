@@ -24,12 +24,18 @@ def table_width (param):
 
 @register.simple_tag
 def get_table_value (param, width, i, j):
-    params = param.split(";")
-    cur = j + i * width
-    if len (params) >= i:
-        return params [cur]
-    else:
-        return ''
+    if param:
+        params = param.split(";")
+        cur = j + i * width
+        if len (params) >= i:
+            return params [cur]
+    return ''
+
+@register.filter(name = 'data_to_chart')
+def data_to_chart (param):
+    if param:
+        return ','.join (param.split(";"))
+    return ''
 
 @register.filter(name = 'param_url')
 def param_url (param):

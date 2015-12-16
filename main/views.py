@@ -379,6 +379,7 @@ def check_workplace (request, course_id, user_id, standtask_id):
             uallowance.course_start = 1
             uallowance.save ()
         return JsonResponse ({'Complete' : standtask_state.complete, 'Error' : standtask_state.error})
+    return JsonResponse ({})
 
 
 def start_workplace (request, course_id, user_id, standtask_id):

@@ -39,7 +39,7 @@ urlpatterns = [
     url (r'^check_answer/([0-9]*)/([0-9]*)/$', views.check_answer),
     url (r'^check_workplace/([0-9]*)/([0-9]*)/([0-9]*)/$', views.check_workplace),
     url (r'^start_workplace/([0-9]*)/([0-9]*)/([0-9]*)/$', views.start_workplace),
-    url (r'^set_userfieldparam/([0-9]*)/([0-9]*)/(\S*)/$', views.set_userfieldparam),
+    url (r'^set_userfieldparam/([0-9]*)/([0-9]*)/(.*)/$', views.set_userfieldparam),
     url (r'^clear_userfieldparam/([0-9]*)/([0-9]*)/$', views.clear_userfieldparam),
     url (r'^get_report/([0-9]*)/([0-9]*)/$', views.get_report),
 

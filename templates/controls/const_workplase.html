@@ -1,44 +1,82 @@
 {% block main %}
+{% load staticfiles %}
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
 
 <script type="text/javascript">
+$(function() {
+	var $div = $('#parent-dialog');
+	var left = $div.offset().left;
+    var top= $div.offset().top;
+    
+	$( "#dialog" ).dialog({
+		modal: true,
+		autoOpen: false,
+		position: {
+			my: "left top",
+	        at: "left+" + (left + 300) +" top+" + top
+	    }
+	});
+});
+
 function startWorkplace{{ ctl.id }}(){
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}", false);
 	xhr.send();
-	
+	startRead{{ ctl.id }}();
 }
 
 function checkWorkplace{{ ctl.id }}(){
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}", false);
-	xhr.send();
-	if (xhr.status != 200) {
-		  // обработать ошибку
-		  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
-		} else {
-		  // вывести результат
-		  alert( xhr.responseText ); // responseText -- текст ответа.
-		}
+	$.ajax({
+		url: "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}",
+		success: function (data) {
+			if (data.Complete == true || data.Error == true){
+				document.getElementById("flag{{ ctl.id }}").value = 'True';
+			}
+			else {
+				document.getElementById("flag{{ ctl.id }}").value = 'False';
+			}
+		},
+		error: function (data) {
+			document.getElementById("flag{{ ctl.id }}").value = 'True';
+		},
+		type: "GET",
+		dataType: "json"
+	});
 }
 
 function startRead{{ ctl.id }}(){
 	checkWorkplace{{ ctl.id }}();
-	if ('False' == 'True')
-	{
+	flag = document.getElementById("flag{{ ctl.id }}").value;
+	if (flag == 'False'){
+		if (!($("#dialog").dialog( "isOpen" )))
+		{
+			$("#dialog").dialog("open");
+		}
 		setTimeout("startRead{{ ctl.id }}()",500);
+	}
+	else{
+		$("#dialog").dialog("close");
 	}
 }
 </script>
 
+<div id="parent-dialog">
+<div id="dialog">Ожидается настройка стенда</div>
+</div>
+<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
 <table class="table-construct">
 	<tr>
 		<td class="td-construct">
 			<div class="div-construct-submit" onClick="startWorkplace{{ ctl.id }}();">Начать сборку стенда</div>
 		</td>
-		<td class="td-construct">
-			<div class="div-construct-submit" onClick="checkWorkplace{{ ctl.id }}();">Проверить правильность сборки стенда</div>
-		</td>
 	</tr>
 </table>
+
 
 {% endblock %}
