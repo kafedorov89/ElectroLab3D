@@ -9,7 +9,7 @@ function checkCourse(){
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/get_report/{{ id }}/{{ user.id }}/", false);
 	xhr.send();
-	window.location.reload();
+	window.location.assign("http://{{ host }}/report/{{ id }}/");
 }
 </script>
 

@@ -451,5 +451,6 @@ def start_workplace (request, course_id, user_id, standtask_id):
 
     uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
     uallowance.course_start = 0
+    uallowance.report = 0
     uallowance.save()
     return render_to_response ('empty.html')
