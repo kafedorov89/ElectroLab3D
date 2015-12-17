@@ -1,5 +1,5 @@
 <script>
-function sendRequestbool(url) {
+function sendRequestbool{{ ctl.id }}(url) {
 $(function(){
 	$.ajax({
 		url: url,
@@ -15,15 +15,15 @@ $(function(){
 	});
 }
 
-function click_button(url) {
+function click_button{{ ctl.id }}(url) {
 	if (document.getElementById("button_{{ ctl.id }}").value == 'on')
 	{
-		sendRequestbool(url + "write=false");
+		sendRequestbool{{ ctl.id }}(url + "&write=false");
 		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_off";
 		document.getElementById("button_{{ ctl.id }}").value = "off";
 	}
 	else{
-		sendRequestbool(url + "write=true");
+		sendRequestbool{{ ctl.id }}(url + "&write=true");
 		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_on";
 		document.getElementById("button_{{ ctl.id }}").value = "on";
 	}
@@ -32,5 +32,5 @@ function click_button(url) {
 
 <h3>{{ ctl.name }}</h3>
 <div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">
-	<div class="bool_switcher_off" id="button_{{ ctl.id }}" value="off" onClick="click_button('{{ url }}');"></div>
+	<div class="bool_switcher_off" id="button_{{ ctl.id }}" value="off" onClick="click_button{{ ctl.id }}('{{ url }}');"></div>
 </div>
