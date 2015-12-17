@@ -16,7 +16,7 @@ $(function(){
 	$.ajax({
 		url: url,
 		success: function(data){
-				$('#chart_container{{ ctl.id }}').highcharts({
+			$('#chart_container{{ ctl.id }}').highcharts({
 				chart: {
 					type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}
 				},
@@ -25,16 +25,16 @@ $(function(){
 				},
 				xAxis: {
 					title: {
-						text: 'Время'
+						text: '{{ ctl.param2|chart_x }}'
 					}
 				},
 				yAxis: {
 					title: {
-						text: 'Влт'
+						text: '{{ ctl.param2|chart_y }}'
 					}
 				},
 				series: [{
-					name: 'Напряжение',
+					name: '{{ ctl.param2|chart_name }}',
 					data: data.Data
 					},]
 				});

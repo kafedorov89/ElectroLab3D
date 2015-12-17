@@ -22,6 +22,28 @@ def table_width (param):
     else:
         return 0
 
+@register.filter(name = 'chart_name')
+def chart_name (param):
+    if param:
+        return param.split(";") [0]
+    return 'Напряжение'
+
+@register.filter(name = 'chart_x')
+def chart_x (param):
+    if param:
+        params = param.split(";")
+        if len (params) > 1:
+            return param.split(";") [1]
+    return 'Время'
+
+@register.filter(name = 'chart_y')
+def chart_y (param):
+    if param:
+        params = param.split(";")
+        if len (params) > 2:
+            return param.split(";") [2]
+    return 'Влт'
+
 @register.simple_tag
 def get_table_value (param, width, i, j):
     if param:

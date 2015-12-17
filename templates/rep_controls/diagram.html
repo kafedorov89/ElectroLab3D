@@ -10,16 +10,16 @@ $(function(){
 		},
 		xAxis: {
 			title: {
-				text: 'Время'
+				text: '{{ ctl.param2|chart_x }}'
 			}
 		},
 		yAxis: {
 			title: {
-				text: 'Влт'
+				text: '{{ ctl.param2|chart_y }}'
 			}
 		},
 		series: [{
-			name: 'Напряжение',
+			name: '{{ ctl.param2|chart_name }}',
 			data: [{{ value|data_to_chart }}]
 			},]
 		});
