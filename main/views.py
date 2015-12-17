@@ -420,7 +420,15 @@ def check_workplace (request, course_id, user_id, standtask_id):
     user = User.objects.get (pk = int (user_id))
     standtask = Standtask.objects.get (pk = int (standtask_id))
 
+    # Заплатка
+    if (int (standtask_id) % 10) == 0:
+        uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
+        uallowance.course_start = 1
+        uallowance.save ()
+        return JsonResponse ({})
+
     standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+
     for standtask_state in standtask_states:
         if standtask_state.complete:
             uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
