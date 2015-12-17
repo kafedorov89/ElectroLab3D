@@ -237,6 +237,54 @@ def teacher_main_menu (request):
 
 
 @private()
+def course_view (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('course_view.html', templ_data)
+
+
+@private()
+def teacher_report (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('teacher_report.html', templ_data)
+
+
+@private()
+def course_usg_view (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('course_usg_view.html', templ_data)
+
+
+@private()
+def teacher_usg_report (request):
+    current_user = request.user
+    templ_data = {
+        'first_name' : current_user.first_name,
+        'last_name' : current_user.last_name,
+        'date' : "{:%Y %m %d}".format (datetime.now()),
+        'time' : "{:%H:%M}".format (datetime.now()),
+    }
+    return render_to_response ('teacher_usg_report.html', templ_data)
+
+
+@private()
 def course_state_add (request, student, course, date, state):
     obj_date = datetime.strptime(date, '%d.%m.%Y').date ()
     obj_course = Course.objects.get (pk = course)

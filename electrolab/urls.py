@@ -21,6 +21,7 @@ from main import views
 
 
 urlpatterns = [
+    # Studenr urls
     url (r'^$', views.LoginFormView.as_view ()),
     url (r'^admin/', include (admin.site.urls)),
     url (r'^register/$', views.RegisterFormView.as_view ()),
@@ -35,6 +36,7 @@ urlpatterns = [
     url (r'^report/([0-9]*)/$', views.report),
     url (r'^media_course/$', views.media_course),
 
+    # Student service urls
     url (r'^load_answer/([0-9]*)/([0-9]*)/([0-9]*)/$', views.load_answer),
     url (r'^check_answer/([0-9]*)/([0-9]*)/$', views.check_answer),
     url (r'^check_workplace/([0-9]*)/([0-9]*)/([0-9]*)/$', views.check_workplace),
@@ -43,10 +45,17 @@ urlpatterns = [
     url (r'^clear_userfieldparam/([0-9]*)/([0-9]*)/$', views.clear_userfieldparam),
     url (r'^get_report/([0-9]*)/([0-9]*)/$', views.get_report),
 
+    # Teacher urls
     url (r'^teacher_main_menu/$', views.teacher_main_menu),
     url (r'^timetable_editor/$', views.timetable_editor),
     url (r'^course_state_form/([a-z]*)/$', views.course_state_form),
     url (r'^course_state_form/([a-z]*)/([0-9]*)/$', views.course_state_form),
+    url (r'^course_view/$', views.course_view),
+    url (r'^teacher_report/$', views.teacher_report),
+    url (r'^course_usg_view/$', views.course_usg_view),
+    url (r'^teacher_usg_report/$', views.teacher_usg_report),
+
+    # Teacher service urls
     url (r'^course_state_cng/([0-9]*)/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_cng),
     url (r'^course_state_add/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_add),
     url (r'^course_state_del/([0-9]*)/$', views.course_state_del),
