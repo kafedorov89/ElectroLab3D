@@ -1,3 +1,4 @@
+{% load main_tags %}
 <script>
 function clear_value{{ ctl.id }}(){
 	var xhr = new XMLHttpRequest();
@@ -6,13 +7,18 @@ function clear_value{{ ctl.id }}(){
 }
 
 function set_value{{ ctl.id }}(value){
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
-	xhr.send();
+	var val = {value: value};
+	$.ajax({
+	    url:  "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/1/",
+	    type: 'POST',
+	    contentType: 'application/json; charset=utf-8',
+	    data: JSON.stringify(val),
+	    dataType: 'text',
+	    success: function(result) {}
+	});
 }
 
 function sendRequestDiargam{{ ctl.id }}(url) {
-$(function(){
 	$.ajax({
 		url: url,
 		success: function(data){
@@ -42,13 +48,11 @@ $(function(){
 				set_value{{ ctl.id }}(data.Data.join(';'));
 		},
 		error: function(data){
-			alert('Нет ответа от стенда.');
+			clear_value{{ ctl.id }}();
 		},
 		type: "GET",
 		dataType: "json"
 		});
-	});
-	
 }
 </script>
 

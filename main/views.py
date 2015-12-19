@@ -12,6 +12,11 @@ from .models import Course, Question, Answer, UserCourseState, CourseField, Meth
 import functools
 from django.shortcuts import redirect
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+try:
+    from django.utils import simplejson as json
+except:
+    import simplejson as json
 
 
 def private (request_number = 0):
@@ -338,11 +343,16 @@ def course_state_form (request, action, id = None):
     }
     return render_to_response ('course_state_form.html', templ_data)
 
-
+@csrf_exempt
 def set_userfieldparam (request, user_id, field_id, value):
     user = User.objects.get (pk = int (user_id))
     field = CourseField.objects.get (pk = int (field_id))
     userfieldparam = UserFieldParam.objects.filter (user = user, field = field)
+
+    if request.is_ajax():
+        if request.method == 'POST':
+            json_data = json.loads(request.body)
+            value = json_data ['value']
 
     if len (userfieldparam) == 0:
         UserFieldParam.objects.update_or_create (user = user, field = field, value = value)
