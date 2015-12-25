@@ -44,6 +44,7 @@ urlpatterns = [
     url (r'^set_userfieldparam/([0-9]*)/([0-9]*)/(.*)/$', views.set_userfieldparam),
     url (r'^clear_userfieldparam/([0-9]*)/([0-9]*)/$', views.clear_userfieldparam),
     url (r'^get_report/([0-9]*)/([0-9]*)/$', views.get_report),
+    url (r'^get_wp_param/$', views.get_wp_param),
 
     # Teacher urls
     url (r'^teacher_main_menu/$', views.teacher_main_menu),

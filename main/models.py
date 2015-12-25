@@ -30,14 +30,53 @@ class WpParamType (models.Model):
         return self.name
 
 
+class DeviceType (models.Model):
+    name = models.CharField (max_length = 200, verbose_name = u"Название")
+
+    def __unicode__ (self):
+        return u"{}".format (self.name, self.id)
+
+    class Meta:
+        verbose_name = u"Тип устройства"
+        verbose_name_plural = u"Типы устройства"
+
+
+class FuncType (models.Model):
+    name = models.CharField (max_length = 200, verbose_name = u"Название")
+
+    def __unicode__ (self):
+        return u"{}".format (self.name, self.id)
+
+    class Meta:
+        verbose_name = u"Тип функции"
+        verbose_name_plural = u"Типы функции"
+
+
+class DataType (models.Model):
+    name = models.CharField (max_length = 200, verbose_name = u"Название")
+
+    def __unicode__ (self):
+        return u"{}".format (self.name, self.id)
+
+    class Meta:
+        verbose_name = u"Тип данных"
+        verbose_name_plural = u"Типы данных"
+
+
 class WpParam (models.Model):
     name = models.CharField (max_length = 200, verbose_name = u"Название")
     wp_param_type = models.ForeignKey (WpParamType, verbose_name = u"Тип")
     workplace = models.ForeignKey (Workplace, verbose_name = u"Стенд")
     code = models.CharField (max_length = 200, default = '', verbose_name = u"Код")
+    device_type = models.ForeignKey (DeviceType, null = True, blank = True, verbose_name = u"Тип устройства")
+    device_address = models.CharField (max_length = 200, default = '', verbose_name = u"Адресс устройства")
+    source = models.CharField (max_length = 200, default = '', verbose_name = u"Источник")
+    type_func = models.ForeignKey (FuncType, null = True, blank = True, verbose_name = u"Тип функции")
+    type = models.ForeignKey (DataType, null = True, blank = True, verbose_name = u"Тип данных")
+    async = models.CharField (max_length = 200, default = '', verbose_name = u"Флаг асинхронности")
 
     def __unicode__ (self):
-        return u"{} {} {}".format (self.workplace.name, self.name, self.code)
+        return u"{} {} {} id:{}".format (self.workplace.name, self.name, self.code, self.id)
 
     class Meta:
         verbose_name = u"Параметр стенда"

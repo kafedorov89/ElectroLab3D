@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam, Standtask_state, Standtask
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam, Standtask_state, Standtask, WpParam
 import functools
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -446,6 +446,28 @@ def check_workplace (request, course_id, user_id, standtask_id):
             uallowance.save ()
         return JsonResponse ({'Complete' : standtask_state.complete, 'Error' : standtask_state.error})
     return JsonResponse ({})
+
+
+def get_wp_param (request):
+
+    wp_params = WpParam.objects.select_related ()
+    json_response = []
+
+    for wp_param in wp_params:
+        param = {
+            'name' : wp_param.name,
+            'wp_param_type' : str (wp_param.wp_param_type),
+            'workplace' : wp_param.workplace.name,
+            'code' : wp_param.code,
+            'device_type' : wp_param.device_type.name if wp_param.device_type is not None else None,
+            'device_address' : wp_param.device_address,
+            'source' : wp_param.source,
+            'type_func' : wp_param.type_func.name if wp_param.type_func is not None else None,
+            'type' : wp_param.type.name if wp_param.type is not None else None,
+            'async' : wp_param.async
+        }
+        json_response.append (param)
+    return JsonResponse (json_response, safe = False)
 
 
 def start_workplace (request, course_id, user_id, standtask_id):

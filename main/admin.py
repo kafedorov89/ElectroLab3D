@@ -71,8 +71,35 @@ class WorkplaceAdmin (admin.ModelAdmin):
 @admin.register (models.WpParam)
 class WpParamAdmin (admin.ModelAdmin):
     fieldsets = [
-        (u'', {'fields': ['workplace', 'name', 'wp_param_type', 'code']}),
+        (u'', {'fields': ['workplace', 'name', 'wp_param_type', 'code', 'device_type', 'device_address', 'source', 'type_func', 'type', 'async']}),
     ]
 
-    list_display = ('workplace', 'name', 'wp_param_type', 'code')
+    list_display = ('workplace', 'name', 'wp_param_type', 'code', 'device_type', 'device_address', 'source', 'type_func', 'type', 'async')
+
+
+@admin.register (models.DeviceType)
+class DeviceTypeAdmin (admin.ModelAdmin):
+    fieldsets = [
+        (u'', {'fields': ['name']}),
+    ]
+
+    list_display = ('name',)
+
+
+@admin.register (models.FuncType)
+class FuncTypeAdmin (admin.ModelAdmin):
+    fieldsets = [
+        (u'', {'fields': ['name']}),
+    ]
+
+    list_display = ('name',)
+
+
+@admin.register (models.DataType)
+class DataTypeAdmin (admin.ModelAdmin):
+    fieldsets = [
+        (u'', {'fields': ['name']}),
+    ]
+
+    list_display = ('name',)
 
