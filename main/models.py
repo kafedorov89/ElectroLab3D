@@ -204,15 +204,15 @@ class Standtask (models.Model):
     rope_json = models.TextField ()
 
 class Standtask_state (models.Model):
-    standtask_id = models.ForeignKey (Standtask)
-    user_id = models.ForeignKey (User)
+    standtask = models.ForeignKey (Standtask)
+    user = models.ForeignKey (User)
     user_rope_json = models.TextField ()
     activate = models.BooleanField ()
     complete = models.BooleanField ()
     error = models.BooleanField ()
 
 class Training_log (models.Model):
-    user_id = models.ForeignKey (User)
+    user = models.ForeignKey (User)
     training_id = models.IntegerField ()
     training_name = models.CharField (max_length = 200)
     start_time = models.DateTimeField ()
@@ -232,7 +232,7 @@ class Training_param_state (models.Model):
 
 class Training_state (models.Model):
     training_id = models.IntegerField ()
-    user_id = models.ForeignKey (User)
+    user = models.ForeignKey (User)
     online = models.BooleanField ()
     activate = models.BooleanField ()
 

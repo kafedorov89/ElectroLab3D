@@ -12,6 +12,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px;
+    min-height: 100%;
 }
 
 .center {
@@ -239,6 +240,22 @@ body {
 	width: 80px;
 	height: 80px;
 	background:url('../img/play_stop.png') 0 -82px;
+}
+
+.checkbox_construct{
+	display: inline-block;
+	vertical-align: middle;
+	width: 40px;
+	height: 40px;
+	background:url('../img/checkbox_construct.png') 0 0;
+}
+
+.checkbox_construct_checked{
+	display: inline-block;
+	vertical-align: middle;
+	width: 40px;
+	height: 40px;
+	background:url('../img/checkbox_construct.png') 0 -41px;
 }
 
 .ul_switcher {

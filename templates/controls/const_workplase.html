@@ -9,12 +9,25 @@
 <script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
 
 <script type="text/javascript">
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+
 $(function() {
-	var $div = $('#parent-dialog');
+	var $div = $('#parent-dialog{{ ctl.id }}');
 	var left = $div.offset().left;
     var top= $div.offset().top;
     
-	$( "#dialog" ).dialog({
+	$( "#dialog{{ ctl.id }}" ).dialog({
 		modal: true,
 		autoOpen: false,
 		position: {
@@ -26,20 +39,26 @@ $(function() {
 
 function startWorkplace{{ ctl.id }}(){
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}", false);
+	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ id }}{{ ctl.param1 }}", false);
 	xhr.send();
+	$("#dialog").dialog("open");
 	startRead{{ ctl.id }}();
 }
 
 function checkWorkplace{{ ctl.id }}(){
 	$.ajax({
-		url: "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ ctl.param1 }}",
+		url: "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ id }}{{ ctl.param1 }}",
 		success: function (data) {
+			switcher = document.getElementById ("checkbox_construct{{ ctl.id }}");
 			if (data.Complete == true || data.Error == true){
 				document.getElementById("flag{{ ctl.id }}").value = 'True';
+				switcher.className = "checkbox_construct_checked";
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}('1');
 			}
 			else {
 				document.getElementById("flag{{ ctl.id }}").value = 'False';
+				switcher.className = "checkbox_construct";
 			}
 		},
 		error: function (data) {
@@ -54,26 +73,32 @@ function startRead{{ ctl.id }}(){
 	checkWorkplace{{ ctl.id }}();
 	flag = document.getElementById("flag{{ ctl.id }}").value;
 	if (flag == 'False'){
-		if (!($("#dialog").dialog( "isOpen" )))
+		if (($("#dialog").dialog( "isOpen" )))
 		{
-			$("#dialog").dialog("open");
+			setTimeout("startRead{{ ctl.id }}()",500);
 		}
-		setTimeout("startRead{{ ctl.id }}()",500);
 	}
 	else{
-		$("#dialog").dialog("close");
+		if (($("#dialog").dialog( "isOpen" )))
+		{
+			$("#dialog").dialog("close");
+		}
 	}
 }
 </script>
 
-<div id="parent-dialog">
-<div id="dialog">Ожидается настройка стенда</div>
+<div id="parent-dialog{{ ctl.id }}">
+<div id="dialog{{ ctl.id }}">
+	Ожидается настройка стенда,<br>
+	не закрывайте окно, при закрытии,<br>
+	ожидание сборки прекратится!</div>
 </div>
 <input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
 <table class="table-construct">
 	<tr>
 		<td class="td-construct">
-			<div class="div-construct-submit" onClick="startWorkplace{{ ctl.id }}();">Начать сборку стенда</div>
+			<div class="div-construct-submit" style="display: inline-block;" onClick="startWorkplace{{ ctl.id }}();">Начать сборку стенда</div>
+			<div class="checkbox_construct" id="checkbox_construct{{ ctl.id }}"></div>
 		</td>
 	</tr>
 </table>

@@ -208,7 +208,7 @@ def report (request, course_id):
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
     templ_data = {
         'report' : True,
-        'controls' : UserFieldParam.objects.select_related ().filter (user = request.user, field__course__id = course_id, field__in_report = True),
+        'controls' : UserFieldParam.objects.select_related ().filter (user = request.user, field__course__id = course_id, field__in_report = True).order_by ('field__number', 'field__id'),
         'id': course_id,
         'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
@@ -425,19 +425,31 @@ def get_report (request, course_id, user_id):
     return render_to_response ('empty.html')
 
 
-def check_workplace (request, course_id, user_id, standtask_id):
+def start_workplace (request, course_id, user_id, standtask_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))
     standtask = Standtask.objects.get (pk = int (standtask_id))
 
-    # Заплатка
-    if (int (standtask_id) % 10) == 0:
-        uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
-        uallowance.course_start = 1
-        uallowance.save ()
-        return JsonResponse ({})
-
     standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+    for standtask_state in standtask_states:
+        standtask_state.delete ()
+
+    Standtask_state.objects.update_or_create (user_id = user_id, standtask_id = standtask_id, activate = True, complete = False, error = False)
+
+    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
+    uallowance.course_start = 0
+    uallowance.report = 0
+    uallowance.save()
+    return render_to_response ('empty.html')
+
+
+def check_workplace (request, course_id, user_id, standtask_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+    standtask = Standtask.objects.get (pk = int (standtask_id))
+    standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+
+    print standtask_states
 
     for standtask_state in standtask_states:
         if standtask_state.complete:
@@ -468,21 +480,3 @@ def get_wp_param (request):
         }
         json_response.append (param)
     return JsonResponse (json_response, safe = False)
-
-
-def start_workplace (request, course_id, user_id, standtask_id):
-    course = Course.objects.get (pk = int (course_id))
-    user = User.objects.get (pk = int (user_id))
-    standtask = Standtask.objects.get (pk = int (standtask_id))
-
-    standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
-    for standtask_state in standtask_states:
-        standtask_state.delete ()
-
-    Standtask_state.objects.update_or_create (user_id = user, standtask_id = standtask, activate = True, complete = False, error = False)
-
-    uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
-    uallowance.course_start = 0
-    uallowance.report = 0
-    uallowance.save()
-    return render_to_response ('empty.html')

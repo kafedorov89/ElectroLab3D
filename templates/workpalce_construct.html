@@ -1,21 +1,82 @@
 {% extends "base_course.html" %}
 {% block title %}Сборка стенда{% endblock %}
 {% block main %}
+{% load staticfiles %}
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
+
 <script type="text/javascript">
+$(function() {
+	var $div = $('#parent-dialog');
+	var left = $div.offset().left;
+    var top= $div.offset().top;
+    
+	$( "#dialog" ).dialog({
+		modal: true,
+		autoOpen: false,
+		position: {
+			my: "left top",
+	        at: "left+" + (left + 300) +" top+" + top
+	    }
+	});
+});
+
 function startWorkplace(){
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ id }}0/", false);
+	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ id }}0", false);
 	xhr.send();
-	window.location.reload();
+	$("#dialog").dialog("open");
+	startRead{{ ctl.id }}();
 }
 
 function checkWorkplace(){
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ id }}0/", false);
-	xhr.send();
-	window.location.reload();
+	$.ajax({
+		url: "http://{{ host }}/check_workplace/{{ id }}/{{ user.id }}/{{ id }}0",
+		success: function (data) {
+			switcher = document.getElementById ("checkbox_construct");
+			if (data.Complete == true || data.Error == true){
+				document.getElementById("flag").value = 'True';
+				switcher.className = "checkbox_construct_checked";
+			}
+			else {
+				document.getElementById("flag").value = 'False';
+				switcher.className = "checkbox_construct";
+			}
+		},
+		error: function (data) {
+			document.getElementById("flag").value = 'True';
+		},
+		type: "GET",
+		dataType: "json"
+	});
+}
+
+function startRead(){
+	checkWorkplace();
+	flag = document.getElementById("flag").value;
+	if (flag == 'False'){
+		setTimeout("startRead()", 500);
+	}
+	else{
+		if (($("#dialog").dialog( "isOpen" )))
+		{
+			$("#dialog").dialog("close");
+		}
+	}
 }
 </script>
+
+<div id="parent-dialog">
+	<div id="dialog">Ожидается настройка стенда</div>
+</div>
+
+<input type='hidden' id="flag" name="flag" value="False">
+
 <table class="table-construct">
     <tr>
 		<td class="td-construct">
@@ -27,10 +88,8 @@ function checkWorkplace(){
 	</tr>
 	<tr>
 		<td class="td-construct">
-			<div class="div-construct-submit" onClick="startWorkplace ();">Начать сборку стенда</div>
-		</td>
-		<td class="td-construct">
-			<div class="div-construct-submit" onClick="checkWorkplace ();">Проверить правильность сборки стенда</div>
+			<div class="div-construct-submit" style="display: inline-block;" onClick="startWorkplace();">Начать сборку стенда</div>
+			<div class="checkbox_construct{% if uallowance.course_start %}_checked{% endif %}" id="checkbox_construct"></div>
 		</td>
 	</tr>
 </table>

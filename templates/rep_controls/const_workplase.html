@@ -1,12 +1,12 @@
 {% block main %}
 
-<script type="text/javascript">
-function loadAnswer(id){
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://{{ host }}/load_answer/{{ user.id }}/{{ question.id }}/" + id + "/", false);
-	xhr.send();
-}
-</script>
-
+<table class="table-construct">
+	<tr>
+		<td class="td-construct">
+			<div class="div-construct-submit" style="display: inline-block;" onClick="startWorkplace{{ ctl.id }}();">Начать сборку стенда</div>
+			<div class="checkbox_construct{% if value %}_checked{% endif %}" id="checkbox_construct{{ ctl.id }}"></div>
+		</td>
+	</tr>
+</table>
 
 {% endblock %}
