@@ -60,19 +60,28 @@ function startRead(){
 	checkWorkplace();
 	flag = document.getElementById("flag").value;
 	if (flag == 'False'){
-		setTimeout("startRead()", 500);
+		if (($("#dialog").dialog( "isOpen" )))
+		{
+			setTimeout("startRead()", 500);
+		}
+		
 	}
 	else{
 		if (($("#dialog").dialog( "isOpen" )))
 		{
 			$("#dialog").dialog("close");
 		}
+		window.location.reload();
 	}
 }
 </script>
 
 <div id="parent-dialog">
-	<div id="dialog">Ожидается настройка стенда</div>
+	<div id="dialog">
+	Ожидается настройка стенда,<br>
+	не закрывайте окно, при закрытии,<br>
+	ожидание сборки прекратится!
+	</div>
 </div>
 
 <input type='hidden' id="flag" name="flag" value="False">

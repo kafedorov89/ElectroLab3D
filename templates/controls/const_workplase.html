@@ -41,7 +41,7 @@ function startWorkplace{{ ctl.id }}(){
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/start_workplace/{{ id }}/{{ user.id }}/{{ id }}{{ ctl.param1 }}", false);
 	xhr.send();
-	$("#dialog").dialog("open");
+	$("#dialog{{ ctl.id }}").dialog("open");
 	startRead{{ ctl.id }}();
 }
 
@@ -73,15 +73,15 @@ function startRead{{ ctl.id }}(){
 	checkWorkplace{{ ctl.id }}();
 	flag = document.getElementById("flag{{ ctl.id }}").value;
 	if (flag == 'False'){
-		if (($("#dialog").dialog( "isOpen" )))
+		if (($("#dialog{{ ctl.id }}").dialog( "isOpen" )))
 		{
 			setTimeout("startRead{{ ctl.id }}()",500);
 		}
 	}
 	else{
-		if (($("#dialog").dialog( "isOpen" )))
+		if (($("#dialog{{ ctl.id }}").dialog( "isOpen" )))
 		{
-			$("#dialog").dialog("close");
+			$("#dialog{{ ctl.id }}").dialog("close");
 		}
 	}
 }
