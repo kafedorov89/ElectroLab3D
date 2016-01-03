@@ -1,0 +1,74 @@
+{% load staticfiles %}
+<link type="text/css" href="{% static 'js/formstyler/' %}jquery.formstyler.css" rel="stylesheet" />
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="{% static 'js/formstyler/' %}/jquery.formstyler.js"></script>
+
+<script>
+(function($) {
+	$(function() {
+		$('input, select').styler({
+			selectSearch: true
+		});
+	});
+})(jQuery);
+
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function setValue{{ ctl.id }} (url) {
+$(function () {
+	value = document.getElementById ("input_param{{ ctl.id }}").value;
+	$.ajax({
+		url: url + "&write=" + value,
+		success: function (data) {
+			if (data.Success == true) {
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data);
+			}
+		},
+		error: function (data) {},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+
+function getValue{{ ctl.id }} (url) {
+	$(function () {
+		$.ajax({
+			url: url,
+			success: function (data) {
+				if (data.Success == true) {
+					document.getElementById ("input_param{{ ctl.id }}").value = data.Data;
+					clear_value{{ ctl.id }}();
+					set_value{{ ctl.id }}(data.Data);
+				}
+			},
+			error: function (data) {},
+			type: "GET",
+			dataType: "json"
+			});
+		});
+	}
+</script>
+
+<h3>{{ ctl.name }}</h3>
+<div style="display: table-cell; vertical-align: middle;">	
+	<input class="styler" id="input_param{{ ctl.id }}" type="text" style="height: 40px;"/>
+	<div class="div-construct-submit" style="margin-top: 20px; display: inline-block; width: 150px;" onClick="setValue{{ ctl.id }}('{{ url|safe }}'); getValue{{ ctl.id }}('{{ url|safe }}');">Записать значение</div>
+</div>

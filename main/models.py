@@ -134,7 +134,7 @@ class CourseField (models.Model):
         ordering = ('-course', 'number')
 
     def __unicode__ (self):
-        return u"{} тип: {} сортировка: {}".format (self.name, self.type.name, self.number)
+        return u"{} тип: {} сортировка: {} id:{}".format (self.name, self.type.name, self.number, self.id)
 
 
 class UserFieldParam (models.Model):

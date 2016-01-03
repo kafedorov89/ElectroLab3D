@@ -24,7 +24,7 @@ function sendRequestDiargam{{ ctl.id }}(url) {
 		success: function(data){
 			$('#chart_container{{ ctl.id }}').highcharts({
 				chart: {
-					type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}
+					type: {% if ctl.param3 == 'diagram' %}'column'{% else %}{% if ctl.param3 == 'pie' %}'pie'{% else %}'line'{% endif %}{% endif %}
 				},
 				title: {
 					text: ''
