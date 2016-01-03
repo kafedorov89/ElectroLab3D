@@ -2,6 +2,7 @@ body {
   background-color: #ffffff;
   margin: 10;
   font-family: Helvetica, sans-serif;
+  background: url('../img/background.png') repeat;
 }
 
 .main {
@@ -229,17 +230,33 @@ body {
 .iterate_switcher_stop{
 	display: inline-block;
 	vertical-align: middle;
-	width: 80px;
-	height: 80px;
-	background:url('../img/play_stop.png') 0 0;
+	width: 64px;
+	height: 64px;
+	background:url('../img/play_stop_small.png') 0 0;
 }
 
 .iterate_switcher_play{
 	display: inline-block;
 	vertical-align: middle;
-	width: 80px;
-	height: 80px;
-	background:url('../img/play_stop.png') 0 -82px;
+	width: 64px;
+	height: 64px;
+	background:url('../img/play_stop_small.png') 0 -65px;
+}
+
+.term_switcher_stop{
+	display: inline-block;
+	vertical-align: middle;
+	width: 64px;
+	height: 64px;
+	background:url('../img/play_stop_small.png') 0 0;
+}
+
+.term_switcher_play{
+	display: inline-block;
+	vertical-align: middle;
+	width: 64px;
+	height: 64px;
+	background:url('../img/play_stop_small.png') 0 -65px;
 }
 
 .checkbox_construct{
@@ -381,6 +398,16 @@ body {
     font-style: normal;
     color: -webkit-text;
     font-family: Helvetica, sans-serif;
+    background-color: #ffffff;
+}
+
+.term_background{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	width: 794px;
+	height: 61px;
+	background:url('../img/term_background.png');
 }
 
 .online_value{
@@ -390,7 +417,7 @@ body {
 	padding-left: 10px;
 	text-align: center;
 	width: 300px;
-	height: 55px;
+	height: 30px;
 	border: 1px solid gray;
 	border-radius: 15px;
 	font-size: 32px;
@@ -398,6 +425,7 @@ body {
     font-style: normal;
     color: -webkit-text;
     font-family: Helvetica, sans-serif;
+    background-color: #ffffff;
 }
 
 .table-question{
@@ -419,6 +447,7 @@ body {
 	max-width: 80%;
 	height: 400px;
 	border-radius: 10px;
+	background-color: #ffffff;
 }
 
 .main_course{
@@ -566,10 +595,12 @@ body {
     height: 40px;
     padding: 10px;
     display: inline-block;
+    background-color: #ffffff;
 }
 
 .number {
     border: 1px solid #ee9015;
+    background-color: #ffffff;
     border-radius: 10px;
     text-align: center;
     vertical-align: middle;
@@ -581,9 +612,10 @@ body {
 .fio {
     border: 1px solid #ee9015;
     border-radius: 10px;
+    background-color: #ffffff;
     text-align: left;
     color: black;
-    width: 70%;
+    width: 260px;
     height: 90px;
     margin-top: 10px;
     padding: 20px;
@@ -633,6 +665,7 @@ body {
 	height:400px;
 	border: 1px solid gray;
     border-radius: 10px;
+    background-color: #ffffff;
 }
 
 .errorlist {

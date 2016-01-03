@@ -1,0 +1,64 @@
+<script>
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function sendRequestonline{{ ctl.id }} (url) {
+$(function () {
+	$.ajax({
+		url: url,
+		success: function (data) {
+			if (data.Success == true) {
+				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data;
+				clear_value{{ ctl.id }}();
+				set_value{{ ctl.id }}(data.Data);
+			}
+		},
+		error: function (data) {},
+		type: "GET",
+		dataType: "json"
+		});
+	});
+}
+
+function startRead{{ ctl.id }}(){
+	flag = document.getElementById("flag{{ ctl.id }}").value;
+	sendRequestonline{{ ctl.id }} ('{{ url }}');
+	if (flag == 'True')
+	{
+		setTimeout("startRead{{ ctl.id }}()",{% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
+	}
+}
+
+function read{{ ctl.id }} () {
+	switcher = document.getElementById ("iterate_switcher{{ ctl.id }}");
+	flag = document.getElementById ("flag{{ ctl.id }}");
+	if (flag.value == 'True')
+	{
+		flag.value = 'False'
+		switcher.className = "term_switcher_play";
+	}
+	else
+	{
+		flag.value = 'True'
+		switcher.className = "term_switcher_stop";
+		startRead{{ ctl.id }} ();
+	}
+}
+</script>
+
+<h3>{{ ctl.name }}</h3>
+<div align="center" style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
+	<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
+	<div class="term_switcher_play" id="iterate_switcher{{ ctl.id }}" onClick="read{{ ctl.id }}();"></div>
+	<div class="term_background"></div><br>
+	<div class="online_value" style="margin-top: 10px;" id="online_{{ ctl.id }}"></div>
+</div>
