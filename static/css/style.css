@@ -484,8 +484,7 @@ body {
 }
 
 .main_control{
-	margin: 10px;
-	padding: 10px;
+
 }
 
 .td-answer{
@@ -522,8 +521,10 @@ body {
 	width: 100%;
     margin-left: auto;
     margin-right: auto;
-    border: 2px solid #ee9015;
+    border: 1px solid #ee9015;
     border-collapse: collapse;
+    max-width: 1000px;
+    min-width: 1000px;
 }
 
 .table-construct{
@@ -543,7 +544,8 @@ body {
 
 .time-td-head{
 	text-align: center;
-    border: 2px solid #ee9015;
+    border: 1px solid #ee9015;
+    background-color: #ffffff;
 }
 
 .time-tr-body1{
@@ -565,7 +567,7 @@ body {
 
 .time-td-body{
 	text-align: center;
-    border: 2px solid #ee9015;
+    border: 1px solid #ee9015;
 }
 
 .timetable-link{
@@ -641,7 +643,7 @@ body {
     text-align: left;
     color: black;
     width: 260px;
-    height: 90px;
+    height: 110px;
     margin-top: 10px;
     padding: 20px;
     font-size: 20px;

@@ -10,21 +10,21 @@ $(function(){
 		},
 		xAxis: {
 			title: {
-				text: '{{ ctl.param2|chart_x }}'
+				text: '{{ ctl.param2|chart_x|safe }}'
 			}
 		},
 		yAxis: {
 			title: {
-				text: '{{ ctl.param2|chart_y }}'
+				text: '{{ ctl.param2|chart_y|safe }}'
 			}
 		},
 		series: [{
-			name: '{{ ctl.param2|chart_name }}',
+			name: '{{ ctl.param2|chart_name|safe }}',
 			data: [{{ value|data_to_chart }}]
 			},]
 		});
 });
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div id="chart_container{{ ctl.id }}" class="chart_container"></div>

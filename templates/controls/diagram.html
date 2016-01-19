@@ -31,16 +31,16 @@ function sendRequestDiargam{{ ctl.id }}(url) {
 				},
 				xAxis: {
 					title: {
-						text: '{{ ctl.param2|chart_x }}'
+						text: '{{ ctl.param2|chart_x|safe }}'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '{{ ctl.param2|chart_y }}'
+						text: '{{ ctl.param2|chart_y|safe }}'
 					}
 				},
 				series: [{
-					name: '{{ ctl.param2|chart_name }}',
+					name: '{{ ctl.param2|chart_name|safe }}',
 					data: data.Data
 					},]
 				});
@@ -56,6 +56,6 @@ function sendRequestDiargam{{ ctl.id }}(url) {
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div id="chart_container{{ ctl.id }}" class="chart_container"></div>
 <div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequestDiargam{{ ctl.id }}('{{ url }}&n={{ ctl.param1 }}');">Построить график</div>

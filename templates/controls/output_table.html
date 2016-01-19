@@ -23,21 +23,24 @@ function save_results{{ ctl.id }}(){
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 
 <table style="border-collapse: collapse;">
 	<tr>
-		{% if ctl.param1|exist_left_head %}
-		<td class="course-td"></td>
-		{% endif %}
-		{% for i in ctl.param2|table_width %}
-		<td class="course-td"><span>{{ ctl.param1|table_head:i }}</span></td>
+	{% if ctl.param1|exist_left_head %}
+		{% for i in ctl.param2|table_width_l %}
+		<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
 		{% endfor %}
+	{% else %}
+		{% for i in ctl.param2|table_width %}
+		<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
+		{% endfor %}
+	{% endif %}
 	</tr>
 	{% for i in ctl.param2|table_heigth %}
 	<tr>
 		{% if ctl.param1|exist_left_head %}
-		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
+		<td class="course-td">{{ ctl.param1|table_left_head:i|safe }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
 		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}" value=""></td>

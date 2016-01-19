@@ -69,11 +69,11 @@ class WpParam (models.Model):
     workplace = models.ForeignKey (Workplace, verbose_name = u"Стенд")
     code = models.CharField (max_length = 200, default = '', verbose_name = u"Код")
     device_type = models.ForeignKey (DeviceType, null = True, blank = True, verbose_name = u"Тип устройства")
-    device_address = models.CharField (max_length = 200, default = '', verbose_name = u"Адресс устройства")
-    source = models.CharField (max_length = 200, default = '', verbose_name = u"Источник")
+    device_address = models.CharField (max_length = 500, null = True, blank = True, default = '', verbose_name = u"Адресс устройства")
+    source = models.CharField (max_length = 500, null = True, blank = True, default = '', verbose_name = u"Источник")
     type_func = models.ForeignKey (FuncType, null = True, blank = True, verbose_name = u"Тип функции")
     type = models.ForeignKey (DataType, null = True, blank = True, verbose_name = u"Тип данных")
-    async = models.CharField (max_length = 200, default = '', verbose_name = u"Флаг асинхронности")
+    async = models.CharField (max_length = 500, default = '', null = True, blank = True, verbose_name = u"Флаг асинхронности")
 
     def __unicode__ (self):
         return u"{} {} {} id:{}".format (self.workplace.name, self.name, self.code, self.id)

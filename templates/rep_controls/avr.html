@@ -1,42 +1,10 @@
-<script>
-function sendRequestbool(url) {
-$(function(){
-	$.ajax({
-		url: url,
-		success: function(data){
-			
-		},
-		error: function(data){
-			
-		},
-		type: "GET",
-		dataType: "json"
-		});
-	});
-}
-
-function click_button(url, id) {
-	if (document.getElementById("button_{{ ctl.id }}_" + id).value == 'on')
-	{
-		sendRequestbool(url + "write=false");
-		document.getElementById("button_{{ ctl.id }}_" + id).className = "bool_switcher_off";
-		document.getElementById("button_{{ ctl.id }}_" + id).value = "off";
-	}
-	else{
-		sendRequestbool(url + "write=true");
-		document.getElementById("button_{{ ctl.id }}_" + id).className = "bool_switcher_on";
-		document.getElementById("button_{{ ctl.id }}_" + id).value = "on";
-	}
-}
-</script>
-
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <table onselectstart="return false">
 	{% for i in "1234" %}
 	<tr>
 		{% for j in "12345" %}
 		<td>
-			<div class="bool_switcher_off" id="button_{{ ctl.id }}_{{ i }}{{ j }}" value="off" onClick="click_button('{{ url }}', '{{ i }}{{ j }}');"></div>
+			<div class="bool_switcher_off" id="button_{{ ctl.id }}_{{ i }}{{ j }}"></div>
 		</td>
 		{% endfor %}
 		<td>
@@ -45,4 +13,3 @@ function click_button(url, id) {
 	</tr>
 	{% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px; display: inline-block;">Отправить</div>

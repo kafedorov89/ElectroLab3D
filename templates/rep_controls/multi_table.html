@@ -15,24 +15,30 @@ $.ajax({
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 
 <table style="border-collapse: collapse;">
 	<tr>
-		{% if ctl.param1|exist_left_head %}
-		<td class="course-td"></td>
-		{% endif %}
+	{% if ctl.param1|exist_left_head %}
+		{% for i in ctl.param2|table_width_l %}
+		<td class="course-td"><p>{{ ctl.param1|table_head:i|safe }}</p></td>
+		{% endfor %}
+		{% for j in ctl.param2|table_width2_l %}
+		<td class="course-td"><p>{{ ctl.param1|table_head:j|safe }}</p></td>
+		{% endfor %}
+	{% else %}
 		{% for i in ctl.param2|table_width %}
-		<td class="course-td"><span>{{ ctl.param1|table_head:i }}</span></td>
+		<td class="course-td"><p>{{ ctl.param1|table_head:i|safe }}</p></td>
 		{% endfor %}
 		{% for j in ctl.param2|table_width2 %}
-		<td class="course-td"><span>{{ ctl.param1|table_head:j }}</span></td>
+		<td class="course-td"><p>{{ ctl.param1|table_head:j|safe }}</p></td>
 		{% endfor %}
+	{% endif %}
 	</tr>
 	{% for i in ctl.param2|table_heigth %}
 	<tr>
 		{% if ctl.param1|exist_left_head %}
-		<td class="course-td">{{ ctl.param1|table_left_head:i }}</td>
+		<td class="course-td">{{ ctl.param1|table_left_head:i|safe }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
 		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>

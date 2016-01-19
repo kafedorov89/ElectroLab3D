@@ -1,7 +1,53 @@
 {% extends "base.html" %}
-{% block title %}Редактор рассписания лабораторных{% endblock %}
+{% block title %}Отчеты по тренингам на УСГ{% endblock %}
 {% load staticfiles %}
 {% block main %}
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="{% static 'js/data_tables/' %}jquery.dataTables.js"></script>
+<script type="text/javascript" src="{% static 'js/formstyler/' %}/jquery.formstyler.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/' %}jquery.dataTables.css">
+<link type="text/css" href="{% static 'js/formstyler/' %}jquery.formstyler.css" rel="stylesheet" />
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" class="init">
+$(document).ready(function() {
+	$('#time-table').DataTable( {
+		"pagingType": "full_numbers",
+		"language": {
+               "url": "{% static 'js/data_tables/' %}dataTables.russian.lang"
+           },
+           
+       initComplete: function () {
+           this.api().columns().every( function () {
+               var column = this;
+               var select = $('<select><option value=""></option></select>')
+                   .appendTo( $(column.footer()).empty() )
+                   .on( 'change', function () {
+                       var val = $.fn.dataTable.util.escapeRegex(
+                           $(this).val()
+                       );
+
+                       column
+                           .search( val ? '^'+val+'$' : '', true, false )
+                           .draw();
+                   } );
+
+               column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' )
+               } );
+           } );
+       }
+	} );
+	
+	
+} );
+</script>
+	
 <table class="menu-head">
 	<tr>
 		<td>
@@ -13,34 +59,34 @@
 			<div class="date">{{ date }}<br>{{ time }}</div>
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<div class="control-group">
-		        <a class="back-link-block" href="/course_state_form/add/">Добавить</a>
-		    </div>
-	    </td>
-	</tr>
 </table>
 
-<table class="time-table">
-	<tr class="time-tr-head">
-		<td class="time-td-head">Студент</td>
-		<td class="time-td-head">Наименование лабораторной работы</td>
-		<td class="time-td-head">Дата/Время</td>
-		<td class="time-td-head">Длительность</td>
-		<td class="time-td-head">Статус</td>
-		<td class="time-td-head">Редактировать</td>
-		<td class="time-td-head">Удалить</td>
-	</tr>
+<table class="time-table" id="time-table">
+	<thead>
+		<tr class="time-tr-head">
+			<th class="time-td-head">Студент</th>
+			<th class="time-td-head">Группа</th>
+			<th class="time-td-head">Наименование тренинга</th>
+			<th class="time-td-head">Время начала</th>
+			<th class="time-td-head">Время окончания</th>
+			<th class="time-td-head">Статус</th>
+			<th class="time-td-head">Отчет</th>
+		</tr>
+		<tfoot>
+			<tr>
+				<td></td><td></td><td></td><td></td>
+			</tr>
+		</tfoot>
+	</thead>
 	{% for row in data %}
-	<tr class="time-tr-body{{ row.course_state.id }}">
+	<tr class="time-tr-body1">
 		<td class="time-td-body">{{ row.user.last_name }} {{ row.user.first_name }}</td>
-		<td class="time-td-body">{{ row.course.name }}</td>
-		<td class="time-td-body">{{ row.last_date }}</td>
-		<td class="time-td-body">{{ row.course.duration }}</td>
-		<td class="time-td-body">{{ row.course_state.name }}</td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_form/cng/{{ row.id }}/">Редактировать</a></td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_del/{{ row.id }}/">Удалить</a></td>
+		<td class="time-td-body">{{ row.user.groups.all.0 }}</td>
+		<td class="time-td-body">{{ row.training_name }}</td>
+		<td class="time-td-body">{{ row.start_time }}</td>
+		<td class="time-td-body">{{ row.end_time }}</td>
+		<td class="time-td-body">{{ row.complete }}</td>
+		<td class="time-td-body"><a class="timetable-link" href="/teacher_usg_report/{{ row.id }}/">Просмотреть</a></td>
 	</tr>
 	{% endfor %}
 </table>

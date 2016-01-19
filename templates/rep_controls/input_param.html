@@ -19,7 +19,7 @@
 })(jQuery);
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div style="display: table-cell; vertical-align: middle;">	
 	<input class="styler" readonly id="input_param{{ ctl.id }}" value="{{ value }}" type="text" style="height: 40px;"/>
 </div>

@@ -52,9 +52,9 @@ urlpatterns = [
     url (r'^course_state_form/([a-z]*)/$', views.course_state_form),
     url (r'^course_state_form/([a-z]*)/([0-9]*)/$', views.course_state_form),
     url (r'^course_view/$', views.course_view),
-    url (r'^teacher_report/$', views.teacher_report),
+    url (r'^teacher_report/([0-9]*)/([0-9]*)/$', views.teacher_report),
     url (r'^course_usg_view/$', views.course_usg_view),
-    url (r'^teacher_usg_report/$', views.teacher_usg_report),
+    url (r'^teacher_usg_report/([0-9]*)/$', views.teacher_usg_report),
 
     # Teacher service urls
     url (r'^course_state_cng/([0-9]*)/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_cng),

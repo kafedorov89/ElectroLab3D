@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from datetime import datetime
-from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam, Standtask_state, Standtask, WpParam
+from .models import Course, Question, Answer, UserCourseState, CourseField, Method, UserAnswer, UserAllowance, CourseState, UserFieldParam, Standtask_state, Standtask, WpParam, Training_log
 import functools
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -220,9 +220,14 @@ def report (request, course_id):
 
 @private()
 def method (request, course_id):
+    course = Course.objects.get (pk = int (course_id))
+    db = list (Method.objects.filter (course__id = course_id))
+    if len (db) > 0:
+        db = db [0]
     templ_data = {
         'id': course_id,
-        'db' : list (Method.objects.filter (course__id = course_id)) [0],
+        'db' : db,
+        'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
     }
@@ -249,18 +254,20 @@ def course_view (request):
         'last_name' : current_user.last_name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'data' : UserAllowance.objects.select_related ().filter (course_start = True).order_by('user__id', 'course__name'),
     }
     return render_to_response ('course_view.html', templ_data)
 
 
 @private()
-def teacher_report (request):
+def teacher_report (request, course_id, user_id):
     current_user = request.user
     templ_data = {
         'first_name' : current_user.first_name,
         'last_name' : current_user.last_name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'controls' : UserFieldParam.objects.select_related ().filter (user = user_id, field__course__id = course_id, field__in_report = True).order_by ('field__number', 'field__id'),
     }
     return render_to_response ('teacher_report.html', templ_data)
 
@@ -273,18 +280,22 @@ def course_usg_view (request):
         'last_name' : current_user.last_name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'data' : Training_log.objects.select_related ().filter ().order_by ('training_name', 'user__id'),
     }
     return render_to_response ('course_usg_view.html', templ_data)
 
 
 @private()
-def teacher_usg_report (request):
+def teacher_usg_report (request, training_log_id):
     current_user = request.user
+    training_log = Training_log.objects.get (pk = int (training_log_id))
+    data = training_log.event_list.split(";")
     templ_data = {
         'first_name' : current_user.first_name,
         'last_name' : current_user.last_name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'data' : data,
     }
     return render_to_response ('teacher_usg_report.html', templ_data)
 

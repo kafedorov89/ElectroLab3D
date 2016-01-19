@@ -49,7 +49,7 @@ function click_button(url, id) {
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <table onselectstart="return false">
 	{% for i in "1234" %}
 	<tr>

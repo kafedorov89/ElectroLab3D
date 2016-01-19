@@ -1,4 +1,4 @@
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
 	<div class="iterate_switcher_play" id="iterate_switcher{{ ctl.id }}"></div>
 	<div class="online_value" id="online_{{ ctl.id }}">{{ value }}</div>

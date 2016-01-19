@@ -1,48 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Редактор рассписания лабораторных{% endblock %}
-{% load staticfiles %}
+{% block title %}Отчет по лабораторной работе{% endblock %}
 {% block main %}
-<table class="menu-head">
-	<tr>
-		<td>
-			<div class="control-group">
-		        <a class="back-link-block" href="/teacher_main_menu">Возврат в главное меню</a>
-		    </div>
-	    </td>
-	    <td valign = top style="text-align: right;">
-			<div class="date">{{ date }}<br>{{ time }}</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<div class="control-group">
-		        <a class="back-link-block" href="/course_state_form/add/">Добавить</a>
-		    </div>
-	    </td>
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/highcharts/highcharts.js' %}"></script>
+
+<table class="table-construct">
+    <tr>
+		<div class="control-group">
+	        <a class="back-link-block" href="/course_view">Ведение лабораторных</a>
+	    </div>
 	</tr>
 </table>
 
-<table class="time-table">
-	<tr class="time-tr-head">
-		<td class="time-td-head">Студент</td>
-		<td class="time-td-head">Наименование лабораторной работы</td>
-		<td class="time-td-head">Дата/Время</td>
-		<td class="time-td-head">Длительность</td>
-		<td class="time-td-head">Статус</td>
-		<td class="time-td-head">Редактировать</td>
-		<td class="time-td-head">Удалить</td>
-	</tr>
-	{% for row in data %}
-	<tr class="time-tr-body{{ row.course_state.id }}">
-		<td class="time-td-body">{{ row.user.last_name }} {{ row.user.first_name }}</td>
-		<td class="time-td-body">{{ row.course.name }}</td>
-		<td class="time-td-body">{{ row.last_date }}</td>
-		<td class="time-td-body">{{ row.course.duration }}</td>
-		<td class="time-td-body">{{ row.course_state.name }}</td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_form/cng/{{ row.id }}/">Редактировать</a></td>
-		<td class="time-td-body"><a class="timetable-link" href="/course_state_del/{{ row.id }}/">Удалить</a></td>
-	</tr>
-	{% endfor %}
-</table>
+<div class="main_course">
+{% for control in controls %}
+	<div class="main_control">
+	{% if control.field.type.code %}
+	    {% with template_name=control.field.type.code|stringformat:"s"|add:".html" %}
+	    	{% include "rep_controls/"|add:template_name with ctl=control.field value=control.value|default:"" %}
+	    {% endwith %}
+	{% endif %}
+	</div>
+{% endfor %}
+</div>
 
 {% endblock %}

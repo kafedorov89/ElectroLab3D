@@ -22,6 +22,14 @@ def table_width (param):
     else:
         return 0
 
+@register.filter(name = 'table_width_l')
+def table_width_l (param):
+    params = param.split(";")
+    if len (params) > 1:
+        return range (int (params [1]) + 1)
+    else:
+        return 0
+
 @register.filter(name = 'chart_name')
 def chart_name (param):
     if param:
@@ -67,7 +75,15 @@ def param_url (param):
 def table_width2 (param):
     params = param.split(";")
     if len (params) > 2:
-        return range (int (params [2]))
+        return range (int (params [1]), int (params [1]) + int (params [2]))
+    else:
+        return 0
+
+@register.filter(name = 'table_width2_l')
+def table_width2_l (param):
+    params = param.split(";")
+    if len (params) > 2:
+        return range (int (params [1]) + 1, int (params [1]) + int (params [2]) + 1)
     else:
         return 0
 
@@ -87,11 +103,14 @@ def exist_left_head (param):
     else:
         return False
 
+import cStringIO as c
+import csv
+
 @register.filter(name = 'table_head')
 def table_head (param, i):
     head = param.split(";") [0]
-    head_range = head.split(",")
-    return head_range [i] if len (head_range) >= int(i) else ''
+    head_range = csv.reader(c.StringIO (head.encode ('utf-8')), delimiter = ',', escapechar = '\\').next()
+    return head_range [i] if len (head_range) > int(i) else ''
 
 @register.filter(name = 'multitable_name1')
 def multitable_name1 (param):
@@ -107,7 +126,7 @@ def multitable_name2 (param):
 def table_left_head (param, i):
     head = param.split(";")
     if len (head) > 1:
-        head_left_range = head [1].split(",")
+        head_left_range = csv.reader(c.StringIO (head [1].encode ('utf-8')), delimiter = ',', escapechar = '\\').next()
         return head_left_range [i] if len (head_left_range) >= int(i) else ''
     else:
         return ''

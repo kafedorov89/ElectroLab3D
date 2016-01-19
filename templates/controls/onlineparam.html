@@ -55,7 +55,7 @@ function read{{ ctl.id }} () {
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
 	<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
 	<div class="iterate_switcher_play" id="iterate_switcher{{ ctl.id }}" onClick="read{{ ctl.id }}();"></div>

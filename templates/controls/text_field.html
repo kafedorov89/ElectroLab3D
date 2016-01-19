@@ -19,6 +19,6 @@ function save_result{{ ctl.id }}(){
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <textarea rows="{{ ctl.param1 }}" cols="{{ ctl.param2 }}" id="textarea_{{ ctl.id }}"></textarea>
 <div class="div-construct-submit" style="margin-top: 20px;" onClick="save_result{{ ctl.id }}()">Сохранить</div>

@@ -30,7 +30,7 @@ function click_button(url) {
 }
 </script>
 
-<h3>{{ ctl.name }}</h3>
+<h3>{{ ctl.name|safe }}</h3>
 <div style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">
 	<div class="bool_switcher_off" id="button_{{ ctl.id }}" value="off" onClick="click_button('{{ url }}');"></div>
 </div>
