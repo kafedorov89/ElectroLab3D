@@ -454,6 +454,20 @@ def start_workplace (request, course_id, user_id, standtask_id):
     return render_to_response ('empty.html')
 
 
+def stop_workplace (request, course_id, user_id, standtask_id):
+    course = Course.objects.get (pk = int (course_id))
+    user = User.objects.get (pk = int (user_id))
+    standtask = Standtask.objects.get (pk = int (standtask_id))
+
+    standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
+    for standtask_state in standtask_states:
+        standtask_state.delete ()
+
+    Standtask_state.objects.update_or_create (user_id = user_id, standtask_id = standtask_id, activate = False, complete = False, error = False)
+
+    return render_to_response ('empty.html')
+
+
 def check_workplace (request, course_id, user_id, standtask_id):
     course = Course.objects.get (pk = int (course_id))
     user = User.objects.get (pk = int (user_id))

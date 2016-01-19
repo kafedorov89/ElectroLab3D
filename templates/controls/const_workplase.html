@@ -33,7 +33,10 @@ $(function() {
 		position: {
 			my: "left top",
 	        at: "left+" + (left + 300) +" top+" + top
-	    }
+	    },
+		beforeClose: function( event, ui ) {
+			stopWorkplace{{ ctl.id }}();
+		}
 	});
 });
 
@@ -43,6 +46,12 @@ function startWorkplace{{ ctl.id }}(){
 	xhr.send();
 	$("#dialog{{ ctl.id }}").dialog("open");
 	startRead{{ ctl.id }}();
+}
+
+function stopWorkplace{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/stop_workplace/{{ id }}/{{ user.id }}/{{ id }}{{ ctl.param1 }}", false);
+	xhr.send();
 }
 
 function checkWorkplace{{ ctl.id }}(){
