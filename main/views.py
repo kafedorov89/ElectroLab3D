@@ -17,6 +17,8 @@ try:
     from django.utils import simplejson as json
 except:
     import simplejson as json
+from documents.models import Document
+from jchat.models import Room
 
 
 def private (request_number = 0):
@@ -77,8 +79,10 @@ class LoginFormView (FormView):
     def form_valid (self, form):
         self.user = form.get_user ()
         login (self.request, self.user)
-        if self.request.user.is_staff:
+        if self.request.user.is_staff and self.request.user.username <> 'admin':
             LoginFormView.success_url = "/teacher_main_menu"
+        else:
+            LoginFormView.success_url = "/main_menu"
         return super (LoginFormView, self).form_valid (form)
 
 
@@ -125,7 +129,9 @@ def media_course (request):
     templ_data = {
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'is_staff' : request.user.is_staff,
         'db' : Method.objects.all (),
+        'data' : Course.objects.select_related ().filter ().order_by('name',),
     }
     return render_to_response ('media_course.html', templ_data)
 
@@ -171,6 +177,8 @@ def input_control (request, course_id, number):
 def workplace_construct (request, course_id):
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    ucs = UserCourseState.objects.filter (user = request.user, course__id = course_id)
+    r = Room.objects.get_or_create (ucs [0])
     templ_data = {
         'workplace_construct' : True,
         'id': course_id,
@@ -180,6 +188,7 @@ def workplace_construct (request, course_id):
         'user' : request.user,
         'host' : request.get_host(),
         'uallowance' : uallowance,
+        'chat_id' : r.pk,
     }
     return render_to_response ('workpalce_construct.html', templ_data)
 
@@ -188,6 +197,8 @@ def workplace_construct (request, course_id):
 def course (request, course_id):
     course = Course.objects.get (pk = int (course_id))
     uallowance, _ = UserAllowance.objects.update_or_create (user = request.user, course = course)
+    ucs = UserCourseState.objects.filter (user = request.user, course__id = course_id)
+    r = Room.objects.get_or_create (ucs [0])
     templ_data = {
         'course' : True,
         'controls' : CourseField.objects.select_related ().filter (course__id = course_id, in_course = True).order_by ('number', 'id'),
@@ -198,6 +209,7 @@ def course (request, course_id):
         'uallowance' : uallowance,
         'host' : request.get_host(),
         'user' : request.user,
+        'chat_id' : r.pk,
     }
     return render_to_response ('course.html', templ_data)
 
@@ -213,25 +225,41 @@ def report (request, course_id):
         'number': course.name,
         'date' : "{:%Y %m %d}".format (datetime.now()),
         'time' : "{:%H:%M}".format (datetime.now()),
+        'host' : request.get_host(),
+        'user' : request.user,
         'uallowance' : uallowance,
     }
     return render_to_response ('report.html', templ_data)
 
+from django.conf import settings
+
 
 @private()
 def method (request, course_id):
-    course = Course.objects.get (pk = int (course_id))
-    db = list (Method.objects.filter (course__id = course_id))
-    if len (db) > 0:
-        db = db [0]
-    templ_data = {
-        'id': course_id,
-        'db' : db,
-        'number': course.name,
-        'date' : "{:%Y %m %d}".format (datetime.now()),
-        'time' : "{:%H:%M}".format (datetime.now()),
-    }
-    return render_to_response ('method.html', templ_data)
+
+    file_name = settings.STATICFILES_DIRS [0] + '/pdf/' + course_id + '.pdf'
+
+    import os.path
+
+    if os.path.isfile (file_name):
+        with open (file_name, 'r') as pdf:
+            response = HttpResponse (pdf.read(), content_type = 'application/pdf')
+            response['Content-Disposition'] = 'inline;filename=' + course_id + '.pdf'
+            return response
+        pdf.closed
+    else:
+        course = Course.objects.get (pk = int (course_id))
+        db = list (Method.objects.filter (course__id = course_id))
+        if len (db) > 0:
+            db = db [0]
+        templ_data = {
+            'id': course_id,
+            'db' : db,
+            'number': course.name,
+            'date' : "{:%Y %m %d}".format (datetime.now()),
+            'time' : "{:%H:%M}".format (datetime.now()),
+        }
+        return render_to_response ('method.html', templ_data)
 
 
 @private()
@@ -289,7 +317,7 @@ def course_usg_view (request):
 def teacher_usg_report (request, training_log_id):
     current_user = request.user
     training_log = Training_log.objects.get (pk = int (training_log_id))
-    data = training_log.event_list.split(";")
+    data = training_log.event_list.split("\n")
     templ_data = {
         'first_name' : current_user.first_name,
         'last_name' : current_user.last_name,
@@ -354,6 +382,7 @@ def course_state_form (request, action, id = None):
     }
     return render_to_response ('course_state_form.html', templ_data)
 
+
 @csrf_exempt
 def set_userfieldparam (request, user_id, field_id, value):
     user = User.objects.get (pk = int (user_id))
@@ -371,6 +400,20 @@ def set_userfieldparam (request, user_id, field_id, value):
         cur_value = u';'.join ([userfieldparam [0].value, value]) if userfieldparam [0].value is not None else value
         userfieldparam.update (value = cur_value)
     return render_to_response ('empty.html')
+
+@csrf_exempt
+def get_userfieldparam (request, user_id, field_id):
+    user = User.objects.get (pk = int (user_id))
+    field = CourseField.objects.get (pk = int (field_id))
+    userfieldparam = UserFieldParam.objects.filter (user = user, field = field)
+    
+    json_response = []
+
+    for res in userfieldparam:
+        if res.value:
+            line = res.value.split(";")
+        json_response = line
+    return JsonResponse (json_response, safe = False)
 
 
 def clear_userfieldparam (request, user_id, field_id):
@@ -448,7 +491,8 @@ def start_workplace (request, course_id, user_id, standtask_id):
     Standtask_state.objects.update_or_create (user_id = user_id, standtask_id = standtask_id, activate = True, complete = False, error = False)
 
     uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
-    uallowance.course_start = 0
+    if (int (standtask_id) % 10) == 0:
+        uallowance.course_start = 0
     uallowance.report = 0
     uallowance.save()
     return render_to_response ('empty.html')
@@ -475,18 +519,19 @@ def check_workplace (request, course_id, user_id, standtask_id):
     standtask_states = Standtask_state.objects.filter (user_id = user, standtask_id = standtask)
 
     # Заплатка
-    if (int (standtask_id) % 10) == 0:
+    #if int (user_id) in (1, 18, 20, 21):
+    if True:
         uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
         uallowance.course_start = 1
         uallowance.save ()
-        return JsonResponse ({'Complete' : 1, 'Error' : 0})
+        return JsonResponse ({'Complete': 1, 'Error': 0})
 
     for standtask_state in standtask_states:
         if standtask_state.complete:
             uallowance, _ = UserAllowance.objects.update_or_create (user = user, course = course)
             uallowance.course_start = 1
             uallowance.save ()
-        return JsonResponse ({'Complete' : standtask_state.complete, 'Error' : standtask_state.error})
+        return JsonResponse ({'Complete': standtask_state.complete, 'Error': standtask_state.error})
     return JsonResponse ({})
 
 
@@ -497,16 +542,17 @@ def get_wp_param (request):
 
     for wp_param in wp_params:
         param = {
-            'name' : wp_param.name,
-            'wp_param_type' : str (wp_param.wp_param_type),
-            'workplace' : wp_param.workplace.name,
-            'code' : wp_param.code,
-            'device_type' : wp_param.device_type.name if wp_param.device_type is not None else None,
-            'device_address' : wp_param.device_address,
-            'source' : wp_param.source,
-            'type_func' : wp_param.type_func.name if wp_param.type_func is not None else None,
-            'type' : wp_param.type.name if wp_param.type is not None else None,
-            'async' : wp_param.async
+            'name': wp_param.name,
+            'wp_param_type': str (wp_param.wp_param_type),
+            'workplace': wp_param.workplace.name,
+            'code': wp_param.code,
+            'device_type': wp_param.device_type.name if wp_param.device_type is not None else None,
+            'device_address': wp_param.device_address,
+            'source': wp_param.source,
+            'type_func': wp_param.type_func.name if wp_param.type_func is not None else None,
+            'type': wp_param.type.name if wp_param.type is not None else None,
+            'async': wp_param.async
         }
         json_response.append (param)
     return JsonResponse (json_response, safe = False)
+

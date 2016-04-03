@@ -2,6 +2,7 @@
 {% block title %}Отчет по по тренингу{% endblock %}
 {% block main %}
 {% load staticfiles %}
+{% load main_tags %}
 <script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="{% static 'js/highcharts/highcharts.js' %}"></script>
 
@@ -14,13 +15,13 @@
 </table>
 
 <div class="main_course">
-{% for string in data %}
-	<div>
-		<span>
+	{% for string in data %}
+	<div style="background-color: #ffffff; padding: 5px 10px 5px 10px;">
+		<span style="{{ string|rep_error }}">
 		{{ string }}
 		</span>
 	</div>
-{% endfor %}
+	{% endfor %}
 </div>
 
 {% endblock %}

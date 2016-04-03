@@ -17,7 +17,7 @@ $(function () {
 		url: url,
 		success: function (data) {
 			if (data.Success == true) {
-				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data;
+				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data.toFixed(6);
 				clear_value{{ ctl.id }}();
 				set_value{{ ctl.id }}(data.Data);
 			}
@@ -29,12 +29,21 @@ $(function () {
 	});
 }
 
-function startRead{{ ctl.id }}(){
+function startRead{{ ctl.id }}(startTime){
 	flag = document.getElementById("flag{{ ctl.id }}").value;
 	sendRequestonline{{ ctl.id }} ('{{ url }}');
-	if (flag == 'True')
+	
+	if (flag == 'True' && Date.now() < (startTime + 30000))
 	{
-		setTimeout("startRead{{ ctl.id }}()",{% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
+		setTimeout("startRead{{ ctl.id }}(" + startTime + ")", {% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
+	}
+	else
+	{
+		switcher = document.getElementById ("iterate_switcher{{ ctl.id }}");
+		flag = document.getElementById ("flag{{ ctl.id }}");
+		
+		flag.value = 'False'
+		switcher.className = "term_switcher_play";
 	}
 }
 
@@ -44,13 +53,13 @@ function read{{ ctl.id }} () {
 	if (flag.value == 'True')
 	{
 		flag.value = 'False'
-		switcher.className = "iterate_switcher_play";
+		switcher.className = "term_switcher_play";
 	}
 	else
 	{
 		flag.value = 'True'
-		switcher.className = "iterate_switcher_stop";
-		startRead{{ ctl.id }} ();
+		switcher.className = "term_switcher_stop";
+		startRead{{ ctl.id }} (Date.now());
 	}
 }
 </script>

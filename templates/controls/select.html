@@ -16,7 +16,18 @@ $(function() {
 		url: "{{ url }}",
 		success: function (data) {
 			if (data.Success){
-				setSelected{{ ctl.id }} (data.Data);
+				setSelected{{ ctl.id }} (data.Data + "");
+				if (data.Data == 0) {
+					document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_left_on_light";
+					
+				}
+				else if (data.Data == {{ ctl.param1|add:"-1" }}) {
+					document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_right_on_light";
+				}
+				else
+				{
+					document.getElementById("switcher_{{ ctl.id }}_" + data.Data).className = "switcher_center_on_light";
+				}
 				clear_value{{ ctl.id }}();
 				set_value{{ ctl.id }}(data.Data);
 			}
@@ -38,7 +49,7 @@ $(function() {
 
 function setSelected{{ ctl.id }} (id) {
 	document.getElementById("select_id_{{ ctl.id }}").value = id;
-	document.getElementById("switcher_value_{{ ctl.id }}").innerHTML = "значение " + id
+	document.getElementById("switcher_value_{{ ctl.id }}").innerHTML = id
 	for (var i = 0; i < {{ ctl.param1 }}; i++) {
 		if (i == 0) {
 			document.getElementById("switcher_{{ ctl.id }}_" + i).className = "switcher_left";
@@ -57,7 +68,7 @@ function setSelected{{ ctl.id }} (id) {
 		document.getElementById("switcher_plus_{{ ctl.id }}").className = "switcher_plus_on";
 	}
 	else if (id == {{ ctl.param1|add:"-1" }}) {
-		document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_right_on";
+		document.getElementById("switcher_{{ ctl.id }}_{{ ctl.param1|add:"-1" }}").className = "switcher_right_on";
 		document.getElementById("switcher_minus_{{ ctl.id }}").className = "switcher_minus_on";
 		document.getElementById("switcher_plus_{{ ctl.id }}").className = "switcher_plus";
 	}
@@ -74,11 +85,24 @@ function sendRequestSelect{{ ctl.id }} (id) {
 		$.ajax({
 			url: "{{ url }}" + "&write=" + id,
 			success: function(data){
-				setSelected{{ ctl.id }} (data.Data);
 				clear_value{{ ctl.id }}();
-				set_value{{ ctl.id }}(data.Data);
+				if (data.Success){
+					if (id == 0) {
+						document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_left_on_light";
+						
+					}
+					else if (id == {{ ctl.param1|add:"-1" }}) {
+						document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_right_on_light";
+					}
+					else{
+						document.getElementById("switcher_{{ ctl.id }}_" + id).className = "switcher_center_on_light";
+					}
+					set_value{{ ctl.id }}(data.Data);
+				}
 			},
-			error: function (data) {},
+			error: function (data) {
+				clear_value{{ ctl.id }}();
+			},
 			type: "GET",
 			dataType: "json"
 		});

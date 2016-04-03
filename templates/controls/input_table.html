@@ -5,16 +5,21 @@ function sendRequesttable{{ ctl.id }}(url) {
 		url: url,
 		success: function(data){
 			if (data.Success == true) {
-				for (var i = 0; i < data.Data.length; i++) {
-					document.getElementById("table_{{ ctl.id }}_" + i + "0").innerHTML = data.Data[i]
+				for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
+					for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
+						iter = i*{{ ctl.param2|table_len_width }} + j
+						document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML = data.Data[iter]
+					}
 				}
+				save_results{{ ctl.id }}();
 			}
 		},
-		error: function (data) {},
+		error: function (data) {
+			save_results{{ ctl.id }}();
+		},
 		type: "GET",
 		dataType: "json"
 		});
-	save_results{{ ctl.id }}();
 }
 
 function clear_value{{ ctl.id }}(){
@@ -24,6 +29,9 @@ function clear_value{{ ctl.id }}(){
 }
 
 function set_value{{ ctl.id }}(value){
+	if (!value){
+		value = " "
+	}
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
 	xhr.send();
@@ -46,21 +54,21 @@ function save_results{{ ctl.id }}(){
 	<tr>
 	{% if ctl.param1|exist_left_head %}
 		{% for i in ctl.param2|table_width_l %}
-		<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
+			<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
 		{% endfor %}
 	{% else %}
 		{% for i in ctl.param2|table_width %}
-		<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
+			<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
 		{% endfor %}
 	{% endif %}
 	</tr>
 	{% for i in ctl.param2|table_heigth %}
 	<tr>
 		{% if ctl.param1|exist_left_head %}
-		<td class="course-td">{{ ctl.param1|table_left_head:i|safe }}</td>
+			<td class="course-td">{{ ctl.param1|table_left_head:i|safe }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
-		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>
+			<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>
 		{% endfor %}
 	</tr>
 	{% endfor %}

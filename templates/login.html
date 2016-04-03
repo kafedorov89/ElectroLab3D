@@ -2,6 +2,13 @@
 {% block title %}Аутентификация{% endblock %}
 {% block main %}
 {% load staticfiles %}
+<script>
+document.onkeypress = function(e){
+	if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+		document.forms[0].submit();
+    }
+}
+</script>
 <div class="login-blok">
     <form name="login_form" action="/login/" method="post">
     {% csrf_token %}

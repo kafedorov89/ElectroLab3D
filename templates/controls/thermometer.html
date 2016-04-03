@@ -17,9 +17,17 @@ $(function () {
 		url: url,
 		success: function (data) {
 			if (data.Success == true) {
-				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data;
+				document.getElementById ("online_{{ ctl.id }}").innerHTML = data.Data.toFixed(6);
 				clear_value{{ ctl.id }}();
 				set_value{{ ctl.id }}(data.Data);
+				
+				max_width = $("#term_background{{ ctl.id }}").width();
+				line_width = (max_width * (Math.abs(data.Data).toFixed(6)) / {{ ctl.param2 }});
+				if (line_width > max_width)
+				{
+					line_width = max_width;
+				}
+				$("#term_line{{ ctl.id }}").width(line_width);
 			}
 		},
 		error: function (data) {},
@@ -29,12 +37,21 @@ $(function () {
 	});
 }
 
-function startRead{{ ctl.id }}(){
+function startRead{{ ctl.id }}(startTime){
 	flag = document.getElementById("flag{{ ctl.id }}").value;
 	sendRequestonline{{ ctl.id }} ('{{ url }}');
-	if (flag == 'True')
+
+	if (flag == 'True' && Date.now() < (startTime + 30000))
 	{
-		setTimeout("startRead{{ ctl.id }}()",{% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
+		setTimeout("startRead{{ ctl.id }}(" + startTime + ")", {% if ctl.param1 %}{{ ctl.param1 }}{% else %}200{% endif %});
+	}
+	else
+	{
+		switcher = document.getElementById ("iterate_switcher{{ ctl.id }}");
+		flag = document.getElementById ("flag{{ ctl.id }}");
+		
+		flag.value = 'False'
+		switcher.className = "term_switcher_play";
 	}
 }
 
@@ -50,7 +67,7 @@ function read{{ ctl.id }} () {
 	{
 		flag.value = 'True'
 		switcher.className = "term_switcher_stop";
-		startRead{{ ctl.id }} ();
+		startRead{{ ctl.id }} (Date.now());
 	}
 }
 </script>
@@ -59,6 +76,8 @@ function read{{ ctl.id }} () {
 <div align="right" style="display: table-cell; vertical-align: middle;" onselectstart="return false" onmousedown="return false">	
 	<input type='hidden' id="flag{{ ctl.id }}" name="flag{{ ctl.id }}" value="False">
 	<div class="term_switcher_play" id="iterate_switcher{{ ctl.id }}" onClick="read{{ ctl.id }}();"></div>
-	<div class="term_background"></div><br>
+	<div id="term_background{{ ctl.id }}" class="term_background">
+		<div id="term_line{{ ctl.id }}" class="term_line"></div>
+	</div><br>
 	<div class="online_value" style="margin-top: 10px;" id="online_{{ ctl.id }}"></div>
 </div>

@@ -1,20 +1,22 @@
 {% load main_tags %}
 <script>
-function sendRequesttable{{ ctl.id }}(url) {
+function sendRequesttable{{ ctl.id }}(url, i) {
 	$.ajax({
 		url: url,
 		success: function(data){
 			if (data.Success == true) {
-				for (var i = 0; i < data.Data.length; i++) {
-					document.getElementById("table_{{ ctl.id }}_" + i + "0").innerHTML = data.Data[i]
+				for (var j = 0; j < data.Data.length; j++) {
+					document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML = data.Data[j].toFixed(2)
 				}
 			}
+			save_results{{ ctl.id }}();
 		},
-		error: function (data) {},
+		error: function (data) {
+			save_results{{ ctl.id }}();
+		},
 		type: "GET",
 		dataType: "json"
 		});
-	save_results{{ ctl.id }}();
 }
 
 function clear_value{{ ctl.id }}(){
@@ -24,6 +26,9 @@ function clear_value{{ ctl.id }}(){
 }
 
 function set_value{{ ctl.id }}(value){
+	if (!value){
+		value = " "
+	}
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
 	xhr.send();
@@ -31,12 +36,14 @@ function set_value{{ ctl.id }}(value){
 
 function save_results{{ ctl.id }}(){
 	clear_value{{ ctl.id }}();
+	new_val = '';
 	for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
 		for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
 			value = document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML;
-			set_value{{ ctl.id }}(value);
+			new_val = new_val + ';' + value;
 		}
 	}
+	set_value{{ ctl.id }}(new_val);
 }
 </script>
 
@@ -62,7 +69,7 @@ function save_results{{ ctl.id }}(){
 		{% for j in ctl.param2|table_width %}
 		<td class="course-td"><div style="display: inline-block;" id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}"></div></td>
 		{% endfor %}
-		<td><div class="div-construct-submit" style="margin: 0px; padding: 0px; width: 200px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2|param_url }}{% endif %}');">{{ ctl.param3 }}</div></td>
+		<td><div class="div-construct-submit" style="margin: 0px; padding: 0px; width: 100px;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}', {{ i }});">{{ ctl.param3 }}</div></td>
 	</tr>
 	{% endfor %}
 </table>

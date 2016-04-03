@@ -30,6 +30,7 @@ $(function() {
 	$( "#dialog{{ ctl.id }}" ).dialog({
 		modal: true,
 		autoOpen: false,
+		open: function(event, ui) { $(".ui-button-text", ui.dialog | ui).hide();},
 		position: {
 			my: "left top",
 	        at: "left+" + (left + 300) +" top+" + top

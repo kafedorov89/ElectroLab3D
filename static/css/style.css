@@ -1,7 +1,7 @@
 body {
   background-color: #ffffff;
   margin: 10;
-  font-family: Helvetica, sans-serif;
+  font-family: 'Times New Roman', Helvetica, sans-serif;
   background: url('../img/background.png') repeat;
 }
 
@@ -69,6 +69,23 @@ body {
 	height: 40px;
 	text-decoration: none;
 }
+
+.help-link {
+	position: relative;
+	top: -11px;
+	left: -295px;
+	background-color: #ee9015;
+	color: black;
+	text-align: center;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	height: 18px;
+	text-decoration: none;
+	cursor: pointer;
+	width: 200px;
+}
+
 .link-construct:active{
 	color: black;
 }
@@ -270,17 +287,17 @@ body {
 .term_switcher_stop{
 	display: inline-block;
 	vertical-align: middle;
-	width: 64px;
-	height: 64px;
-	background:url('../img/play_stop_small.png') 0 0;
+	width: 52px;
+	height: 52px;
+	background:url('../img/play_stop.png') 0 0;
 }
 
 .term_switcher_play{
 	display: inline-block;
 	vertical-align: middle;
-	width: 64px;
-	height: 64px;
-	background:url('../img/play_stop_small.png') 0 -65px;
+	width: 52px;
+	height: 52px;
+	background:url('../img/play_stop.png') 0 -52px;
 }
 
 .checkbox_construct{
@@ -325,7 +342,7 @@ body {
 	margin: 0;
 	width: 30px;
 	height: 35px;
-	background:url('../img/switcher_center.png') 0 0;
+	background:url('../img/switcher_center_2.png') 0 0;
 }
 
 .switcher_center_on{
@@ -334,7 +351,16 @@ body {
 	margin: 0;
 	width: 30px;
 	height: 35px;
-	background:url('../img/switcher_center.png') 0 -36px;
+	background:url('../img/switcher_center_2.png') 0 -36px;
+}
+
+.switcher_center_on_light{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	width: 30px;
+	height: 35px;
+	background:url('../img/switcher_center_2.png') 0 -72px;
 }
 
 .switcher_left{
@@ -343,7 +369,7 @@ body {
 	margin: 0;
 	width: 30px;
 	height: 35px;
-	background:url('../img/switcher_left.png') 0 0;
+	background:url('../img/switcher_left_2.png') 0 0;
 }
 
 .switcher_left_on{
@@ -352,7 +378,16 @@ body {
 	margin: 0;
 	width: 30px;
 	height: 35px;
-	background:url('../img/switcher_left.png') 0 -36px;
+	background:url('../img/switcher_left_2.png') 0 -36px;
+}
+
+.switcher_left_on_light{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	width: 30px;
+	height: 35px;
+	background:url('../img/switcher_left_2.png') 0 -72px;
 }
 
 .switcher_right{
@@ -361,7 +396,7 @@ body {
 	margin: 0;
 	width: 32px;
 	height: 35px;
-	background:url('../img/switcher_right.png') 0 0;
+	background:url('../img/switcher_right_2.png') 0 0;
 }
 
 .switcher_right_on{
@@ -370,7 +405,16 @@ body {
 	margin: 0;
 	width: 32px;
 	height: 35px;
-	background:url('../img/switcher_right.png') 0 -36px;
+	background:url('../img/switcher_right_2.png') 0 -36px;
+}
+
+.switcher_right_on_light{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	width: 32px;
+	height: 35px;
+	background:url('../img/switcher_right_2.png') 0 -72px;
 }
 
 .switcher_minus{
@@ -413,7 +457,7 @@ body {
 	display: inline-block;
 	vertical-align: middle;
 	text-align: center;
-	width: 200px;
+	width: 70px;
 	height: 35px;
 	border: 1px solid black;
 	border-radius: 15px;
@@ -426,12 +470,30 @@ body {
 }
 
 .term_background{
+	position: relative;
 	display: inline-block;
 	vertical-align: middle;
 	margin: 0;
-	width: 794px;
+	width: 920px;
 	height: 61px;
-	background:url('../img/term_background.png');
+	border: 1px solid gray;
+	border-radius: 15px;
+	background-color: #ffffff;
+/*	background:url('../img/term_background.png'); */
+}
+
+.term_line{
+	position: absolute;
+    top: 25%;
+    left: 0;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	width: 919px;
+	height: 30px;
+	border: 1px solid gray;
+/*	border-radius: 15px; */
+	background-color: #ffa500;
 }
 
 .online_value{
@@ -531,6 +593,7 @@ body {
 	width: 100%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 15px;
 }
 
 .td-construct{
@@ -546,28 +609,38 @@ body {
 	text-align: center;
     border: 1px solid #ee9015;
     background-color: #ffffff;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .time-tr-body1{
 	background-color: #d7d7d7;
 	height: 50px;
     border: 1px solid #ee9015;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .time-tr-body2{
 	background-color: #e6c191;
 	height: 50px;
     border: 1px solid #ee9015;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .time-tr-body3{
 	height: 50px;
     border: 1px solid #ee9015;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .time-td-body{
 	text-align: center;
     border: 1px solid #ee9015;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .timetable-link{
@@ -610,6 +683,8 @@ body {
 	height: 20px;
     border: 2px solid black;
     background-color: #ffffff;
+    min-width: 30px;
+    padding: 5px 5px 5px 5px;
 }
 
 .date {

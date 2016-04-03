@@ -1,2 +1,14 @@
+{% load staticfiles %}
+<script>
+$(document).ready (function () {
+    $("img").lazyload ({effect:"fadeIn"});
+    $("a[rel='colorbox']").colorbox ({current:"Изображение {current} из {total}"});
+});
+</script>
+
 <h3>{{ ctl.name|safe }}</h3>
-{{ ctl.param1|safe }}
+<div style="background-color: #ffffff; text-align: center;">
+	<a rel="colorbox" href="{{ ctl.param1 }}" >
+	     <img style="width: 1000px;" src="{{ ctl.param1 }}" alt="{{ ctl.param1 }}"/>
+	</a>
+</div>

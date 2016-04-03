@@ -68,6 +68,7 @@ $(document).ready(function() {
 			<th class="time-td-head">Группа</th>
 			<th class="time-td-head">Наименование лабораторной работы</th>
 			<th class="time-td-head">Длительность</th>
+			<th class="time-td-head">Чат</th>
 			<th class="time-td-head">Отчет</th>
 		</tr>
 		<tfoot>
@@ -82,6 +83,7 @@ $(document).ready(function() {
 		<td class="time-td-body">{{ row.user.groups.all.0 }}</td>
 		<td class="time-td-body">{{ row.course.name }}</td>
 		<td class="time-td-body">{{ row.course.duration }}</td>
+		<td class="time-td-body"><a class="timetable-link" href="/teacher_chat/{{ row.course.id }}/{{ row.user.id }}/">Войти</a></td>
 		<td class="time-td-body"><a class="timetable-link" href="/teacher_report/{{ row.course.id }}/{{ row.user.id }}/">Просмотреть</a></td>
 	</tr>
 	{% endfor %}

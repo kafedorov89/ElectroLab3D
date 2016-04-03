@@ -5,17 +5,6 @@
 <script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="{% static 'js/highcharts/highcharts.js' %}"></script>
 
-<table class="table-construct">
-    <tr>
-		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
-		</td>
-		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Помощь преподавателя</a></div>
-		</td>
-	</tr>
-</table>
-
 <div class="main_course">
 {% for control in controls %}
 	<div class="main_control">

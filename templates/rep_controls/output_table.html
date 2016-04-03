@@ -4,7 +4,7 @@
 
 <table style="border-collapse: collapse;">
 	<tr>
-		{% if ctl.param1|exist_left_head %}
+	{% if ctl.param1|exist_left_head %}
 		{% for i in ctl.param2|table_width_l %}
 		<td class="course-td">{{ ctl.param1|table_head:i|safe }}</td>
 		{% endfor %}

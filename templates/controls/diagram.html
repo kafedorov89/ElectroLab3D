@@ -18,44 +18,110 @@ function set_value{{ ctl.id }}(value){
 	});
 }
 
-function sendRequestDiargam{{ ctl.id }}(url) {
+function get_value{{ ctl.id }}(ctl_id){
+	var xhr = new XMLHttpRequest();
+
+	xhr.open('GET', "http://{{ host }}/get_userfieldparam/{{ user.id }}/"+ctl_id+"/", false);
+	xhr.send();
+	var jsonObj = JSON.parse(xhr.responseText);
+	var res = [];
+	for (var i = 0, len = jsonObj.length; i < len; i++) {
+		res.push(parseFloat(jsonObj[i]));
+	}
+	return res;	
+}
+
+function render_diagram{{ ctl.id }}(data_set, names){
+	var diagram_list = [];
+	
+	for (var i = 0, len = data_set.length; i < len; i++) {
+		diagram_list.push(
+				{
+			    	name: names[i],
+					data: data_set[i]
+				}		
+		);
+	}
+	
+	$('#chart_container{{ ctl.id }}').highcharts({
+		chart: {type: {% if ctl.param3 == 'diagram' %}'column'{% else %}'line'{% endif %}},
+		title: {text: ''},
+		xAxis: {title: {text: '{{ ctl.param2|chart_x|safe }}'}},
+		yAxis: {title: {text: '{{ ctl.param2|chart_y|safe }}'}},
+		series: diagram_list
+	});
+}
+
+function send_request{{ ctl.id }}(url) {
 	$.ajax({
-		url: url,
+		url: url+'&n={{ ctl.param1|get_n }}',
 		success: function(data){
-			$('#chart_container{{ ctl.id }}').highcharts({
-				chart: {
-					type: {% if ctl.param3 == 'diagram' %}'column'{% else %}{% if ctl.param3 == 'pie' %}'pie'{% else %}'line'{% endif %}{% endif %}
-				},
-				title: {
-					text: ''
-				},
-				xAxis: {
-					title: {
-						text: '{{ ctl.param2|chart_x|safe }}'
-					}
-				},
-				yAxis: {
-					title: {
-						text: '{{ ctl.param2|chart_y|safe }}'
-					}
-				},
-				series: [{
-					name: '{{ ctl.param2|chart_name|safe }}',
-					data: data.Data
-					},]
-				});
-				clear_value{{ ctl.id }}();
-				set_value{{ ctl.id }}(data.Data.join(';'));
+			clear_value{{ ctl.id }}();
+			set_value{{ ctl.id }}(data.Data.join(';'));
 		},
 		error: function(data){
 			clear_value{{ ctl.id }}();
 		},
 		type: "GET",
 		dataType: "json"
-		});
+		}
+	);
+}
+
+function get_diagram{{ ctl.id }}(url) {
+	var data_set = [];
+	var tables_uid = '{{ ctl.param1|get_table_uid }}';
+	var diagram_name = '{{ ctl.param2|all_chart_name|safe }}';
+	var names = diagram_name.split(';');
+	var tables = tables_uid.split(';');
+	if (tables_uid) {
+		for (var i = 0, len = tables.length; i < len; i++) {
+			if (tables[i]) {
+				var params = tables[i].split(',');
+				var control_id = params[0];
+				var x_col = parseInt(params[1], 10);
+				var y_col = parseInt(params[2], 10);
+				var cell_cnt = parseInt(params[3], 10);
+				
+				var data = get_value{{ ctl.id }}(control_id);
+				var t_data = [];
+				var pnt = 0
+				
+				var cur_x;
+				var cur_y;
+				
+				for (var j = 0, len = data.length; j < len; j++) {
+					
+					if (pnt == x_col)
+						cur_x = data[j];
+					
+					if (pnt == y_col)
+						cur_y = data[j];
+					
+					if (pnt == cell_cnt) {
+						if (cur_x && cur_y)
+							t_data.push([cur_x, cur_y]);	
+						pnt = 0;
+					}
+					else
+						pnt++;
+				}
+				data_set.push(t_data);
+			}
+		}
+		set_value{{ ctl.id }}(data_set.join(';'));
+	}
+	
+	if (url) {
+		send_request{{ ctl.id }}(url)
+		r_data = get_value{{ ctl.id }}("{{ ctl.id }}");
+		data_set.push(r_data);
+	}
+	
+	render_diagram{{ ctl.id }}(data_set, names);
 }
 </script>
 
 <h3>{{ ctl.name|safe }}</h3>
 <div id="chart_container{{ ctl.id }}" class="chart_container"></div>
-<div class="div-construct-submit" style="margin-top: 20px;" onClick="sendRequestDiargam{{ ctl.id }}('{{ url }}&n={{ ctl.param1 }}');">Построить график</div>
+<div class="div-construct-submit" style="margin-top: 20px;" onClick="get_diagram{{ ctl.id }}('{% if ctl.wp_param.code %}{{ url }}{% else %}{% endif %}');">Построить график</div>

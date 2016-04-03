@@ -18,6 +18,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from main import views
+from jchat import views as jviews
 
 
 urlpatterns = [
@@ -43,6 +44,7 @@ urlpatterns = [
     url (r'^start_workplace/([0-9]*)/([0-9]*)/([0-9]*)/$', views.start_workplace),
     url (r'^stop_workplace/([0-9]*)/([0-9]*)/([0-9]*)/$', views.stop_workplace),
     url (r'^set_userfieldparam/([0-9]*)/([0-9]*)/(.*)/$', views.set_userfieldparam),
+    url (r'^get_userfieldparam/([0-9]*)/([0-9]*)/$', views.get_userfieldparam),
     url (r'^clear_userfieldparam/([0-9]*)/([0-9]*)/$', views.clear_userfieldparam),
     url (r'^get_report/([0-9]*)/([0-9]*)/$', views.get_report),
     url (r'^get_wp_param/$', views.get_wp_param),
@@ -61,4 +63,13 @@ urlpatterns = [
     url (r'^course_state_cng/([0-9]*)/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_cng),
     url (r'^course_state_add/([0-9]*)/([0-9]*)/(\d{2}.\d{2}.\d{4})/([0-9]*)/$', views.course_state_add),
     url (r'^course_state_del/([0-9]*)/$', views.course_state_del),
+
+    # Chat urls
+    url (r'^chat/([0-9]*)/([0-9]*)/$', jviews.chat),
+    url (r'^teacher_chat/([0-9]*)/([0-9]*)/$', jviews.teacher_chat),
+    url (r'^chat/send/$', jviews.send),
+    url (r'^chat/receive/$', jviews.receive),
+    url (r'^chat/sync/$', jviews.sync),
+    url (r'^chat/join/$', jviews.join),
+    url (r'^chat/leave/$', jviews.leave),
 ]

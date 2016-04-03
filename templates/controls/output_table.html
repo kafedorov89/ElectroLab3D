@@ -7,6 +7,9 @@ function clear_value{{ ctl.id }}(){
 }
 
 function set_value{{ ctl.id }}(value){
+	if (!value){
+		value = " "
+	}
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
 	xhr.send();
@@ -43,7 +46,7 @@ function save_results{{ ctl.id }}(){
 		<td class="course-td">{{ ctl.param1|table_left_head:i|safe }}</td>
 		{% endif %}
 		{% for j in ctl.param2|table_width %}
-		<td class="course-td"><input type='text' size=10 id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}" value=""></td>
+		<td class="course-td" style="padding: 0px;"><input type='text' size=10 id="table_{{ ctl.id }}_{{ i }}{{ j }}" name="table_{{ ctl.id }}_{{ i }}{{ j }}" value=""></td>
 		{% endfor %}
 	</tr>
 	{% endfor %}

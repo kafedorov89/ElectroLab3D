@@ -11,8 +11,18 @@ def table_heigth (param):
 
 @register.filter(name = 'table_len_heigth')
 def table_len_heigth (param):
+    print param
     width = param.split(";") [0]
-    return int (width)
+    if width:
+        return int (width)
+    return 0
+
+@register.filter(name = 'rep_error')
+def rep_error (string):
+    if string.find (u'Ошибка!') == -1:
+        return 'color: #000000;'
+    else:
+        return 'color: red;'
 
 @register.filter(name = 'table_width')
 def table_width (param):
@@ -36,6 +46,17 @@ def chart_name (param):
         return param.split(";") [0]
     return 'Напряжение'
 
+@register.filter(name = 'all_chart_name')
+def all_chart_name (param):
+    if param:
+        res = []
+        res.append(param.split(";") [0])
+        if param.split(";")[3:]:
+            for name in param.split(";")[3:]:
+                res.append(name)
+        return ';'.join(res)
+    return 'Напряжение'
+
 @register.filter(name = 'chart_x')
 def chart_x (param):
     if param:
@@ -57,7 +78,7 @@ def get_table_value (param, width, i, j):
     if param:
         params = param.split(";")
         cur = j + i * width
-        if len (params) >= i:
+        if len (params) > int (cur):
             return params [cur]
     return ''
 
@@ -70,6 +91,14 @@ def data_to_chart (param):
 @register.filter(name = 'param_url')
 def param_url (param):
     return param.split(";") [0]
+
+@register.filter(name = 'get_n')
+def get_n (param):
+    return param.split(";") [0]
+
+@register.filter(name = 'get_table_uid')
+def get_table_uid (param):
+    return ';'.join(param.split(";") [1:])
 
 @register.filter(name = 'table_width2')
 def table_width2 (param):
@@ -109,6 +138,8 @@ import csv
 @register.filter(name = 'table_head')
 def table_head (param, i):
     head = param.split(";") [0]
+    if not head:
+        return ''
     head_range = csv.reader(c.StringIO (head.encode ('utf-8')), delimiter = ',', escapechar = '\\').next()
     return head_range [i] if len (head_range) > int(i) else ''
 
@@ -125,9 +156,11 @@ def multitable_name2 (param):
 @register.filter(name = 'table_left_head')
 def table_left_head (param, i):
     head = param.split(";")
+    if not head:
+        return ''
     if len (head) > 1:
         head_left_range = csv.reader(c.StringIO (head [1].encode ('utf-8')), delimiter = ',', escapechar = '\\').next()
-        return head_left_range [i] if len (head_left_range) >= int(i) else ''
+        return head_left_range [i] if len (head_left_range) > int(i) else ''
     else:
         return ''
 
@@ -136,3 +169,30 @@ def swicher_range (number):
     if number is None:
         number = 16
     return range (1, int (number) - 1)
+
+from django import template
+
+class SetVarNode(template.Node):
+
+    def __init__(self, var_name, var_value):
+        self.var_name = var_name
+        self.var_value = var_value
+
+    def render(self, context):
+        try:
+            value = template.Variable(self.var_value).resolve(context)
+        except template.VariableDoesNotExist:
+            value = ""
+        context[self.var_name] = value
+        return u""
+
+def set_var(parser, token):
+    """
+        {% set <var_name>  = <var_value> %}
+    """
+    parts = token.split_contents()
+    if len(parts) < 4:
+        raise template.TemplateSyntaxError("'set' tag must be of the form:  {% set <var_name>  = <var_value> %}")
+    return SetVarNode(parts[1], parts[3])
+
+register.tag('set', set_var)

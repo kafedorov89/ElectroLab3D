@@ -3,30 +3,86 @@
 {% block main %}
 {% load staticfiles %}
 <script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jchat.js"></script>
 <script type="text/javascript" src="{% static 'js/highcharts/highcharts.js' %}"></script>
-<script type="text/javascript">
+<script type="text/javascript" src="{% static 'js/' %}jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="{% static 'js/colorbox/' %}jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'js/ui/' %}jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'js/colorbox/' %}colorbox.css">
+
+<script>
 function checkCourse(){
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', "http://{{ host }}/get_report/{{ id }}/{{ user.id }}/", false);
 	xhr.send();
 	window.location.assign("http://{{ host }}/report/{{ id }}/");
 }
+
+$(function() {
+	var $div = $('#parent-dialog');
+	var left = $div.offset().left;
+    var top= $div.offset().top;
+    
+    $( "#chat" ).dialog({
+      autoOpen: false,
+      height: 520,
+      width: 680,
+      position: {
+			my: "left top",
+	        at: "left+" + (left + 300) +" top+" + top
+	    },
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+    });
+ 
+    $( "#open_chat" ).click(function() {
+      init_chat({{chat_id}}, "chat");
+      $( "#chat" ).dialog( "open" );
+    });
+  });
 </script>
 
 <table class="table-construct">
     <tr>
 		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
+			<div class="div-link-construct"><a target="_blank" class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
 		</td>
 		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Помощь преподавателя</a></div>
+			<div id="open_chat" class="help-link">Помощь преподавателя</div>
 		</td>
 	</tr>
 </table>
 
+<div id="parent-dialog">
+	<div id="chat" title="Помощь преподавателя">
+	</div>
+</div>
+
 <div class="main_course">
+{% load main_tags %}
+
+{% with cur_number="0" %}    
 {% for control in controls %}
-	<div class="main_control">
+	{% if cur_number != control.number and cur_number != "0" %}
+				</td>
+			</tr>
+		</table>
+		</div>
+	{% endif %}
+	{% if cur_number == control.number %} 
+		</td>
+	{% endif %}
+	{% if cur_number != control.number %}  
+		<div class="main_control">
+			<table style="width: 100%; border-collapse: collapse;" >
+				<tr>
+					<td>
+	{% else %}
+		<td>
+	{% endif %}
 	{% if control.type.code %}
 	    {% with template_name=control.type.code|stringformat:"s"|add:".html" %}
 	    	{% if control.wp_param.code %}
@@ -38,8 +94,13 @@ function checkCourse(){
 	    	{% endif %}
 	    {% endwith %}
 	{% endif %}
-	</div>
+	{% set cur_number  = control.number %}  
 {% endfor %}
+			</td>
+		</tr>
+	</table>
+</div>
+{% endwith %}
 </div>
 
 <table class="table-answer">
@@ -49,4 +110,5 @@ function checkCourse(){
 		</td>
 	</tr>
 </table>
+
 {% endblock %}

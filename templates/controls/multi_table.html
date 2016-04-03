@@ -4,14 +4,45 @@ function sendRequesttable{{ ctl.id }}(url) {
 $.ajax({
 	url: url,
 	success: function(data){
-		for (var i = 0; i < data.Data.length; i++) {
-			document.getElementById("table_{{ ctl.id }}_" + i).innerHTML = data.Data[i]
+		for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
+			for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
+				iter = i*{{ ctl.param2|table_len_width }} + j
+				document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML = data.Data[iter]
+			}
 		}
+		save_results{{ ctl.id }}();
 	},
-	error: function (data) {},
+	error: function (data) {
+		save_results{{ ctl.id }}();
+	},
 	type: "GET",
 	dataType: "json"
 	});
+}
+
+function clear_value{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/clear_userfieldparam/{{ user.id }}/{{ ctl.id }}/", false);
+	xhr.send();
+}
+
+function set_value{{ ctl.id }}(value){
+	if (!value){
+		value = " "
+	}
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/set_userfieldparam/{{ user.id }}/{{ ctl.id }}/" + value + "/", false);
+	xhr.send();
+}
+
+function save_results{{ ctl.id }}(){
+	clear_value{{ ctl.id }}();
+	for (var i = 0; i < {{ ctl.param2|table_len_heigth }}; i++) {
+		for (var j = 0; j < {{ ctl.param2|table_len_width }}; j++) {
+			value = document.getElementById("table_{{ ctl.id }}_" + i + j).innerHTML;
+			set_value{{ ctl.id }}(value);
+		}
+	}
 }
 </script>
 
@@ -49,5 +80,5 @@ $.ajax({
 	</tr>
 	{% endfor %}
 </table>
-<div class="div-construct-submit" style="margin-top: 20px; display: inline-block;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}{% if ctl.param2 %}&n={{ ctl.param2 }}{% endif %}');">{{ ctl.param3|multitable_name1 }}</div>
+<div class="div-construct-submit" style="margin-top: 20px; display: inline-block;" onClick="sendRequesttable{{ ctl.id }}('{{ url|safe }}');">{{ ctl.param3|multitable_name1 }}</div>
 <div class="div-construct-submit" style="margin-top: 20px; display: inline-block;">{{ ctl.param3|multitable_name2 }}</div>

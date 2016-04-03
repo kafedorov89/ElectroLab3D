@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block main %}
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jchat.js"></script>
+
+<table class="menu-head">
+	<tr>
+		<td>
+			<div class="control-group">
+		        <a class="back-link-block" href="/teacher_main_menu">Возврат в главное меню</a>
+		    </div>
+	    </td>
+	    <td valign = top style="text-align: right;">
+			<div class="date">{{ date }}<br>{{ time }}</div>
+		</td>
+	</tr>
+</table>
+
+<div id="chat"></div>
+
+<script type="text/javascript">
+/* chat_id is passed form the view, the init_chat function then does all the magic */
+$(window).ready(function(){
+	init_chat({{chat_id}}, "chat");
+})
+</script>
+{% endblock %}

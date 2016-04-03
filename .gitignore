@@ -3,3 +3,10 @@
 .project
 .pydevproject
 .settings
+
+static/img
+static/text
+static/pdf
+
+jchat/fixtures/initial_data.json
+.idea

@@ -1,31 +1,38 @@
 <script>
-function sendRequestbool{{ ctl.id }}(url) {
-$(function(){
-	$.ajax({
-		url: url,
-		success: function(data){
-			
-		},
-		error: function(data){
-			
-		},
-		type: "GET",
-		dataType: "json"
+function sendRequestbool{{ ctl.id }}(url, state) {
+	$(function(){
+		$.ajax({
+			url: url + "&write=" + state,
+			success: function(data){
+				if (data.Success == true) {
+					if (state == "false"){
+						document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_off_light";
+					}
+					else{
+						document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_on_light";
+					}
+				}
+			},
+			error: function(data){
+
+			},
+			type: "GET",
+			dataType: "json"
+			});
 		});
-	});
 }
 
 function click_button{{ ctl.id }}(url) {
 	if (document.getElementById("button_{{ ctl.id }}").value == 'on')
 	{
-		sendRequestbool{{ ctl.id }}(url + "&write=false");
 		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_off";
 		document.getElementById("button_{{ ctl.id }}").value = "off";
+		sendRequestbool{{ ctl.id }}(url, "false");
 	}
 	else{
-		sendRequestbool{{ ctl.id }}(url + "&write=true");
 		document.getElementById("button_{{ ctl.id }}").className = "bool_switcher_on";
 		document.getElementById("button_{{ ctl.id }}").value = "on";
+		sendRequestbool{{ ctl.id }}(url, "true");
 	}
 }
 </script>

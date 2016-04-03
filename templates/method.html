@@ -1,5 +1,22 @@
 {% extends "base_course.html" %}
 {% block title %}Методические материалы{% endblock %}
+{% block head_course %}
+	<table class="menu-head">
+		<tr>
+			<td class="td-left">
+				<div class="control-group">
+			        <a class="back-link-block" href="/media_course/">Мультимедийный курс</a>
+			    </div>
+			</td>
+			<td class="td-right">
+				<span>Лабораторная работа № </span><div style="display: inline-block; vertical-align: middle;"><div class="number">{{ number }}</div></div>
+			</td>
+	    	<td class="td-right">
+	    		<div class="date">{{ date }}<br>{{ time }}</div>
+	    	</td>
+	    </tr>
+	</table>
+	{% endblock %}
 {% block cource_menu %}
 {% endblock %}
 {% block main %}

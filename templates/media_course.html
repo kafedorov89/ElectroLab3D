@@ -1,11 +1,61 @@
 {% extends "base.html" %}
 {% block title %}Мультимедийный курс{% endblock %}
+{% load staticfiles %}
 {% block main %}
+
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui-i18n.min.js"></script>
+<script type="text/javascript" src="{% static 'js/data_tables/' %}jquery.dataTables.js"></script>
+<script type="text/javascript" src="{% static 'js/formstyler/' %}/jquery.formstyler.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/' %}jquery.dataTables.css">
+<link type="text/css" href="{% static 'js/formstyler/' %}jquery.formstyler.css" rel="stylesheet" />
+<link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript" class="init">	
+$(document).ready(function() {
+	$('#time-table').DataTable( {
+		"pagingType": "full_numbers",
+		"language": {
+               "url": "{% static 'js/data_tables/' %}dataTables.russian.lang"
+           },
+           
+           initComplete: function () {
+               this.api().columns().every( function () {
+                   var column = this;
+                   var select = $('<select><option value=""></option></select>')
+                       .appendTo( $(column.footer()).empty() )
+                       .on( 'change', function () {
+                           var val = $.fn.dataTable.util.escapeRegex(
+                               $(this).val()
+                           );
+
+                           column
+                               .search( val ? '^'+val+'$' : '', true, false )
+                               .draw();
+                       } );
+
+                   column.data().unique().sort().each( function ( d, j ) {
+                       select.append( '<option value="'+d+'">'+d+'</option>' )
+                   } );
+               } );
+           }
+	} );
+	
+	$('input, select').styler({
+		selectSearch: true
+	});
+} );
+</script>
+	
 <table class="menu-head">
 	<tr>
 		<td>
 			<div class="control-group">
-		        <a class="back-link-block" href="/main_menu">Возврат в главное меню</a>
+		        <a class="back-link-block" href="/{% if is_staff %}teacher_{% endif %}main_menu">Возврат в главное меню</a>
 		    </div>
 	    </td>
 	    <td valign = top style="text-align: right;">
@@ -14,13 +64,26 @@
 	</tr>
 </table>
 
-<table class="table-question">
-	{% for row in db %}
-	<tr>
-		<td class="td-question">
-			<div class="question">{{ row.text_question|safe }}</div>
-		</td>
-    </tr>
-    {% endfor %}
+<table class="time-table" id="time-table">
+	<thead>
+		<tr class="time-tr-head">
+			<th class="time-td-head">Наименование лабораторной работы</th>
+			<th class="time-td-head">Преподаватель</th>
+			<th class="time-td-head">Методические материалы</th>
+		</tr>
+	</thead>
+	{% for row in data %}
+	<tr class="time-tr-body">
+		<td class="time-td-body">Лабораторная работа №{{ row.name }}</td>
+		<td class="time-td-body">{{ row.user.last_name }} {{ row.user.first_name }}</td>
+		<td class="time-td-body"><a class="timetable-link" href="/method/{{ row.id }}/" target="_blank">Открыть</a></td>
+	</tr>
+	{% endfor %}
+	<tfoot>
+		<tr>
+			<td></td><td>
+		</tr>
+	</tfoot>
 </table>
+
 {% endblock %}

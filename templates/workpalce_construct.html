@@ -5,6 +5,7 @@
 <link type="text/css" href="{% static 'js/ui/' %}jquery-ui.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/' %}jchat.js"></script>
 <script type="text/javascript" src="{% static 'js/' %}jquery-1.11.3.js"></script>
 <script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'js/ui/' %}jquery-ui.min.js"></script>
@@ -22,9 +23,31 @@ $(function() {
 		position: {
 			my: "left top",
 	        at: "left+" + (left + 300) +" top+" + top
-	    }
+	    },
+	    beforeClose: function( event, ui ) {
+			stopWorkplace{{ ctl.id }}();
+		}
 	});
-});
+
+    $( "#chat" ).dialog({
+      autoOpen: false,
+      height: 520,
+      width: 680,
+      position: {
+			my: "left top",
+	        at: "left+" + (left + 300) +" top+" + top
+	    },
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+    });
+ 
+    $( "#open_chat" ).click(function() {
+      init_chat({{chat_id}}, "chat");
+      $( "#chat" ).dialog( "open" );
+    });
+  });
 
 function startWorkplace(){
 	var xhr = new XMLHttpRequest();
@@ -32,6 +55,12 @@ function startWorkplace(){
 	xhr.send();
 	$("#dialog").dialog("open");
 	startRead{{ ctl.id }}();
+}
+
+function stopWorkplace{{ ctl.id }}(){
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://{{ host }}/stop_workplace/{{ id }}/{{ user.id }}/{{ id }}0", false);
+	xhr.send();
 }
 
 function checkWorkplace(){
@@ -89,10 +118,10 @@ function startRead(){
 <table class="table-construct">
     <tr>
 		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
+			<div class="div-link-construct"><a target="_blank" class="link-construct" href="/method/{{ id }}/">Методические материалы</a></div>
 		</td>
 		<td class="td-construct">
-			<div class="div-link-construct"><a class="link-construct" href="/method/{{ id }}/">Помощь преподавателя</a></div>
+			<div id="open_chat" class="help-link">Помощь преподавателя</div>
 		</td>
 	</tr>
 	<tr>
@@ -102,4 +131,9 @@ function startRead(){
 		</td>
 	</tr>
 </table>
+
+<div id="parent-dialog1">
+	<div id="chat" title="Помощь преподавателя">
+	</div>
+</div>
 {% endblock %}
